@@ -1,36 +1,146 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PredictionSport Project Specification
 
-## Getting Started
+## Core Features and Implementation
 
-First, run the development server:
+### 1. Homepage
+- Hero section with live matches carousel
+- Top predictions of the day
+- Quick access to popular leagues
+- Latest news highlights
+- Performance metrics of recent predictions
+- Newsletter signup
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 2. Match Predictions
+- League-wise match listings
+- Detailed match cards showing:
+    - Team statistics
+    - Head-to-head history
+    - Form analysis
+    - Predicted score
+    - Success rate of previous predictions
+- Filters for:
+    - Date range
+    - Leagues
+    - Prediction confidence
+- Real-time odds comparison
+- Pre-match and in-play predictions
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Live Scores Section
+- Real-time score updates
+- Match statistics
+- Line-ups
+- Live commentary
+- Match events (goals, cards, substitutions)
+- League tables
+- Form guides
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. News Section
+- Breaking news
+- Transfer updates
+- Injury reports
+- Pre-match press conferences
+- Post-match analysis
+- Custom categorization by:
+    - Leagues
+    - Teams
+    - Topics
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 5. Blog (Contentful Integration)
+- Expert analysis articles
+- Betting strategies
+- League previews
+- Tournament coverage
+- Rich media content
+- Author profiles
+- Related articles suggestions
 
-## Learn More
+### 6. Multilingual Support
+- Language switcher in header
+- Supported languages:
+    - English (default)
+    - French
+    - German
+    - Spanish
+- Contentful localization for blog content
+- API responses in multiple languages
+- SEO meta tags for each language
 
-To learn more about Next.js, take a look at the following resources:
+## Technical Implementation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Frontend (Next.js)
+- Server components for improved performance
+- Client components for interactive features
+- Framer Motion for animations
+- Tailwind CSS for styling
+- i18n integration
+- Progressive Web App capabilities
+- Responsive design breakpoints:
+    - Mobile: 320px - 480px
+    - Tablet: 481px - 768px
+    - Desktop: 769px+
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Backend (Hono.js)
+- RESTful API endpoints
+- WebSocket connections for live data
+- Rate limiting
+- Cache management
+- Authentication/Authorization
+- API documentation
 
-## Deploy on Vercel
+### Database Schema (PostgreSQL + Drizzle)
+- Users
+- Matches
+- Predictions
+- Teams
+- Leagues
+- Statistics
+- User preferences
+- Subscription data
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Caching (Redis)
+- Match data
+- Live scores
+- Predictions
+- API responses
+- Session management
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Third-party Integrations
+- Sports data API
+- Contentful
+- Analytics tools
+- Newsletter service
+- Social media sharing
+
+## SEO Implementation
+- Dynamic meta tags
+- Structured data (JSON-LD)
+- Sitemap generation
+- robots.txt configuration
+- Open Graph tags
+- Twitter Cards
+- Canonical URLs
+- Hreflang tags for multiple languages
+
+## Performance Targets
+- Lighthouse scores > 90
+- First Contentful Paint < 1.5s
+- Time to Interactive < 3.5s
+- Core Web Vitals compliance
+- Mobile responsiveness score > 95
+
+## Security Measures
+- HTTPS enforcement
+- CSRF protection
+- XSS prevention
+- Rate limiting
+- Input validation
+- Data encryption
+- Regular security audits
+
+## Analytics & Monitoring
+- User behavior tracking
+- Performance monitoring
+- Error logging
+- Conversion tracking
+- A/B testing capabilities
+- Custom event tracking
