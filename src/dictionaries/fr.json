@@ -1,0 +1,20 @@
+{
+  "navigation": {
+    "home": "Home",
+    "predictions": "Predictions",
+    "live_scores": "Live Scores",
+    "news": "News",
+    "blog": "Blog"
+  },
+  "matches": {
+    "upcoming": "Upcoming Matches",
+    "live": "Live Matches",
+    "finished": "Finished Matches",
+    "prediction": {
+      "win": "Win",
+      "draw": "Draw",
+      "lose": "Lose",
+      "confidence": "Confidence"
+    }
+  }
+}

@@ -1,16 +1,8 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import { getDictionary } from '@/lib/get-dictionary'
+import { LanguageProvider } from '@/contexts/LanguageContext'
+import {Locale} from "@/i18n-config";
+import {Metadata} from "next";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
     metadataBase: new URL('https://predictionsport.com'),
@@ -79,18 +71,25 @@ export const metadata: Metadata = {
     category: 'Sports'
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
-  );
+export default async function RootLayout({
+                                             children,
+                                             params: { lang }
+                                         }: {
+    children: React.ReactNode
+    params: { lang: Locale }
+}) {
+    const dictionary = await getDictionary(lang)
+
+    return (
+        <html lang={lang}>
+        <body>
+        <LanguageProvider
+            initialLocale={lang}
+            initialDictionary={dictionary}
+        >
+            {children}
+        </LanguageProvider>
+        </body>
+        </html>
+    )
 }
