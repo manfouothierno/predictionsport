@@ -1,8 +1,14 @@
 import { getDictionary } from '@/lib/get-dictionary'
 import { LanguageProvider } from '@/contexts/LanguageContext'
-import {Locale} from "@/i18n-config";
+import {i18n, Locale} from "@/i18n-config";
 import {Metadata} from "next";
 
+export type LayoutProps = {
+    children: React.ReactNode;
+    params: {
+        lang: Locale;
+    };
+};
 
 export const metadata: Metadata = {
     metadataBase: new URL('https://predictionsport.com'),
@@ -71,14 +77,13 @@ export const metadata: Metadata = {
     category: 'Sports'
 }
 
-export default async function RootLayout({
-                                             children,
-                                             params: { lang }
-                                         }: {
-    children: React.ReactNode
-    params: { lang: Locale }
-}) {
-    const dictionary = await getDictionary(lang)
+export async function generateStaticParams() {
+    return i18n.locales.map((locale) => ({ lang: locale }));
+}
+
+export default async function RootLayout({ children, params }: LayoutProps) {
+    const lang = await  params.lang;
+    const dictionary = await getDictionary(lang);
 
     return (
         <html lang={lang}>

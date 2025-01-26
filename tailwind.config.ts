@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
-import { nextui } from "@nextui-org/react"
-import colors from 'tailwindcss/colors'
+import {nextui} from "@nextui-org/react";
+import colors from "tailwindcss/colors";
 
 export default {
   content: [
