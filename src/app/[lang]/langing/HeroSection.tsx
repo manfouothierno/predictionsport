@@ -16,6 +16,32 @@ const mockMatches = [
         confidence: 85,
         odds: '1.95'
     },
+    {
+        id: 2,
+        league: 'Premier League',
+        homeTeam: 'Manchester City',
+        awayTeam: 'Chelsea',
+        time: '20:45',
+        homeScore: 2,
+        awayScore: 1,
+        minute: '63',
+        prediction: 'Home Win',
+        confidence: 85,
+        odds: '1.95'
+    },
+    {
+        id: 3,
+        league: 'Premier League',
+        homeTeam: 'Manchester City',
+        awayTeam: 'Chelsea',
+        time: '20:45',
+        homeScore: 2,
+        awayScore: 1,
+        minute: '63',
+        prediction: 'Home Win',
+        confidence: 85,
+        odds: '1.95'
+    },
     // Add more mock matches
 ];
 
