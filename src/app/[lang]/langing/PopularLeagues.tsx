@@ -46,7 +46,7 @@ export default function PopularLeagues() {
                                     />
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                                    <h3 className="font-semibold text-gray-900 group-hover:text-red-600 transition-colors">
                                         {league.name}
                                     </h3>
                                     <p className="text-sm text-gray-500">{league.country}</p>
@@ -69,7 +69,7 @@ export default function PopularLeagues() {
 
                 {/* Quick filters */}
                 <div className="mt-8 flex space-x-4 overflow-x-auto pb-4 scrollbar-hide">
-                    <button className="flex-shrink-0 bg-blue-600 text-white px-4 py-2 rounded-full">
+                    <button className="flex-shrink-0 bg-red-600 text-white px-4 py-2 rounded-full">
                         All Leagues
                     </button>
                     <button className="flex-shrink-0 bg-gray-100 text-gray-700 px-4 py-2 rounded-full hover:bg-gray-200">

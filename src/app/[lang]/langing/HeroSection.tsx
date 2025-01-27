@@ -81,7 +81,7 @@ export default function HeroSection() {
     }, [currentSlide]);
 
     return (
-        <section className="relative min-h-[600px] lg:min-h-[700px] bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 overflow-hidden">
+        <section className="relative min-h-[600px] lg:min-h-[700px] bg-gradient-to-br from-red-900 via-red-800 to-indigo-900 overflow-hidden">
             {/* Background Pattern */}
             <div className="absolute inset-0">
                 <div className="absolute inset-0 bg-[url('/hero-pattern.svg')] opacity-10" />
@@ -97,7 +97,7 @@ export default function HeroSection() {
                             animate={{ opacity: 1, y: 0 }}
                             className="space-y-6"
                         >
-              <span className="inline-block px-4 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm font-medium">
+              <span className="inline-block px-4 py-1 bg-red-500/20 text-red-300 rounded-full text-sm font-medium">
                 Live Predictions
               </span>
                             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
@@ -117,7 +117,7 @@ export default function HeroSection() {
                         >
                             <div className="text-center">
                                 <div className="bg-white/10 rounded-lg p-4">
-                                    <Clock className="w-6 h-6 text-blue-400 mx-auto mb-2" />
+                                    <Clock className="w-6 h-6 text-red-400 mx-auto mb-2" />
                                     <p className="text-2xl font-bold text-white">98%</p>
                                     <p className="text-sm text-gray-300">On-time</p>
                                 </div>

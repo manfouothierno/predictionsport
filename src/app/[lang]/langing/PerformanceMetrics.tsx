@@ -64,7 +64,7 @@ const CustomTooltip = ({ active=false, payload = [] as any, label='' }) => {
         return (
             <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-100">
                 <p className="font-medium text-gray-900">{label}</p>
-                <p className="text-blue-600">{`Success Rate: ${payload[0].value}%`}</p>
+                <p className="text-red-600">{`Success Rate: ${payload[0].value}%`}</p>
                 <p className="text-gray-600">{`Predictions: ${payload[0].payload.predictions}`}</p>
             </div>
         );
@@ -100,16 +100,16 @@ export default function PerformanceMetrics() {
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white"
+                            className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-6 text-white"
                         >
                             <div className="flex justify-between items-start mb-4">
-                                <div className="bg-blue-400/30 rounded-lg p-2">
+                                <div className="bg-red-400/30 rounded-lg p-2">
                                     <Activity className="w-6 h-6" />
                                 </div>
                             </div>
-                            <p className="text-blue-100 text-sm">Overall Success Rate</p>
+                            <p className="text-red-100 text-sm">Overall Success Rate</p>
                             <h3 className="text-3xl font-bold mt-1">89.5%</h3>
-                            <div className="mt-4 flex items-center text-blue-100 text-sm">
+                            <div className="mt-4 flex items-center text-red-100 text-sm">
                                 <TrendingUp className="w-4 h-4 mr-1" />
                                 <span>+2.5% from last month</span>
                             </div>
@@ -226,7 +226,7 @@ export default function PerformanceMetrics() {
                                     </div>
                                     <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                                         <div
-                                            className="h-full bg-blue-500 rounded-full transition-all duration-500 group-hover:bg-blue-600"
+                                            className="h-full bg-red-500 rounded-full transition-all duration-500 group-hover:bg-red-600"
                                             style={{ width: `${league.accuracy}%` }}
                                         />
                                     </div>
@@ -246,7 +246,7 @@ export default function PerformanceMetrics() {
                                 <h3 className="text-lg font-semibold text-gray-900">Recent Predictions</h3>
                                 <p className="text-sm text-gray-500 mt-1">Latest prediction results and outcomes</p>
                             </div>
-                            <button className="text-blue-600 hover:text-blue-700 text-sm font-medium inline-flex items-center">
+                            <button className="text-red-600 hover:text-red-700 text-sm font-medium inline-flex items-center">
                                 View All
                                 <ChevronRight className="w-4 h-4 ml-1" />
                             </button>

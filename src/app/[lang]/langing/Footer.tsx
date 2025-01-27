@@ -44,15 +44,15 @@ const Footer = () => {
 
                         <div className="space-y-4">
                             <div className="flex items-center space-x-3 text-gray-400">
-                                <Globe className="w-5 h-5 text-blue-500" />
+                                <Globe className="w-5 h-5 text-red-500" />
                                 <span>Available in 4 languages</span>
                             </div>
                             <div className="flex items-center space-x-3 text-gray-400">
-                                <MapPin className="w-5 h-5 text-blue-500" />
+                                <MapPin className="w-5 h-5 text-red-500" />
                                 <span>Coverage of 30+ leagues</span>
                             </div>
                             <div className="flex items-center space-x-3 text-gray-400">
-                                <Phone className="w-5 h-5 text-blue-500" />
+                                <Phone className="w-5 h-5 text-red-500" />
                                 <span>24/7 Customer support</span>
                             </div>
                         </div>
@@ -62,7 +62,7 @@ const Footer = () => {
                                 <a
                                     key={label}
                                     href={href}
-                                    className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-blue-600 hover:text-white transition-all"
+                                    className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-red-600 hover:text-white transition-all"
                                 >
                                     <Icon className="w-5 h-5" />
                                 </a>
@@ -80,7 +80,7 @@ const Footer = () => {
                                         <ArrowRight className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" />
                                         <span>{link.name}</span>
                                         {link.badge && (
-                                            <span className="ml-2 px-2 py-0.5 text-xs bg-blue-600 text-white rounded-full">
+                                            <span className="ml-2 px-2 py-0.5 text-xs bg-red-600 text-white rounded-full">
                         {link.badge}
                       </span>
                                         )}
@@ -117,7 +117,7 @@ const Footer = () => {
                                 <Mail className="w-5 h-5 mr-2" />
                                 support@predictionsport.com
                             </a>
-                            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg transition-colors">
+                            <button className="w-full bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-lg transition-colors">
                                 Live Chat Support
                             </button>
                             <p className="text-sm text-gray-500">

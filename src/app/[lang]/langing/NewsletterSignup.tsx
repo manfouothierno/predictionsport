@@ -18,7 +18,7 @@ export default function NewsletterSignup() {
             icon: Bell,
             title: 'Daily Predictions',
             description: 'Get expertly analyzed match predictions',
-            color: 'blue'
+            color: 'red'
         },
         {
             icon: Star,
@@ -37,7 +37,7 @@ export default function NewsletterSignup() {
     return (
         <section className="relative py-20 overflow-hidden">
             {/* Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900">
+            <div className="absolute inset-0 bg-gradient-to-br from-red-900 via-red-800 to-indigo-900">
                 <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
             </div>
@@ -51,7 +51,7 @@ export default function NewsletterSignup() {
                         transition={{ duration: 0.6 }}
                         className="text-center lg:text-left"
                     >
-            <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-800/50 text-blue-200 text-sm font-medium mb-6 backdrop-blur-sm">
+            <span className="inline-flex items-center px-3 py-1 rounded-full bg-red-800/50 text-red-200 text-sm font-medium mb-6 backdrop-blur-sm">
               <Shield className="w-4 h-4 mr-2" />
               Trusted by 50,000+ Users
             </span>
@@ -60,7 +60,7 @@ export default function NewsletterSignup() {
                             Get Match Predictions That Actually Work
                         </h2>
 
-                        <p className="text-xl text-blue-100 mb-8 leading-relaxed">
+                        <p className="text-xl text-red-100 mb-8 leading-relaxed">
                             Join our community of successful bettors receiving daily expert analysis, predictions, and exclusive insights.
                         </p>
 
@@ -69,13 +69,13 @@ export default function NewsletterSignup() {
                                 <div className="flex-1">
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                            <Mail className="h-5 w-5 text-blue-300" />
+                                            <Mail className="h-5 w-5 text-red-300" />
                                         </div>
                                         <input
                                             type="email"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
-                                            className="block w-full pl-12 pr-4 py-4 border-0 rounded-xl focus:ring-2 focus:ring-blue-400 bg-white/10 backdrop-blur-sm text-white placeholder-blue-200 transition-all"
+                                            className="block w-full pl-12 pr-4 py-4 border-0 rounded-xl focus:ring-2 focus:ring-red-400 bg-white/10 backdrop-blur-sm text-white placeholder-red-200 transition-all"
                                             placeholder="Enter your email"
                                             required
                                         />
@@ -84,10 +84,10 @@ export default function NewsletterSignup() {
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="inline-flex items-center justify-center px-8 py-4 rounded-xl text-blue-900 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition-all disabled:opacity-70 disabled:cursor-not-allowed font-medium shadow-lg shadow-blue-900/20"
+                                    className="inline-flex items-center justify-center px-8 py-4 rounded-xl text-red-900 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 transition-all disabled:opacity-70 disabled:cursor-not-allowed font-medium shadow-lg shadow-red-900/20"
                                 >
                                     {isSubmitting ? (
-                                        <div className="w-5 h-5 border-2 border-blue-900 border-t-transparent rounded-full animate-spin" />
+                                        <div className="w-5 h-5 border-2 border-red-900 border-t-transparent rounded-full animate-spin" />
                                     ) : (
                                         <>
                                             Subscribe
@@ -98,7 +98,7 @@ export default function NewsletterSignup() {
                             </div>
                         </form>
 
-                        <p className="mt-4 text-sm text-blue-200 flex items-center justify-center lg:justify-start">
+                        <p className="mt-4 text-sm text-red-200 flex items-center justify-center lg:justify-start">
                             <Shield className="w-4 h-4 mr-2" />
                             Your data is secure. Unsubscribe anytime.
                         </p>
@@ -124,10 +124,10 @@ export default function NewsletterSignup() {
                                         <feature.icon className={`w-6 h-6 text-${feature.color}-300`} />
                                     </div>
                                     <div>
-                                        <h3 className="text-lg font-semibold text-white group-hover:text-blue-200 transition-colors">
+                                        <h3 className="text-lg font-semibold text-white group-hover:text-red-200 transition-colors">
                                             {feature.title}
                                         </h3>
-                                        <p className="text-blue-200">{feature.description}</p>
+                                        <p className="text-red-200">{feature.description}</p>
                                     </div>
                                 </div>
                             </motion.div>
@@ -137,15 +137,15 @@ export default function NewsletterSignup() {
                         <div className="grid grid-cols-3 gap-4 mt-4">
                             <div className="text-center p-4 bg-white/5 rounded-xl backdrop-blur-sm">
                                 <div className="text-2xl font-bold text-white">92%</div>
-                                <div className="text-sm text-blue-200">Success Rate</div>
+                                <div className="text-sm text-red-200">Success Rate</div>
                             </div>
                             <div className="text-center p-4 bg-white/5 rounded-xl backdrop-blur-sm">
                                 <div className="text-2xl font-bold text-white">150+</div>
-                                <div className="text-sm text-blue-200">Daily Tips</div>
+                                <div className="text-sm text-red-200">Daily Tips</div>
                             </div>
                             <div className="text-center p-4 bg-white/5 rounded-xl backdrop-blur-sm">
                                 <div className="text-2xl font-bold text-white">50K+</div>
-                                <div className="text-sm text-blue-200">Subscribers</div>
+                                <div className="text-sm text-red-200">Subscribers</div>
                             </div>
                         </div>
                     </motion.div>

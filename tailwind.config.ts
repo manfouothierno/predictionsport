@@ -12,7 +12,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: colors.blue[600],
+        primary: colors.red[600],
         secondary: colors.gray[600],
         success: colors.green[500],
         warning: colors.yellow[500],

@@ -53,7 +53,7 @@ export default function NewsHighlights() {
                                 key={category}
                                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all
                   ${category === "All"
-                                    ? "bg-blue-600 text-white hover:bg-blue-700"
+                                    ? "bg-red-600 text-white hover:bg-red-700"
                                     : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
                                 }`}
                             >
@@ -80,7 +80,7 @@ export default function NewsHighlights() {
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                                 <div className="absolute bottom-4 left-4 right-4">
-                  <span className="inline-block px-3 py-1 bg-blue-600 text-white text-sm font-medium rounded-full mb-2">
+                  <span className="inline-block px-3 py-1 bg-red-600 text-white text-sm font-medium rounded-full mb-2">
                     {item.category}
                   </span>
                                     <h3 className="text-xl font-bold text-white line-clamp-2">
@@ -106,12 +106,12 @@ export default function NewsHighlights() {
                                 </p>
 
                                 <div className="flex justify-between items-center">
-                                    <button className="text-blue-600 hover:text-blue-700 font-medium inline-flex items-center group">
+                                    <button className="text-red-600 hover:text-red-700 font-medium inline-flex items-center group">
                                         Read More
                                         <ChevronRight className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" />
                                     </button>
 
-                                    <button className="p-2 text-gray-400 hover:text-blue-600 rounded-full hover:bg-blue-50 transition-colors">
+                                    <button className="p-2 text-gray-400 hover:text-red-600 rounded-full hover:bg-red-50 transition-colors">
                                         <Share2 className="w-5 h-5" />
                                     </button>
                                 </div>
@@ -121,7 +121,7 @@ export default function NewsHighlights() {
                 </div>
 
                 <div className="mt-12 flex justify-center">
-                    <button className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                    <button className="bg-red-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors">
                         View All News
                     </button>
                 </div>

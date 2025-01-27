@@ -47,7 +47,7 @@ export default function TopPredictions() {
                         </h2>
                         <p className="mt-2 text-gray-600">Expert picks with highest confidence</p>
                     </div>
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                    <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
                         View All
                     </button>
                 </div>
@@ -105,7 +105,7 @@ export default function TopPredictions() {
                                     </div>
                                 </div>
 
-                                <button className="w-full mt-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white py-2 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transition-all">
+                                <button className="w-full mt-6 bg-gradient-to-r from-red-600 to-red-700 text-white py-2 rounded-lg font-medium hover:from-red-700 hover:to-red-800 transition-all">
                                     View Analysis
                                 </button>
                             </div>
@@ -115,8 +115,8 @@ export default function TopPredictions() {
 
                 <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="flex items-center space-x-4 bg-white p-4 rounded-lg shadow">
-                        <div className="bg-blue-100 p-3 rounded-lg">
-                            <Trophy className="w-6 h-6 text-blue-600" />
+                        <div className="bg-red-100 p-3 rounded-lg">
+                            <Trophy className="w-6 h-6 text-red-600" />
                         </div>
                         <div>
                             <p className="text-lg font-semibold text-gray-900">92%</p>
