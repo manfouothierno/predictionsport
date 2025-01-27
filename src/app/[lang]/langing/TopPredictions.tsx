@@ -33,6 +33,26 @@ const mockPredictions = [
         odds: 1.95,
         status: 'hot'
     },
+    {
+        id: 4,
+        league: 'Premier League',
+        match: 'Liverpool vs Chelsea',
+        time: '20:45',
+        prediction: 'Home Win',
+        confidence: 85,
+        odds: 1.95,
+        status: 'hot'
+    },
+    {
+        id: 5,
+        league: 'Premier League',
+        match: 'Liverpool vs Chelsea',
+        time: '20:45',
+        prediction: 'Home Win',
+        confidence: 85,
+        odds: 1.95,
+        status: 'hot'
+    },
     // Add more predictions
 ];
 

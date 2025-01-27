@@ -42,7 +42,7 @@ const mockMatches = [
         confidence: 85,
         odds: '1.95'
     },
-    // Add more mock matches
+    // Add more mock [match]
 ];
 
 export default function HeroSection() {

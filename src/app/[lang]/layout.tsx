@@ -2,6 +2,8 @@ import { getDictionary } from '@/lib/get-dictionary'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import {i18n, Locale} from "@/i18n-config";
 import {Metadata} from "next";
+import Navbar from "@/app/[lang]/langing/Navbar";
+import Footer from "@/app/[lang]/langing/Footer";
 
 export type LayoutProps = {
     children: React.ReactNode;
@@ -16,8 +18,8 @@ export const metadata: Metadata = {
         default: 'PredictionSport - Expert Football Predictions & Betting Tips',
         template: '%s | PredictionSport'
     },
-    description: 'Get expert football predictions, live scores, and betting tips. Daily match analysis and predictions for Premier League, La Liga, Champions League and more.',
-    keywords: ['football predictions', 'betting tips', 'soccer predictions', 'match analysis', 'live scores'],
+    description: 'Get expert football predictions, live scores, and betting tips. Daily match [match] and predictions for Premier League, La Liga, Champions League and more.',
+    keywords: ['football predictions', 'betting tips', 'soccer predictions', 'match [match]', 'live scores'],
     authors: [{ name: 'PredictionSport' }],
     creator: 'PredictionSport',
     publisher: 'PredictionSport',
@@ -92,7 +94,9 @@ export default async function RootLayout({ children, params }: LayoutProps) {
             initialLocale={lang}
             initialDictionary={dictionary}
         >
+
             {children}
+            <Footer/>
         </LanguageProvider>
         </body>
         </html>

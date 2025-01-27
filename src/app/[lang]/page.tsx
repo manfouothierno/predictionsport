@@ -16,13 +16,13 @@ export default function Home() {
   return (
     <div >
         <Navbar />
-        <HeroSection />
+        {/*<HeroSection />*/}
         <TopPredictions />
         <PopularLeagues />
         <NewsHighlights/>
         <PerformanceMetrics/>
         <NewsletterSignup/>
-        <Footer/>
+
     </div>
   );
 }

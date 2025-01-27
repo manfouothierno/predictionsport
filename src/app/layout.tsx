@@ -18,8 +18,8 @@ export const metadata: Metadata = {
         default: 'PredictionSport - Expert Football Predictions & Betting Tips',
         template: '%s | PredictionSport'
     },
-    description: 'Get expert football predictions, live scores, and betting tips. Daily match analysis and predictions for Premier League, La Liga, Champions League and more.',
-    keywords: ['football predictions', 'betting tips', 'soccer predictions', 'match analysis', 'live scores'],
+    description: 'Get expert football predictions, live scores, and betting tips. Daily match [match] and predictions for Premier League, La Liga, Champions League and more.',
+    keywords: ['football predictions', 'betting tips', 'soccer predictions', 'match [match]', 'live scores'],
     authors: [{ name: 'PredictionSport' }],
     creator: 'PredictionSport',
     publisher: 'PredictionSport',
