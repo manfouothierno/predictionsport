@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { Search, Tag, Calendar, Filter, ArrowRight } from 'lucide-react';
 import {  Button, Card, Avatar } from "@nextui-org/react";
 import {useRouter} from "next/navigation";
 import Navbar from "@/app/[lang]/langing/Navbar";
 import Image from "next/image";
+import {BlogPost, getBlogCategories, getBlogPosts} from "@/lib/api/blogs";
+import {formatDistanceToNow} from "date-fns";
 
 const blogCategories = [
     { id: 'all', name: 'All Posts' },
@@ -102,6 +104,24 @@ export default function BlogPage() {
     const [activeCategory, setActiveCategory] = useState('all');
     const router = useRouter();
 
+    const [posts, setPosts] = useState<BlogPost[]>([]);
+    const [categories, setCategories] = useState<any[]>([]);
+
+    useEffect(() => {
+        getBlogPosts().then(posts => {
+            setPosts(posts);
+        });
+
+        getBlogCategories().then(categories => {
+            setCategories([ { id: 'all', name: 'All Posts' }, ...categories]);
+
+        });
+
+        console.log(categories)
+
+    }, []);
+
+
     return (
         <div className="min-h-screen bg-gray-50">
             <Navbar/>
@@ -122,7 +142,7 @@ export default function BlogPage() {
                         <div className="relative">
                             <div className="absolute inset-0 bg-grid-pattern opacity-10" />
                             <img
-                                src="/pexels-pixabay-274422.jpg"
+                                src="https://images.ctfassets.net/xmgs91wbscbl/3VXvmqcF20EIiqDcrUso2a/05d67dc0df0223842d58cfb04e3f6ca8/pexels-pixabay-274422.jpg"
                                 alt="Blog Header"
                                 width={1000}
                                 height={500}
@@ -137,12 +157,12 @@ export default function BlogPage() {
             <div className="max-w-7xl mx-auto px-4 py-8">
                 <div className="flex flex-col md:flex-row justify-between gap-4 mb-8">
                     <div className="flex gap-4 overflow-x-auto">
-                        {blogCategories.map((category) => (
+                        {categories.map((category, index) => (
                             <Button
-                                key={category.id}
-                                variant={activeCategory === category.id ? "solid" : "light"}
-                                color={activeCategory === category.id ? "danger" : "default"}
-                                onClick={() => setActiveCategory(category.id)}
+                                key={index}
+                                variant={activeCategory === category.name ? "solid" : "light"}
+                                color={activeCategory === category.name ? "danger" : "default"}
+                                onClick={() => setActiveCategory(category.name)}
                             >
                                 {category.name}
                             </Button>
@@ -165,7 +185,7 @@ export default function BlogPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {mockPosts.map((post) => (
+                    { posts.length > 0 &&  posts.map((post) => (
                         <Card
                             key={post.id}
                             className="group"
@@ -176,16 +196,16 @@ export default function BlogPage() {
                                     alt={post.title}
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                 />
-                                <div className="absolute top-4 left-4 flex gap-2">
-                                    {post.tags.map((tag) => (
-                                        <span
-                                            key={tag}
-                                            className="px-2 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium rounded-full"
-                                        >
-                      {tag}
-                    </span>
-                                    ))}
-                                </div>
+                    {/*            <div className="absolute top-4 left-4 flex gap-2">*/}
+                    {/*                {post.tags.map((tag) => (*/}
+                    {/*                    <span*/}
+                    {/*                        key={tag}*/}
+                    {/*                        className="px-2 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium rounded-full"*/}
+                    {/*                    >*/}
+                    {/*  {tag}*/}
+                    {/*</span>*/}
+                    {/*                ))}*/}
+                    {/*            </div>*/}
                             </div>
 
                             <div className="p-4">
@@ -211,7 +231,7 @@ export default function BlogPage() {
                                     <div className="flex items-center gap-4 text-gray-500">
                                         <div className="flex items-center gap-1">
                                             <Calendar className="w-4 h-4" />
-                                            {post.date}
+                                            {formatDistanceToNow(post.publishDate, { addSuffix: true })}
                                         </div>
                                         <span>•</span>
                                         <span>{post.readTime}</span>
@@ -231,17 +251,17 @@ export default function BlogPage() {
                     ))}
                 </div>
 
-                <div className="flex justify-center mt-12">
-                    <Button
-                        color="danger"
-                        variant="bordered"
-                        size="lg"
-                        endContent={<ArrowRight className="w-4 h-4" />}
+                {/*<div className="flex justify-center mt-12">*/}
+                {/*    <Button*/}
+                {/*        color="danger"*/}
+                {/*        variant="bordered"*/}
+                {/*        size="lg"*/}
+                {/*        endContent={<ArrowRight className="w-4 h-4" />}*/}
 
-                    >
-                        Load More Posts
-                    </Button>
-                </div>
+                {/*    >*/}
+                {/*        Load More Posts*/}
+                {/*    </Button>*/}
+                {/*</div>*/}
             </div>
         </div>
     );

@@ -119,21 +119,6 @@ export default function MatchPredictions() {
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                             </div>
 
-                            {/* View Toggle */}
-                            <div className="flex rounded-lg overflow-hidden border border-gray-200">
-                                <button
-                                    onClick={() => setViewType('grid')}
-                                    className={`px-4 py-2 ${viewType === 'grid' ? 'bg-red-600 text-white' : 'bg-white text-gray-700'}`}
-                                >
-                                    Grid
-                                </button>
-                                <button
-                                    onClick={() => setViewType('list')}
-                                    className={`px-4 py-2 ${viewType === 'list' ? 'bg-red-600 text-white' : 'bg-white text-gray-700'}`}
-                                >
-                                    List
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -142,7 +127,7 @@ export default function MatchPredictions() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Sidebar Filters */}
-                    <div className="lg:w-64 flex-shrink-0">
+                    <div className="lg:w-64 hidden lg:block flex-shrink-0">
                         <div className="bg-white rounded-xl shadow-sm p-6 sticky top-24">
                             <h3 className="font-semibold text-gray-900 mb-4">Categories</h3>
                             <div className="space-y-2">

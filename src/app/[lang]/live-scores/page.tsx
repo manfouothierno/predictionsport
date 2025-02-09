@@ -1,405 +1,193 @@
 'use client';
 
-import { useState } from 'react';
-import { TrendingUp, Star, Calendar, Search, Clock, RefreshCcw } from 'lucide-react';
-import {  Chip, Button, Tooltip } from "@nextui-org/react";
+import { useState, useEffect } from 'react';
+import { TrendingUp, Star, Calendar, Search, Clock, RefreshCcw, Filter } from 'lucide-react';
 import Navbar from "@/app/[lang]/langing/Navbar";
-
-const mockMatches = [
-    {
-        id: 1,
-        league: 'Premier League',
-        status: 'live',
-        minute: 65,
-        homeTeam: {
-            name: 'Arsenal',
-            score: 2,
-            stats: {
-                possession: 58,
-                shots: 12,
-                shotsOnTarget: 5,
-                corners: 6,
-                yellowCards: 1,
-                redCards: 0
-            }
-        },
-        awayTeam: {
-            name: 'Chelsea',
-            score: 1,
-            stats: {
-                possession: 42,
-                shots: 8,
-                shotsOnTarget: 3,
-                corners: 4,
-                yellowCards: 2,
-                redCards: 0
-            }
-        },
-        events: [
-            { time: 65, type: 'goal', team: 'home', player: 'Smith', detail: 'Goal' },
-            { time: 45, type: 'yellow', team: 'away', player: 'Mount', detail: 'Foul' }
-        ]
-    },
-    {
-        id: 2,
-        league: 'Premier League',
-        status: 'live',
-        minute: 65,
-        homeTeam: {
-            name: 'Arsenal',
-            score: 2,
-            stats: {
-                possession: 58,
-                shots: 12,
-                shotsOnTarget: 5,
-                corners: 6,
-                yellowCards: 1,
-                redCards: 0
-            }
-        },
-        awayTeam: {
-            name: 'Chelsea',
-            score: 1,
-            stats: {
-                possession: 42,
-                shots: 8,
-                shotsOnTarget: 3,
-                corners: 4,
-                yellowCards: 2,
-                redCards: 0
-            }
-        },
-        events: [
-            { time: 65, type: 'goal', team: 'home', player: 'Smith', detail: 'Goal' },
-            { time: 45, type: 'yellow', team: 'away', player: 'Mount', detail: 'Foul' }
-        ]
-    },
-    {
-        id: 3,
-        league: 'Premier League',
-        status: 'live',
-        minute: 65,
-        homeTeam: {
-            name: 'Arsenal',
-            score: 2,
-            stats: {
-                possession: 58,
-                shots: 12,
-                shotsOnTarget: 5,
-                corners: 6,
-                yellowCards: 1,
-                redCards: 0
-            }
-        },
-        awayTeam: {
-            name: 'Chelsea',
-            score: 1,
-            stats: {
-                possession: 42,
-                shots: 8,
-                shotsOnTarget: 3,
-                corners: 4,
-                yellowCards: 2,
-                redCards: 0
-            }
-        },
-        events: [
-            { time: 65, type: 'goal', team: 'home', player: 'Smith', detail: 'Goal' },
-            { time: 45, type: 'yellow', team: 'away', player: 'Mount', detail: 'Foul' }
-        ]
-    },
-    {
-        id: 4,
-        league: 'Premier League',
-        status: 'live',
-        minute: 65,
-        homeTeam: {
-            name: 'Arsenal',
-            score: 2,
-            stats: {
-                possession: 58,
-                shots: 12,
-                shotsOnTarget: 5,
-                corners: 6,
-                yellowCards: 1,
-                redCards: 0
-            }
-        },
-        awayTeam: {
-            name: 'Chelsea',
-            score: 1,
-            stats: {
-                possession: 42,
-                shots: 8,
-                shotsOnTarget: 3,
-                corners: 4,
-                yellowCards: 2,
-                redCards: 0
-            }
-        },
-        events: [
-            { time: 65, type: 'goal', team: 'home', player: 'Smith', detail: 'Goal' },
-            { time: 45, type: 'yellow', team: 'away', player: 'Mount', detail: 'Foul' }
-        ]
-    },
-    {
-        id: 5,
-        league: 'Premier League',
-        status: 'live',
-        minute: 65,
-        homeTeam: {
-            name: 'Arsenal',
-            score: 2,
-            stats: {
-                possession: 58,
-                shots: 12,
-                shotsOnTarget: 5,
-                corners: 6,
-                yellowCards: 1,
-                redCards: 0
-            }
-        },
-        awayTeam: {
-            name: 'Chelsea',
-            score: 1,
-            stats: {
-                possession: 42,
-                shots: 8,
-                shotsOnTarget: 3,
-                corners: 4,
-                yellowCards: 2,
-                redCards: 0
-            }
-        },
-        events: [
-            { time: 65, type: 'goal', team: 'home', player: 'Smith', detail: 'Goal' },
-            { time: 45, type: 'yellow', team: 'away', player: 'Mount', detail: 'Foul' }
-        ]
-    },
-    {
-        id: 6,
-        league: 'Premier League',
-        status: 'live',
-        minute: 65,
-        homeTeam: {
-            name: 'Arsenal',
-            score: 2,
-            stats: {
-                possession: 58,
-                shots: 12,
-                shotsOnTarget: 5,
-                corners: 6,
-                yellowCards: 1,
-                redCards: 0
-            }
-        },
-        awayTeam: {
-            name: 'Chelsea',
-            score: 1,
-            stats: {
-                possession: 42,
-                shots: 8,
-                shotsOnTarget: 3,
-                corners: 4,
-                yellowCards: 2,
-                redCards: 0
-            }
-        },
-        events: [
-            { time: 65, type: 'goal', team: 'home', player: 'Smith', detail: 'Goal' },
-            { time: 45, type: 'yellow', team: 'away', player: 'Mount', detail: 'Foul' }
-        ]
-    },
-    {
-        id: 7,
-        league: 'Premier League',
-        status: 'live',
-        minute: 65,
-        homeTeam: {
-            name: 'Arsenal',
-            score: 2,
-            stats: {
-                possession: 58,
-                shots: 12,
-                shotsOnTarget: 5,
-                corners: 6,
-                yellowCards: 1,
-                redCards: 0
-            }
-        },
-        awayTeam: {
-            name: 'Chelsea',
-            score: 1,
-            stats: {
-                possession: 42,
-                shots: 8,
-                shotsOnTarget: 3,
-                corners: 4,
-                yellowCards: 2,
-                redCards: 0
-            }
-        },
-        events: [
-            { time: 65, type: 'goal', team: 'home', player: 'Smith', detail: 'Goal' },
-            { time: 45, type: 'yellow', team: 'away', player: 'Mount', detail: 'Foul' }
-        ]
-    },
-];
+import MatchCard from "@/components/MatchCard";
 
 export default function LiveScores() {
+    const [matches, setMatches] = useState([]);
     const [selectedLeague, setSelectedLeague] = useState('all');
     const [lastUpdate, setLastUpdate] = useState(new Date());
+    const [searchQuery, setSearchQuery] = useState('');
+    const [availableLeagues, setAvailableLeagues] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [layout, setLayout] = useState('grid'); // 'grid' or 'list'
+
+    useEffect(() => {
+        const fetchLiveScores = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch(
+                    'https://apiv3.apifootball.com/?action=get_events&match_live=1&APIkey=a416a23b2f17f2c7e90d41aab89229bb3d445f2b5616c45f03f054eef6876004'
+                );
+                if (!response.ok) {
+                    throw new Error('Failed to fetch live scores');
+                }
+                const data = await response.json();
+                setMatches(data);
+                setAvailableLeagues([...new Set(data.map(match => match.league_name))]);
+                setError(null);
+            } catch (error) {
+                setError('Failed to load matches');
+                console.error('Error fetching live scores:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchLiveScores();
+        const intervalId = setInterval(fetchLiveScores, 60000);
+        return () => clearInterval(intervalId);
+    }, []);
+
+    const filteredMatches = matches.filter(match => {
+        const searchTerm = searchQuery.toLowerCase();
+        if (selectedLeague === 'all') {
+            return match.league_name.toLowerCase().includes(searchTerm) ||
+                match.match_hometeam_name.toLowerCase().includes(searchTerm) ||
+                match.match_awayteam_name.toLowerCase().includes(searchTerm);
+        }
+        return match.league_name === selectedLeague &&
+            (match.match_hometeam_name.toLowerCase().includes(searchTerm) ||
+                match.match_awayteam_name.toLowerCase().includes(searchTerm));
+    });
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <Navbar/>
-            <div className="bg-white pt-20 shadow-sm">
-                <div>
-                    <div className="max-w-7xl w-full mx-auto px-4">
-                        <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-4">
+        <div className="min-h-screen bg-gray-100">
+            <Navbar />
+
+            {/* Sticky Header */}
+            <div className=" sticky pt-16 bg-white shadow-sm">
+                <div className="max-w-8xl mx-auto">
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between p-4 gap-4">
+                        {/* Left Section */}
+                        <div className="flex items-center justify-between">
                             <div>
                                 <h1 className="text-2xl font-bold text-gray-900">Live Scores</h1>
                                 <div className="flex items-center gap-2 mt-1">
-                                    <span className="text-sm text-gray-500">Last updated: {lastUpdate.toLocaleTimeString()}</span>
-                                    <Button
-                                        isIconOnly
-                                        size="sm"
-                                        variant="light"
-                                        onClick={() => setLastUpdate(new Date())}
+                                    <Clock className="w-4 h-4 text-gray-400" />
+                                    <span className="text-sm text-gray-500">
+                                        Last updated: {lastUpdate.toLocaleTimeString()}
+                                    </span>
+                                    <button
+                                        onClick={() => {
+                                            setLastUpdate(new Date());
+                                            setMatches(prev => [...prev]);
+                                        }}
+                                        className="p-1 hover:bg-gray-100 rounded-full transition-colors"
                                     >
-                                        <RefreshCcw className="w-4 h-4" />
-                                    </Button>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-4">
-                                <div className="relative">
-                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
-                                        <Search className="h-4 w-4 text-gray-400" />
-                                    </div>
-                                    <input
-                                        type="text"
-                                        className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                                        placeholder="Search teams..."
-                                    />
+                                        <RefreshCcw className="w-4 h-4 text-gray-400" />
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <div className="border-t">
-                    <div className="max-w-7xl mx-auto px-4">
-                        <div className="flex gap-6 overflow-x-auto py-4">
-                            <button className="flex items-center gap-2 text-red-600 border-b-2 border-red-600 pb-2 px-1">
-                                <Star className="w-4 h-4" />
-                                <span className="font-medium">Live Now</span>
-                            </button>
-                            <button className="flex items-center gap-2 text-gray-500 hover:text-gray-700 pb-2 px-1">
-                                <Calendar className="w-4 h-4" />
-                                <span className="font-medium">Today</span>
-                            </button>
-                            <button className="flex items-center gap-2 text-gray-500 hover:text-gray-700 pb-2 px-1">
-                                <TrendingUp className="w-4 h-4" />
-                                <span className="font-medium">Finished</span>
-                            </button>
+                        {/* Right Section */}
+                        <div className="flex items-center gap-4">
+                            <div className="relative flex-1 lg:w-96">
+                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                                <input
+                                    type="text"
+                                    className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="Search teams or leagues..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => setLayout('grid')}
+                                    className={`p-2 rounded-lg transition-colors ${
+                                        layout === 'grid' ? 'bg-blue-50 text-blue-600' : 'text-gray-400 hover:bg-gray-100'
+                                    }`}
+                                >
+                                    <div className="grid grid-cols-2 gap-0.5">
+                                        <div className="w-1.5 h-1.5 bg-current rounded-sm"/>
+                                        <div className="w-1.5 h-1.5 bg-current rounded-sm"/>
+                                        <div className="w-1.5 h-1.5 bg-current rounded-sm"/>
+                                        <div className="w-1.5 h-1.5 bg-current rounded-sm"/>
+                                    </div>
+                                </button>
+                                <button
+                                    onClick={() => setLayout('list')}
+                                    className={`p-2 rounded-lg transition-colors ${
+                                        layout === 'list' ? 'bg-blue-50 text-blue-600' : 'text-gray-400 hover:bg-gray-100'
+                                    }`}
+                                >
+                                    <div className="space-y-1">
+                                        <div className="w-6 h-0.5 bg-current rounded"/>
+                                        <div className="w-6 h-0.5 bg-current rounded"/>
+                                        <div className="w-6 h-0.5 bg-current rounded"/>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* League Filter */}
+                    <div className="border-t">
+                        <div className="max-w-8xl mx-auto px-4">
+                            <div className="flex gap-6 overflow-x-auto py-4 scrollbar-hide">
+                                <button
+                                    onClick={() => setSelectedLeague('all')}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                                        selectedLeague === 'all'
+                                            ? 'bg-blue-500 text-white'
+                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    <Star className="w-4 h-4" />
+                                    All Leagues
+                                </button>
+                                {availableLeagues.map((league) => (
+                                    <button
+                                        key={league}
+                                        onClick={() => setSelectedLeague(league)}
+                                        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+                                            selectedLeague === league
+                                                ? 'bg-blue-500 text-white'
+                                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                        }`}
+                                    >
+                                        <Calendar className="w-4 h-4" />
+                                        {league}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 py-8">
-                <div className="space-y-6">
-                    {mockMatches.map((match) => (
-                        <div key={match.id} className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                            {/* Match Header */}
-                            <div className="bg-gray-50 px-6 py-4 flex items-center justify-between border-b">
-                                <div className="flex items-center gap-4">
-                                    <div className="text-sm text-gray-600">{match.league}</div>
-                                    {match.status === 'live' && (
-                                        <Chip
-                                            className="bg-gradient-to-r from-green-500 to-green-600 text-white"
-                                            size="sm"
-                                            startContent={<div className="w-2 h-2 rounded-full bg-white animate-pulse" />}
-                                        >
-                                            LIVE {match.minute}'
-                                        </Chip>
-                                    )}
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <Clock className="w-4 h-4 text-gray-400" />
-                                    <span className="text-sm text-gray-600">19:45</span>
-                                </div>
-                            </div>
-
-                            {/* Score Section */}
-                            <div className="p-6">
-                                <div className="grid grid-cols-3 gap-4 items-center mb-6">
-                                    <div className="text-center">
-                                        <div className="font-medium text-gray-900 mb-1">{match.homeTeam.name}</div>
-                                        <div className="text-3xl font-bold text-gray-900">{match.homeTeam.score}</div>
-                                    </div>
-                                    <div className="text-center text-sm text-gray-500">
-                                        VS
-                                    </div>
-                                    <div className="text-center">
-                                        <div className="font-medium text-gray-900 mb-1">{match.awayTeam.name}</div>
-                                        <div className="text-3xl font-bold text-gray-900">{match.awayTeam.score}</div>
-                                    </div>
-                                </div>
-
-                                {/* Match Stats */}
-                                <div className="space-y-4">
-                                    <div className="flex items-center">
-                                        <div className="w-16 text-right text-sm font-medium text-gray-900">{match.homeTeam.stats.possession}%</div>
-                                        <div className="flex-1 mx-4">
-                                            <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                                                <div
-                                                    className="h-full bg-blue-600 rounded-full"
-                                                    style={{ width: `${match.homeTeam.stats.possession}%` }}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="w-16 text-sm font-medium text-gray-900">{match.awayTeam.stats.possession}%</div>
-                                    </div>
-
-                                    <div className="grid grid-cols-3 gap-4 text-sm">
-                                        <div className="text-right font-medium text-gray-900">{match.homeTeam.stats.shots}</div>
-                                        <div className="text-center text-gray-500">Shots</div>
-                                        <div className="text-left font-medium text-gray-900">{match.awayTeam.stats.shots}</div>
-
-                                        <div className="text-right font-medium text-gray-900">{match.homeTeam.stats.shotsOnTarget}</div>
-                                        <div className="text-center text-gray-500">On Target</div>
-                                        <div className="text-left font-medium text-gray-900">{match.awayTeam.stats.shotsOnTarget}</div>
-
-                                        <div className="text-right font-medium text-gray-900">{match.homeTeam.stats.corners}</div>
-                                        <div className="text-center text-gray-500">Corners</div>
-                                        <div className="text-left font-medium text-gray-900">{match.awayTeam.stats.corners}</div>
-                                    </div>
-                                </div>
-
-                                {/* Match Events */}
-                                <div className="mt-6 pt-6 border-t">
-                                    <h3 className="text-sm font-medium text-gray-900 mb-4">Match Events</h3>
-                                    <div className="space-y-3">
-                                        {match.events.map((event, index) => (
-                                            <div key={index} className="flex items-center gap-3 text-sm">
-                                                <span className="w-8 text-right text-gray-500">{event.time}'</span>
-                                                <div className={`w-2 h-2 rounded-full ${
-                                                    event.type === 'goal' ? 'bg-green-500' :
-                                                        event.type === 'yellow' ? 'bg-yellow-500' :
-                                                            'bg-red-500'
-                                                }`} />
-                                                <span className="font-medium text-gray-900">{event.player}</span>
-                                                <span className="text-gray-500">{event.detail}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+            {/* Main Content */}
+            <div className="max-w-8xl mx-auto px-4 py-6">
+                {loading ? (
+                    <div className="flex justify-center items-center py-12">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" />
+                    </div>
+                ) : error ? (
+                    <div className="text-center py-12 text-gray-500">{error}</div>
+                ) : filteredMatches.length === 0 ? (
+                    <div className="text-center py-12 text-gray-500">
+                        No matches found. Try adjusting your search or filters.
+                    </div>
+                ) : (
+                    <div className={
+                        layout === 'grid'
+                            ? 'grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+                            : 'space-y-6 max-w-4xl mx-auto'
+                    }>
+                        {filteredMatches.map((match) => (
+                            <MatchCard
+                                key={match?.match_id}
+                                match={match}
+                                layout={layout}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );

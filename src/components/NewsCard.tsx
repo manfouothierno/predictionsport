@@ -68,7 +68,7 @@ export default function NewsCard({
                         variant="light"
                         size="sm"
                         endContent={<ArrowRight className="w-4 h-4" />}
-                        onClick={() => router.push(`/news/${slug}`)}
+                        onClick={() => router.push(`${slug}`)}
                     >
                         Read More
                     </Button>

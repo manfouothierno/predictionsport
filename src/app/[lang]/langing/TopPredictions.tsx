@@ -60,6 +60,14 @@ export default function TopPredictions() {
     return (
         <section className="py-16 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="my-10">
+                    <h1 className="text-4xl sm:text-3xl lg:text-5xl font-bold mt-5 leading-tight">
+                        Expert Football Predictions & Analysis
+                    </h1>
+                    <p className="text-lg sm:text-xl text-gray-900 max-w-xl">
+                        Get real-time match predictions powered by advanced analytics and expert insights. Stay ahead of the game with our accurate forecasting.
+                    </p>
+                </div>
                 <div className="flex items-center justify-between mb-8">
                     <div>
                         <h2 className="text-3xl font-bold text-gray-900">
@@ -98,7 +106,7 @@ export default function TopPredictions() {
                                     )}
                                 </div>
 
-                                <div className="flex items-center space-x-4 mb-4">
+                                {/* <div className="flex items-center space-x-4 mb-4">
                                     <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
                                         <div
                                             className="h-full bg-green-500 rounded-full"
@@ -108,20 +116,27 @@ export default function TopPredictions() {
                                     <span className="text-sm font-medium text-gray-600">
                     {prediction.confidence}%
                   </span>
-                                </div>
+                                </div> */}
 
-                                <div className="grid grid-cols-3 gap-4 text-center">
+                                <div className="grid grid-cols-3 gap-4 w-full text-center">
                                     <div className="bg-gray-50 rounded-lg p-3">
                                         <p className="text-xs text-gray-500 mb-1">Time</p>
                                         <p className="font-medium">{prediction.time}</p>
                                     </div>
-                                    <div className="bg-gray-50 rounded-lg p-3">
+                                    {/* <div className="bg-gray-50 rounded-lg p-3">
                                         <p className="text-xs text-gray-500 mb-1">Prediction</p>
                                         <p className="font-medium">{prediction.prediction}</p>
-                                    </div>
-                                    <div className="bg-gray-50 rounded-lg p-3">
+                                    </div> */}
+                                    <div className="bg-gray-50 rounded-lg  flex justify-evenly  items-end col-span-2  gap-10 p-3">
+                                       <div>
                                         <p className="text-xs text-gray-500 mb-1">Odds</p>
                                         <p className="font-medium">{prediction.odds}</p>
+                                       </div>
+                                       <span className="text-xs text-gray-500 mb-1 ">Vs.</span>
+                                       <div>
+                                        <p className="text-xs text-gray-500 mb-1">Odds</p>
+                                        <p className="font-medium">{prediction.odds}</p>
+                                       </div>
                                     </div>
                                 </div>
 
