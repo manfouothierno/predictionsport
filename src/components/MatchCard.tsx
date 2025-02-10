@@ -14,7 +14,7 @@ const StatBar = ({ label, home, away }) => (
         <div className="w-16 text-right text-sm">{home}</div>
         <div className="flex-1 relative h-1.5 bg-gray-100 rounded-full overflow-hidden">
             <div
-                className="absolute left-0 top-0 h-full bg-blue-500 rounded-full transition-all duration-300"
+                className="absolute left-0 top-0 h-full bg-red-800 rounded-full transition-all duration-300"
                 style={{ width: `${(parseInt(home) / (parseInt(home) + parseInt(away)) * 100) || 50}%` }}
             />
         </div>

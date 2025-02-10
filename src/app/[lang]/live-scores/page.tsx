@@ -90,7 +90,7 @@ export default function LiveScores() {
                                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                                 <input
                                     type="text"
-                                    className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-200 focus:ring-2 focus:ring-red-500 focus:border-transparent"
                                     placeholder="Search teams or leagues..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -100,7 +100,7 @@ export default function LiveScores() {
                                 <button
                                     onClick={() => setLayout('grid')}
                                     className={`p-2 rounded-lg transition-colors ${
-                                        layout === 'grid' ? 'bg-blue-50 text-blue-600' : 'text-gray-400 hover:bg-gray-100'
+                                        layout === 'grid' ? 'bg-red-50 text-red-600' : 'text-gray-400 hover:bg-gray-100'
                                     }`}
                                 >
                                     <div className="grid grid-cols-2 gap-0.5">
@@ -113,7 +113,7 @@ export default function LiveScores() {
                                 <button
                                     onClick={() => setLayout('list')}
                                     className={`p-2 rounded-lg transition-colors ${
-                                        layout === 'list' ? 'bg-blue-50 text-blue-600' : 'text-gray-400 hover:bg-gray-100'
+                                        layout === 'list' ? 'bg-red-50 text-red-950' : 'text-gray-400 hover:bg-gray-100'
                                     }`}
                                 >
                                     <div className="space-y-1">
@@ -134,7 +134,7 @@ export default function LiveScores() {
                                     onClick={() => setSelectedLeague('all')}
                                     className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                                         selectedLeague === 'all'
-                                            ? 'bg-blue-500 text-white'
+                                            ? 'bg-red-800 text-white'
                                             : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                     }`}
                                 >
@@ -147,7 +147,7 @@ export default function LiveScores() {
                                         onClick={() => setSelectedLeague(league)}
                                         className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
                                             selectedLeague === league
-                                                ? 'bg-blue-500 text-white'
+                                                ? 'bg-red-800 text-white'
                                                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                         }`}
                                     >
@@ -165,7 +165,7 @@ export default function LiveScores() {
             <div className="max-w-8xl mx-auto px-4 py-6">
                 {loading ? (
                     <div className="flex justify-center items-center py-12">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" />
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500" />
                     </div>
                 ) : error ? (
                     <div className="text-center py-12 text-gray-500">{error}</div>
