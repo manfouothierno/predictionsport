@@ -1,408 +1,297 @@
 'use client';
 
-import { useState } from 'react';
-import { ChevronDown, Star, TrendingUp, BarChart, Clock, Search, Filter, ChevronRight, Info, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Star, Search, Clock, ChevronRight, Calendar } from 'lucide-react';
 import Navbar from "@/app/[lang]/langing/Navbar";
+import Link from 'next/link';
 
-const categoryFilters = [
-    { id: 'all', name: 'All Matches', count: 24 },
-    { id: 'top-picks', name: 'Top Picks', count: 8 },
-    { id: 'high-odds', name: 'High Odds', count: 6 },
-    { id: 'trending', name: 'Trending', count: 4 },
-    { id: 'live-now', name: 'Live Now', count: 12 }
-];
-
-const mockLeagues = [
-    {
-        id: 1,
-        name: 'Premier League',
-        country: 'England',
-        logo: '/leagues/premier-league.png',
-        matches: [
-            {
-                id: 1,
-                homeTeam: { name: 'Arsenal', logo: '/teams/arsenal.png', rank: '1st' },
-                awayTeam: { name: 'Chelsea', logo: '/teams/chelsea.png', rank: '4th' },
-                time: '20:45',
-                date: '2025-01-27',
-                status: 'hot',
-                prediction: 'Home Win',
-                confidence: 85,
-                odds: { home: 1.95, draw: 3.50, away: 4.20 },
-                stats: {
-                    homeForm: 'WWDWL',
-                    awayForm: 'LWDWD',
-                    h2h: 'HWADH',
-                    homeGoals: 2.5,
-                    awayGoals: 1.2
-                }
-            },
-            {
-                id: 2,
-                homeTeam: { name: 'Arsenal', logo: '/teams/arsenal.png', rank: '1st' },
-                awayTeam: { name: 'Chelsea', logo: '/teams/chelsea.png', rank: '4th' },
-                time: '20:45',
-                date: '2025-01-27',
-                status: 'hot',
-                prediction: 'Home Win',
-                confidence: 85,
-                odds: { home: 1.95, draw: 3.50, away: 4.20 },
-                stats: {
-                    homeForm: 'WWDWL',
-                    awayForm: 'LWDWD',
-                    h2h: 'HWADH',
-                    homeGoals: 2.5,
-                    awayGoals: 1.2
-                }
-            },
-            // Add more [match]...
-        ]
-    },
-    {
-        id: 2,
-        name: ' League 1',
-        country: 'France',
-        logo: '/leagues/premier-league.png',
-        matches: [
-            {
-                id: 2,
-                homeTeam: { name: 'Arsenal', logo: '/teams/arsenal.png', rank: '1st' },
-                awayTeam: { name: 'Chelsea', logo: '/teams/chelsea.png', rank: '4th' },
-                time: '20:45',
-                date: '2025-01-27',
-                status: 'hot',
-                prediction: 'Home Win',
-                confidence: 85,
-                odds: { home: 1.95, draw: 3.50, away: 4.20 },
-                stats: {
-                    homeForm: 'WWDWL',
-                    awayForm: 'LWDWD',
-                    h2h: 'HWADH',
-                    homeGoals: 2.5,
-                    awayGoals: 1.2
-                }
-            },
-            // Add more [match]...
-        ]
-    }
-];
-
-export default function MatchPredictions() {
-    const [activeLeague, setActiveLeague] = useState(mockLeagues[0].id);
-    const [filter, setFilter] = useState('all');
+export default function TomorrowMatches() {
+    const [matches, setMatches] = useState([]);
+    const [leagues, setLeagues] = useState([]);
+    const [activeLeague, setActiveLeague] = useState('all');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
-    const [viewType, setViewType] = useState('grid');
-    const [activeCategory, setActiveCategory] = useState('all');
+
+    useEffect(() => {
+        const fetchTomorrowMatches = async () => {
+            try {
+                setLoading(true);
+                const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1))
+                    .toISOString().split('T')[0];
+                const dayAfterTomorrow = new Date(new Date().setDate(new Date().getDate() + 2))
+                    .toISOString().split('T')[0];
+
+                const response = await fetch(
+                    `https://apiv3.apifootball.com/?action=get_events&APIkey=a416a23b2f17f2c7e90d41aab89229bb3d445f2b5616c45f03f054eef6876004&from=${tomorrow}&to=${tomorrow}`
+                );
+
+                if (!response.ok) throw new Error('Failed to fetch matches');
+                const data = await response.json();
+
+                // Group matches by league
+                const groupedMatches = data.reduce((acc, match) => {
+                    if (!acc[match.league_id]) {
+                        acc[match.league_id] = {
+                            id: match.league_id,
+                            name: match.league_name,
+                            country: match.country_name,
+                            logo: match.league_logo || '/placeholder-league.png',
+                            matches: []
+                        };
+                    }
+                    acc[match.league_id].matches.push(match);
+                    return acc;
+                }, {});
+
+                setLeagues(Object.values(groupedMatches));
+                setMatches(data);
+                if (Object.values(groupedMatches).length > 0) {
+                    setActiveLeague('all');
+                }
+            } catch (err) {
+                console.error('Error fetching matches:', err);
+                setError('Failed to load matches');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchTomorrowMatches();
+    }, []);
+
+    const filteredMatches = activeLeague === 'all'
+        ? matches
+        : matches.filter(match => match.league_id === activeLeague);
+
+    const searchFilteredMatches = filteredMatches.filter(match =>
+        match.match_hometeam_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        match.match_awayteam_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        match.league_name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1));
+    const formattedDate = tomorrow.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-500 border-t-transparent"/>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="text-center">
+                    <h2 className="text-xl font-medium text-gray-900 mb-2">Error Loading Matches</h2>
+                    <p className="text-gray-500">{error}</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <Navbar/>
-            {/* Header */}
-            <div className="bg-white ">
-                <div className="mx-auto pt-20 px-4 sm:px-6 lg:px-8 py-4">
-                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                        <div>
-                            <h1 className="text-2xl font-bold text-gray-900">Match Predictions Tomorrow</h1>
-                            <p className="text-sm text-gray-500 mt-1">Updated predictions for tomorrow's matches</p>
-                        </div>
-
-                        <div className="flex flex-wrap gap-3">
-                            {/* Search */}
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    placeholder="Search teams..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                                />
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                            </div>
-
-                            {/* View Toggle */}
-                            {/*<div className="flex rounded-lg overflow-hidden border border-gray-200">
-                                <button
-                                    onClick={() => setViewType('grid')}
-                                    className={`px-4 py-2 ${viewType === 'grid' ? 'bg-red-600 text-white' : 'bg-white text-gray-700'}`}
-                                >
-                                    Grid
-                                </button>
-                                <button
-                                    onClick={() => setViewType('list')}
-                                    className={`px-4 py-2 ${viewType === 'list' ? 'bg-red-600 text-white' : 'bg-white text-gray-700'}`}
-                                >
-                                    List
-                                </button>
-                            </div>*/}
+            <Navbar />
+            <div className="pt-20">
+                {/* Date Header */}
+                <div className="bg-white border-b">
+                    <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                        <div className="flex items-center gap-3">
+                            <Calendar className="w-5 h-5 text-red-500" />
+                            <h1 className="text-xl font-bold text-gray-900">{formattedDate}</h1>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="flex flex-col lg:flex-row gap-8">
-                    {/* Sidebar Filters */}
-                    <div className="lg:w-64 flex-shrink-0">
-                        <div className="bg-white rounded-xl shadow-sm p-6 sticky top-24">
-                            <h3 className="font-semibold text-gray-900 mb-4">Categories</h3>
-                            <div className="space-y-2">
-                                {categoryFilters.map((category) => (
-                                    <button
-                                        key={category.id}
-                                        onClick={() => setActiveCategory(category.id)}
-                                        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors ${
-                                            activeCategory === category.id
-                                                ? 'bg-red-50 text-red-700'
-                                                : 'text-gray-600 hover:bg-gray-50'
-                                        }`}
-                                    >
-                                        <span className="font-medium">{category.name}</span>
-                                        <span className={`text-sm ${
-                                            activeCategory === category.id
-                                                ? 'text-red-600'
-                                                : 'text-gray-400'
-                                        }`}>
-                      {category.count}
-                    </span>
-                                    </button>
-                                ))}
-                            </div>
+                <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    {/* Mobile League Selector */}
+                    <div className="lg:hidden mb-6">
+                        <select
+                            value={activeLeague}
+                            onChange={(e) => setActiveLeague(e.target.value)}
+                            className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        >
+                            <option value="all">All Leagues ({matches.length})</option>
+                            {leagues.map(league => (
+                                <option key={league.id} value={league.id}>
+                                    {league.name} ({league.matches.length})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
-                            <div className="mt-8">
-                                <h3 className="font-semibold text-gray-900 mb-4">Prediction Type</h3>
-                                <div className="space-y-2">
-                                    <label className="flex items-center space-x-2">
-                                        <input type="checkbox" className="rounded border-gray-300 text-red-600 focus:ring-red-500" />
-                                        <span className="text-gray-600">1X2</span>
-                                    </label>
-                                    <label className="flex items-center space-x-2">
-                                        <input type="checkbox" className="rounded border-gray-300 text-red-600 focus:ring-red-500" />
-                                        <span className="text-gray-600">Over/Under</span>
-                                    </label>
-                                    <label className="flex items-center space-x-2">
-                                        <input type="checkbox" className="rounded border-gray-300 text-red-600 focus:ring-red-500" />
-                                        <span className="text-gray-600">Both Teams to Score</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div className="mt-8">
-                                <h3 className="font-semibold text-gray-900 mb-4">Confidence Level</h3>
-                                <div className="space-y-2">
-                                    <label className="flex items-center space-x-2">
-                                        <input type="radio" name="confidence" className="text-red-600 focus:ring-red-500" />
-                                        <span className="text-gray-600">All</span>
-                                    </label>
-                                    <label className="flex items-center space-x-2">
-                                        <input type="radio" name="confidence" className="text-red-600 focus:ring-red-500" />
-                                        <span className="text-gray-600">Above 80%</span>
-                                    </label>
-                                    <label className="flex items-center space-x-2">
-                                        <input type="radio" name="confidence" className="text-red-600 focus:ring-red-500" />
-                                        <span className="text-gray-600">Above 90%</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div className="mt-8 pt-8 border-t">
-                                <button className="w-full bg-red-600 text-white rounded-lg py-2 hover:bg-red-700 transition-colors">
-                                    Apply Filters
-                                </button>
-                                <button className="w-full mt-2 text-gray-500 hover:text-gray-700 text-sm">
-                                    Reset All
-                                </button>
-                            </div>
+                    {/* Search Bar - Mobile Optimized */}
+                    <div className="mb-6">
+                        <div className="relative">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                            <input
+                                type="text"
+                                placeholder="Search teams or leagues..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent shadow-sm"
+                            />
                         </div>
                     </div>
 
-                    {/* Main Content */}
-                    <div className="flex-1">
-                        {/* League Tabs */}
-                        <div className="flex overflow-x-auto gap-4 pb-4 mb-8 scrollbar-hide">
-                            {mockLeagues.map((league) => (
-                                <button
-                                    key={league.id}
-                                    onClick={() => setActiveLeague(league.id)}
-                                    className={`flex items-center space-x-3 px-4 py-3 rounded-xl whitespace-nowrap transition-all ${
-                                        activeLeague === league.id
-                                            ? 'bg-red-600 text-white shadow-lg'
-                                            : 'bg-white hover:bg-gray-50'
-                                    }`}
-                                >
-                                    <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-                                        <img src={league.logo} alt={league.name} className="w-6 h-6" />
-                                    </div>
-                                    <div className="text-left">
-                                        <p className={`font-medium ${activeLeague === league.id ? 'text-white' : 'text-gray-900'}`}>
-                                            {league.name}
-                                        </p>
-                                        <p className={`text-sm ${activeLeague === league.id ? 'text-red-100' : 'text-gray-500'}`}>
-                                            {league.matches.length} matches
-                                        </p>
-                                    </div>
-                                </button>
-                            ))}
+                    <div className="flex flex-col lg:flex-row gap-8">
+                        {/* League Sidebar - Desktop */}
+                        <div className="hidden lg:block w-72 flex-shrink-0">
+                            <div className="bg-white rounded-xl shadow-sm overflow-hidden sticky top-24">
+                                <div className="p-4 border-b bg-gray-50">
+                                    <h2 className="font-semibold text-gray-900">Leagues</h2>
+                                </div>
+                                <div className="divide-y max-h-[calc(100vh-220px)] overflow-y-auto">
+                                    <button
+                                        onClick={() => setActiveLeague('all')}
+                                        className={`w-full flex items-center gap-3 p-3 transition-colors ${
+                                            activeLeague === 'all'
+                                                ? 'bg-red-50 text-red-600'
+                                                : 'hover:bg-gray-50 text-gray-600'
+                                        }`}
+                                    >
+                                        <div className="w-8 h-8 bg-white rounded-full shadow-sm flex items-center justify-center">
+                                            <Star className="w-4 h-4" />
+                                        </div>
+                                        <div className="flex-1 flex items-center justify-between">
+                                            <span className="font-medium">All Leagues</span>
+                                            <span className="text-sm bg-gray-100 px-2 py-0.5 rounded-full">
+                                                {matches.length}
+                                            </span>
+                                        </div>
+                                    </button>
+
+                                    {leagues.map((league) => (
+                                        <button
+                                            key={league.id}
+                                            onClick={() => setActiveLeague(league.id)}
+                                            className={`w-full flex items-center gap-3 p-3 transition-colors ${
+                                                activeLeague === league.id
+                                                    ? 'bg-red-50 text-red-600'
+                                                    : 'hover:bg-gray-50 text-gray-600'
+                                            }`}
+                                        >
+                                            <div className="w-8 h-8 bg-white rounded-full shadow-sm p-1.5">
+                                                <img
+                                                    src={league.logo}
+                                                    alt={league.name}
+                                                    className="w-full h-full object-contain"
+                                                />
+                                            </div>
+                                            <div className="flex-1 flex items-center justify-between">
+                                                <span className="font-medium truncate">{league.name}</span>
+                                                <span className="text-sm bg-gray-100 px-2 py-0.5 rounded-full ml-2">
+                                                    {league.matches.length}
+                                                </span>
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
 
-                        {/* Matches Grid */}
-                        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                            {mockLeagues
-                                .find((l) => l.id === activeLeague)
-                                ?.matches.map((match) => (
-                                    <div
-                                        key={match.id}
-                                        className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300"
+                        {/* Main Content */}
+                        <div className="flex-1">
+                            <div className="flex items-center justify-between mb-6">
+                                <div>
+                                    <h2 className="text-xl font-bold text-gray-900">
+                                        {activeLeague === 'all' ? 'All Matches' : leagues.find(l => l.id === activeLeague)?.name}
+                                    </h2>
+                                    <p className="text-sm text-gray-500 mt-1">
+                                        {searchFilteredMatches.length} matches scheduled
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Matches Grid */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                                {searchFilteredMatches.map((match) => (
+                                    <Link
+                                        key={match.match_id}
+                                        href={`/match/${match.match_id}`}
+                                        className="block group focus:outline-none focus:ring-2 focus:ring-red-500 rounded-xl"
                                     >
-                                        {match.status === 'hot' && (
-                                            <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-t-xl text-sm font-medium flex items-center justify-between">
-                        <span className="flex items-center">
-                          <TrendingUp className="w-4 h-4 mr-2" />
-                          Hot Pick
-                        </span>
-                                                <span className="text-orange-100">85% Success Rate</span>
-                                            </div>
-                                        )}
-
-                                        <div className="p-6">
-                                            <div className="flex justify-between items-start mb-6">
-                                                <div className="flex items-center space-x-3">
-                                                    <Clock className="w-4 h-4 text-gray-400" />
-                                                    <span className="text-sm text-gray-600">{match.time}</span>
-                                                    <span className="text-sm text-gray-400">•</span>
-                                                    <span className="text-sm text-gray-600">{match.date}</span>
-                                                </div>
-                                                <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                                                    <Star className="w-5 h-5" />
-                                                </button>
-                                            </div>
-
-                                            <div className="grid grid-cols-3 gap-4 mb-8">
-                                                {/* Home Team */}
-                                                <div className="text-center space-y-3">
-                                                    <div className="relative w-16 h-16 mx-auto">
+                                        <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100 hover:border-red-100">
+                                            {/* League & Time Header */}
+                                            <div className="bg-gradient-to-r from-gray-50 to-white px-4 py-2.5 flex items-center justify-between border-b">
+                                                <div className="flex items-center gap-2.5">
+                                                    <div className="w-5 h-5 bg-white rounded-full p-0.5 shadow-sm">
                                                         <img
-                                                            src={match.homeTeam.logo}
-                                                            alt={match.homeTeam.name}
+                                                            src={match.league_logo || '/placeholder-league.png'}
+                                                            alt={match.league_name}
                                                             className="w-full h-full object-contain"
                                                         />
-                                                        <span className="absolute -top-2 -right-2 bg-gray-100 text-gray-600 text-xs font-medium px-2 py-1 rounded-full">
-                              {match.homeTeam.rank}
-                            </span>
                                                     </div>
-                                                    <div>
-                                                        <p className="font-medium text-gray-900">{match.homeTeam.name}</p>
-                                                        <div className="mt-2 flex justify-center gap-1">
-                                                            {match.stats.homeForm.split('').map((result, i) => (
-                                                                <span
-                                                                    key={i}
-                                                                    className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
-                                                                        result === 'W' ? 'bg-green-100 text-green-700' :
-                                                                            result === 'D' ? 'bg-yellow-100 text-yellow-700' :
-                                                                                'bg-red-100 text-red-700'
-                                                                    }`}
-                                                                >
-                                  {result}
-                                </span>
-                                                            ))}
+                                                    <span className="text-sm text-gray-700 font-medium truncate">
+                                                        {match.league_name}
+                                                    </span>
+                                                </div>
+                                                <span className="text-sm font-medium text-gray-900">
+                                                    {match.match_time}
+                                                </span>
+                                            </div>
+
+                                            <div className="px-4 py-3">
+                                                {/* Teams */}
+                                                <div className="flex items-center justify-between gap-4">
+                                                    {/* Home Team */}
+                                                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                                                        <div className="w-10 h-10 rounded-full bg-gray-50 p-1.5 flex-shrink-0">
+                                                            <img
+                                                                src={match.team_home_badge}
+                                                                alt={match.match_hometeam_name}
+                                                                className="w-full h-full object-contain"
+                                                            />
+                                                        </div>
+                                                        <span className="text-sm font-medium text-gray-900 truncate">
+                                                            {match.match_hometeam_name}
+                                                        </span>
+                                                    </div>
+
+                                                    {/* VS */}
+                                                    <span className="text-sm font-medium text-gray-400">VS</span>
+
+                                                    {/* Away Team */}
+                                                    <div className="flex items-center gap-3 flex-1 min-w-0 justify-end">
+                                                        <span className="text-sm font-medium text-gray-900 truncate">
+                                                            {match.match_awayteam_name}
+                                                        </span>
+                                                        <div className="w-10 h-10 rounded-full bg-gray-50 p-1.5 flex-shrink-0">
+                                                            <img
+                                                                src={match.team_away_badge}
+                                                                alt={match.match_awayteam_name}
+                                                                className="w-full h-full object-contain"
+                                                            />
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                {/* Center */}
-                                                <div className="flex flex-col items-center justify-center space-y-4">
-                                                    <div className="text-sm text-gray-500">VS</div>
-                                                    <div className="bg-red-50 text-red-700 px-4 py-2 rounded-lg font-medium">
-                                                        {match.prediction}
+                                                {/* Match Status & Action */}
+                                                <div className="flex items-center justify-between mt-3 pt-3 border-t">
+                                                    <div className="inline-flex items-center px-2 py-1 bg-gray-50 rounded-md">
+                                                        <Clock className="w-3.5 h-3.5 text-gray-400 mr-1.5" />
+                                                        <span className="text-xs font-medium text-gray-600">
+                                                            Upcoming
+                                                        </span>
                                                     </div>
-                                                    <div className="text-sm text-gray-500">
-                                                        Head to Head
-                                                    </div>
-                                                    <div className="flex gap-1">
-                                                        {match.stats.h2h.split('').map((result, i) => (
-                                                            <span
-                                                                key={i}
-                                                                className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
-                                                                    result === 'H' ? 'bg-red-100 text-red-700' :
-                                                                        result === 'A' ? 'bg-purple-100 text-purple-700' :
-                                                                            'bg-gray-100 text-gray-700'
-                                                                }`}
-                                                            >
-                                {result}
-                              </span>
-                                                        ))}
+                                                    <div className="flex items-center gap-1.5 text-xs font-medium text-red-600 group-hover:text-red-700">
+                                                        View Analysis
+                                                        <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                                                     </div>
                                                 </div>
-
-                                                {/* Away Team */}
-                                                <div className="text-center space-y-3">
-                                                    <div className="relative w-16 h-16 mx-auto">
-                                                        <img
-                                                            src={match.awayTeam.logo}
-                                                            alt={match.awayTeam.name}
-                                                            className="w-full h-full object-contain"
-                                                        />
-                                                        <span className="absolute -top-2 -right-2 bg-gray-100 text-gray-600 text-xs font-medium px-2 py-1 rounded-full">
-                              {match.awayTeam.rank}
-                            </span>
-                                                    </div>
-                                                    <div>
-                                                        <p className="font-medium text-gray-900">{match.awayTeam.name}</p>
-                                                        <div className="mt-2 flex justify-center gap-1">
-                                                            {match.stats.awayForm.split('').map((result, i) => (
-                                                                <span
-                                                                    key={i}
-                                                                    className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
-                                                                        result === 'W' ? 'bg-green-100 text-green-700' :
-                                                                            result === 'D' ? 'bg-yellow-100 text-yellow-700' :
-                                                                                'bg-red-100 text-red-700'
-                                                                    }`}
-                                                                >
-                                  {result}
-                                </span>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* Stats */}
-                                            <div className="grid grid-cols-4 gap-4 mb-6">
-                                                <div className="bg-gray-50 rounded-lg p-3 text-center group-hover:bg-gray-100 transition-colors">
-                                                    <TrendingUp className="w-5 h-5 text-red-500 mx-auto mb-1" />
-                                                    <p className="text-sm text-gray-600">Confidence</p>
-                                                    <p className="font-medium text-gray-900">{match.confidence}%</p>
-                                                </div>
-                                                <div className="bg-gray-50 rounded-lg p-3 text-center group-hover:bg-gray-100 transition-colors">
-                                                    <Star className="w-5 h-5 text-yellow-500 mx-auto mb-1" />
-                                                    <p className="text-sm text-gray-600">Best Odds</p>
-                                                    <p className="font-medium text-gray-900">{match.odds.home}</p>
-                                                </div>
-                                                <div className="bg-gray-50 rounded-lg p-3 text-center group-hover:bg-gray-100 transition-colors">
-                                                    <BarChart className="w-5 h-5 text-green-500 mx-auto mb-1" />
-                                                    <p className="text-sm text-gray-600">Home Goals</p>
-                                                    <p className="font-medium text-gray-900">{match.stats.homeGoals}</p>
-                                                </div>
-                                                <div className="bg-gray-50 rounded-lg p-3 text-center group-hover:bg-gray-100 transition-colors">
-                                                    <BarChart className="w-5 h-5 text-red-500 mx-auto mb-1" />
-                                                    <p className="text-sm text-gray-600">Away Goals</p>
-                                                    <p className="font-medium text-gray-900">{match.stats.awayGoals}</p>
-                                                </div>
-                                            </div>
-
-                                            {/* Actions */}
-                                            <div className="flex items-center justify-between">
-                                                <div className="flex items-center space-x-2">
-                                                    <Info className="w-4 h-4 text-gray-400" />
-                                                    <span className="text-sm text-gray-500">Analysis updated 2h ago</span>
-                                                </div>
-                                                <button className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
-                                                    View Analysis
-                                                    <ChevronRight className="w-4 h-4 ml-2" />
-                                                </button>
                                             </div>
                                         </div>
-                                    </div>
+                                    </Link>
                                 ))}
+                            </div>
                         </div>
                     </div>
                 </div>

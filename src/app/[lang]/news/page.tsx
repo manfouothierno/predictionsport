@@ -16,20 +16,7 @@ const newsCategories = [
     // { id: 'analysis', name: 'Analysis' }
 ];
 
-const mockNews = [
-    {
-        id: 1,
-        slug: 'star-player-returns-to-training-after-long-term-injury',
-        title: 'Star Player Returns to Training After Long-Term Injury',
-        excerpt: 'Key midfielder back in full training, boost for upcoming crucial matches...',
-        category: 'Injuries',
-        image: '/news/1.jpg',
-        date: '2h ago',
-        readTime: '3 min read',
-        isFeatured: true
-    },
 
-];
 
 export default function NewsPage() {
     const [activeCategory, setActiveCategory] = useState('all');
@@ -153,7 +140,7 @@ export default function NewsPage() {
                                 excerpt={newsItem.excerpt}
                                 category={newsItem.category}
                                 image={newsItem.thumbnail}
-                                date={feed?.pubDate && formatDistanceToNow(feed?.pubDate, { addSuffix: true })}
+                                date={newsItem?.pubDate && formatDistanceToNow(newsItem?.pubDate, { addSuffix: true })}
                                 readTime={newsItem.readTime}
                             />
                         ))}
@@ -170,7 +157,7 @@ export default function NewsPage() {
                             excerpt={newsItem.description}
                             category={newsItem.category}
                             image={newsItem.thumbnail}
-                            date={feed?.pubDate && formatDistanceToNow(feed?.pubDate, { addSuffix: true })}
+                            date={newsItem?.pubDate && formatDistanceToNow(newsItem?.pubDate, { addSuffix: true })}
                             readTime={newsItem.readTime}
                         />
                     ))}

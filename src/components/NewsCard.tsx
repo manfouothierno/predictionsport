@@ -4,6 +4,7 @@
 import { Clock, BookOpen, ArrowRight } from 'lucide-react';
 import { Chip, Button } from "@nextui-org/react";
 import {useRouter} from "next/navigation";
+import { motion } from 'framer-motion';
 
 interface NewsCardProps {
     id: number;
@@ -29,7 +30,7 @@ export default function NewsCard({
                                  }: NewsCardProps) {
     const router = useRouter();
     return (
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden group cursor-pointer hover:shadow-md transition-shadow">
+        <motion.article className="bg-white rounded-xl shadow-sm overflow-hidden group cursor-pointer hover:shadow-md transition-shadow">
             <div className="relative h-48">
                 <img
                     src={image}
@@ -74,6 +75,6 @@ export default function NewsCard({
                     </Button>
                 </div>
             </div>
-        </div>
+        </motion.article>
     );
 }
