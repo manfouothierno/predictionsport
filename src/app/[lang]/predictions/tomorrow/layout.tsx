@@ -12,7 +12,7 @@ interface LayoutProps {
 export async function generateMetadata({ params }: LayoutProps): Promise<Metadata> {
     return {
         title: {
-            template: '%s',
+            template: '',
             default: "Expert Football Tomorrow's Predictions ",
         },
         description: 'Get accurate football predictions, match analysis, and expert betting tips. Daily predictions for Premier League, Champions League, and other top competitions.',
