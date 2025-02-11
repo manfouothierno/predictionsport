@@ -14,6 +14,7 @@ export default function robots(): MetadataRoute.Robots {
                     '/live-scores/'
                 ],
                 disallow: [
+                    '/page-not-found-test',
                     '/admin/',
                     '/api/',
                     '/private/',
