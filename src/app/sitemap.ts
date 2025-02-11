@@ -6,7 +6,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Common routes for all languages
     const routes = [
         '',
-        '/predictions',
+        '/predictions/today',
+        '/predictions/tomorrow',
         '/live-scores',
         '/news',
         '/blog'
