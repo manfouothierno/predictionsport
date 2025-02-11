@@ -20,12 +20,12 @@ export const metadata: Metadata = {
     metadataBase: new URL('https://predictionsport.com'),
     title: {
         default: 'PredictionSport - Expert Football Predictions & Betting Tips',
-        template: '%s | PredictionSport'
+        template: '%s'
     },
     description: 'Get expert football predictions, live scores, and betting tips. Daily match [match] and predictions for Premier League, La Liga, Champions League and more.',
     keywords: ['football predictions', 'betting tips', 'soccer predictions', 'match [match]', 'live scores'],
     authors: [{ name: 'PredictionSport' }],
-    creator: 'PredictionSport',
+    creator: 'Manfouo Thierno',
     publisher: 'PredictionSport',
     formatDetection: {
         email: false,
