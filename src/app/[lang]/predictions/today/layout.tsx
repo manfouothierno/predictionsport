@@ -10,6 +10,21 @@ interface LayoutProps {
 }
 
 export async function generateMetadata({ params }: LayoutProps): Promise<Metadata> {
+
+    // Base URL without trailing slash
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://predictionsport.com'
+
+    // Default language is canonical
+    const canonicalLang = i18n.defaultLocale
+    const canonicalPath = `/predictions`
+    const canonicalUrl = `${baseUrl}/${canonicalLang}${canonicalPath}`
+
+    // Generate language alternates
+    const languages: Record<string, string> = {}
+    i18n.locales.forEach(locale => {
+        languages[locale] = `${baseUrl}/${locale}${canonicalPath}`
+    })
+
     return {
         title: {
             template: '%s',
@@ -49,12 +64,12 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
             images: ['https://predictionsport.com/twitter-predictions.jpg'],
         },
         alternates: {
-            canonical: `https://predictionsport.com/${params.lang}/predictions`,
+            canonical: `https://predictionsport.com/${params.lang}/predictions/today`,
             languages: {
-                'en': 'https://predictionsport.com/en/predictions',
-                'fr': 'https://predictionsport.com/fr/predictions',
-                'de': 'https://predictionsport.com/de/predictions',
-                'es': 'https://predictionsport.com/es/predictions',
+                'en': 'https://predictionsport.com/en/predictions/today',
+                'fr': 'https://predictionsport.com/fr/predictions/today',
+                'de': 'https://predictionsport.com/de/predictions/today',
+                'es': 'https://predictionsport.com/es/predictions/today',
             }
         },
         robots: {
@@ -67,7 +82,8 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
                 'max-image-preview': 'large',
                 'max-snippet': -1,
             },
-        }
+        },
+
     }
 }
 
