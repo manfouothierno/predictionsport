@@ -243,8 +243,8 @@ export default function TomorrowMatches() {
                                                 {/* Teams */}
                                                 <div className="flex items-center justify-between gap-4">
                                                     {/* Home Team */}
-                                                    <div className="flex items-center gap-3 flex-1 min-w-0">
-                                                        <div className="w-10 h-10 rounded-full bg-gray-50 p-1.5 flex-shrink-0">
+                                                    <div className="flex flex-col items-center gap-3 flex-1 min-w-0">
+                                                        <div className="w-16 h-16 rounded-full bg-gray-50 p-1.5 flex-shrink-0">
                                                             <img
                                                                 src={match.team_home_badge}
                                                                 alt={match.match_hometeam_name}
@@ -260,17 +260,17 @@ export default function TomorrowMatches() {
                                                     <span className="text-sm font-medium text-gray-400">VS</span>
 
                                                     {/* Away Team */}
-                                                    <div className="flex items-center gap-3 flex-1 min-w-0 justify-end">
-                                                        <span className="text-sm font-medium text-gray-900 truncate">
-                                                            {match.match_awayteam_name}
-                                                        </span>
-                                                        <div className="w-10 h-10 rounded-full bg-gray-50 p-1.5 flex-shrink-0">
+                                                    <div className="flex flex-col items-center gap-3 flex-1 min-w-0 justify-end">
+                                                        <div className="w-16 h-16 rounded-full bg-gray-50 p-1.5 flex-shrink-0">
                                                             <img
                                                                 src={match.team_away_badge}
                                                                 alt={match.match_awayteam_name}
                                                                 className="w-full h-full object-contain"
                                                             />
                                                         </div>
+                                                        <span className="text-sm font-medium text-gray-900 truncate">
+                                                            {match.match_awayteam_name}
+                                                        </span>
                                                     </div>
                                                 </div>
 
