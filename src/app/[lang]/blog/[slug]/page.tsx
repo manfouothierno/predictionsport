@@ -1,18 +1,46 @@
 
 import { notFound } from 'next/navigation';
 import { ChevronLeft, Share2, Bookmark, Tag, Calendar, Clock } from 'lucide-react';
-import {getBlogPost} from "@/lib/api/blogs";
+import {BlogPost, getBlogPost} from "@/lib/api/blogs";
 import Image from "next/image";
 import Link from "next/link";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { formatDistanceToNow } from 'date-fns';
+import {Metadata} from "next";
 
 interface BlogDetailProps {
     params: {
         slug: string;
+        lang: string;
     };
 }
 
+export async function generateMetadata({ params }: BlogDetailProps): Promise<Metadata> {
+    // Fetch blog post data
+    const post: BlogPost = await getBlogPost(params.slug);
+
+    return {
+        title: post.title,
+        description: post.excerpt,
+        openGraph: {
+            title: post.title,
+            description: post.excerpt,
+            url: `https://predictionsport.com/${params.lang}/blog/${params.slug}`,
+            type: 'article',
+            publishedTime: post.publishDate,
+            authors: [post.author],
+            images: [
+                {
+                    url: post.image,
+                    width: 1200,
+                    height: 630,
+                    alt: post.title
+                }
+            ]
+        },
+        // ... rest of metadata
+    }
+}
 
 
 export default async function BlogDetailPage({ params }: BlogDetailProps) {

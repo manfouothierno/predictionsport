@@ -10,7 +10,7 @@ const navigation = [
         submenu: [
             { name: 'Today\'s Matches', href: '/predictions/today' },
             { name: 'Tomorrow\'s Matches', href: '/predictions/tomorrow' },
-            { name: 'Analysis', href: '/predictions/analysis' },
+            // { name: 'Analysis', href: '/predictions/analysis' },
         ]
     },
     { name: 'Live Scores', href: '/live-scores' },
