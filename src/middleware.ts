@@ -36,7 +36,14 @@ export function middleware(request: NextRequest) {
     }
 
     // For all other requests
-    const response = NextResponse.next()
+    let response = NextResponse.next()
+    // Try to match the route
+
+    // // If route doesn't exist, return 404
+    // response =  NextResponse.rewrite(new URL('/not-found', request.url), {
+    //     status: 404
+    // })
+
 
     // Add HSTS header to all responses
     response.headers.set(

@@ -313,7 +313,7 @@ export default function MatchPredictions() {
                                                 <div className="inline-flex items-center px-2 py-1 bg-gray-50 rounded-md">
                                                     <Clock className="w-3.5 h-3.5 text-gray-400 mr-1.5" />
                                                     <span className="text-xs font-medium text-gray-600">
-                                                        {match.match_status || 'Upcoming'}
+                                                       {match.match_date} - {match.match_time}
                                                     </span>
                                                 </div>
                                                 <div className="flex items-center gap-1.5 text-xs font-medium text-red-600 group-hover:text-red-700">
