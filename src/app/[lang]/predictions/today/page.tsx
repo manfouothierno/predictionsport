@@ -238,7 +238,7 @@ export default function MatchPredictions() {
                                         {/* League & Time Header */}
                                         <div className="bg-gradient-to-r from-gray-50 to-white px-4 py-2.5 flex items-center justify-between border-b">
                                             <div className="flex items-center gap-2.5">
-                                                <div className="w-5 h-5 bg-white rounded-full p-0.5 shadow-sm  ">
+                                                <div className="w-5 h-5 bg-white rounded-full p-0.5 shadow-sm">
                                                     <img
                                                         src={match.league_logo || '/placeholder-league.png'}
                                                         alt={match.league_name}
@@ -246,24 +246,16 @@ export default function MatchPredictions() {
                                                     />
                                                 </div>
                                                 <span className="text-sm text-gray-700 font-medium truncate">
-                                                    {match.league_name}
-                                                </span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                {match.match_live === '1' && (
-                                                    <span className="flex gap-1.5 items-center bg-green-50 text-green-600 px-2 py-0.5 rounded-full text-xs font-medium">
-                                                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"/>
-                                                        LIVE
+                                                        {match.league_name}
                                                     </span>
-                                                )}
-                                                <span className="text-sm font-medium text-gray-900">
+                                            </div>
+                                            <span className="text-sm font-medium text-gray-900">
                                                     {match.match_time}
                                                 </span>
-                                            </div>
                                         </div>
 
                                         <div className="px-4 py-3">
-                                            {/* Teams & Score */}
+                                            {/* Teams */}
                                             <div className="flex items-center justify-between gap-4">
                                                 {/* Home Team */}
                                                 <div className="flex flex-col items-center gap-3 flex-1 min-w-0">
@@ -275,36 +267,25 @@ export default function MatchPredictions() {
                                                         />
                                                     </div>
                                                     <span className="text-sm font-medium text-gray-900 truncate">
-                                                        {match.match_hometeam_name}
-                                                    </span>
+                                                            {match.match_hometeam_name}
+                                                        </span>
                                                 </div>
 
-                                                {/* Score/VS */}
-                                                <div className="flex flex-col items-center justify-center">
-                                                    {match.match_live === '1' ? (
-                                                        <div className="px-3 py-1 bg-gray-50 rounded-lg">
-                                                            <span className="text-base font-bold text-gray-900">
-                                                                {match.match_hometeam_score} - {match.match_awayteam_score}
-                                                            </span>
-                                                        </div>
-                                                    ) : (
-                                                        <span className="text-sm font-medium text-gray-400">VS</span>
-                                                    )}
-                                                </div>
+                                                {/* VS */}
+                                                <span className="text-sm font-medium text-gray-400">VS</span>
 
                                                 {/* Away Team */}
                                                 <div className="flex flex-col items-center gap-3 flex-1 min-w-0 justify-end">
-
                                                     <div className="w-16 h-16 rounded-full bg-gray-50 p-1.5 flex-shrink-0">
                                                         <img
                                                             src={match.team_away_badge}
                                                             alt={match.match_awayteam_name}
-                                                            className="w-full h-full object-contain  "
+                                                            className="w-full h-full object-contain"
                                                         />
                                                     </div>
                                                     <span className="text-sm font-medium text-gray-900 truncate">
-                                                        {match.match_awayteam_name}
-                                                    </span>
+                                                            {match.match_awayteam_name}
+                                                        </span>
                                                 </div>
                                             </div>
 
@@ -313,13 +294,13 @@ export default function MatchPredictions() {
                                                 <div className="inline-flex items-center px-2 py-1 bg-gray-50 rounded-md">
                                                     <Clock className="w-3.5 h-3.5 text-gray-400 mr-1.5" />
                                                     <span className="text-xs font-medium text-gray-600">
-                                                       {match.match_date} - {match.match_time}
-                                                    </span>
+                                                           {match.match_date} - {match.match_time}
+                                                        </span>
                                                 </div>
-                                                <div className="flex items-center gap-1.5 text-xs font-medium text-red-600 group-hover:text-red-700">
+                                                <button className="flex items-center gap-1.5 text-xs font-medium text-white bg-red-600 group-hover:bg-red-700 px-2 py-2 rounded-[5px] ">
                                                     View Predictions
                                                     <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                                                </div>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>

@@ -222,7 +222,7 @@ export default function TomorrowMatches() {
                                 {searchFilteredMatches.map((match) => (
                                     <Link
                                         key={match.match_id}
-                                        href={`/match/${match.match_id}`}
+                                        href={`/predictions/analysis/${match.match_id}`}
                                         className="block group focus:outline-none focus:ring-2 focus:ring-red-500 rounded-xl"
                                     >
                                         <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100 hover:border-red-100">
@@ -288,10 +288,10 @@ export default function TomorrowMatches() {
                                                            {match.match_date} - {match.match_time}
                                                         </span>
                                                     </div>
-                                                    <div className="flex items-center gap-1.5 text-xs font-medium text-red-600 group-hover:text-red-700">
+                                                    <button className="flex items-center gap-1.5 text-xs font-medium text-white bg-red-600 group-hover:bg-red-700 px-2 py-2 rounded-[5px] ">
                                                         View Predictions
                                                         <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                                                    </div>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
