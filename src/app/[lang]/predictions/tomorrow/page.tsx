@@ -105,9 +105,14 @@ export default function TomorrowMatches() {
                 {/* Date Header */}
                 <div className="bg-white border-b">
                     <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                        <h1 className="text-2xl font-bold text-gray-900">Match Predictions</h1>
+                        <p className="text-sm text-gray-500 mt-1">
+                            {searchFilteredMatches.length} matches available tomorrow
+                        </p>
                         <div className="flex items-center gap-3">
                             <Calendar className="w-5 h-5 text-red-500" />
-                            <h1 className="text-xl font-bold text-gray-900">{formattedDate}</h1>
+                            <h4 className="text-xl font-bold text-gray-900">{formattedDate}</h4>
+
                         </div>
                     </div>
                 </div>
