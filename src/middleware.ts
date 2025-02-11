@@ -1,13 +1,12 @@
 // middleware.ts
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import {i18n} from "@/i18n-config";
-
+import { i18n } from '@/i18n-config'
 
 export function middleware(request: NextRequest) {
     const pathname = request.nextUrl.pathname
 
-    // Check if the request is for robots1.txt or sitemaps
+    // Check if request is for robots.txt or sitemaps
     if (
         pathname === '/robots.txt' ||
         pathname === '/sitemap.xml' ||
@@ -25,18 +24,37 @@ export function middleware(request: NextRequest) {
 
     if (pathnameIsMissingLocale) {
         const locale = request.cookies.get('NEXT_LOCALE')?.value || i18n.defaultLocale
-        return NextResponse.redirect(new URL(`/${locale}${pathname}`, request.url))
+        const response = NextResponse.redirect(new URL(`/${locale}${pathname}`, request.url))
+
+        // Add HSTS header
+        response.headers.set(
+            'Strict-Transport-Security',
+            'max-age=31536000; includeSubDomains; preload'
+        )
+
+        return response
     }
 
-    return NextResponse.next()
+    // For all other requests
+    const response = NextResponse.next()
+
+    // Add HSTS header to all responses
+    response.headers.set(
+        'Strict-Transport-Security',
+        'max-age=31536000; includeSubDomains; preload'
+    )
+
+    return response
 }
 
 export const config = {
     matcher: [
+        // Skip all internal paths (_next, api)
         '/((?!api|_next/static|_next/image|favicon.ico).*)',
-        '/robots1.txt',
-        '/sitemap1.xml',
-        '/news-sitemap1.xml',
-        '/blog-sitemap1.xml'
+        // Include robots.txt and sitemaps
+        '/robots.txt',
+        '/sitemap.xml',
+        '/news-sitemap.xml',
+        '/blog-sitemap.xml'
     ]
 }
