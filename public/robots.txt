@@ -1,0 +1,50 @@
+# robots.txt for https://predictionsport.com/
+
+User-agent: *
+Allow: /
+Allow: /news/
+Allow: /blog/
+Allow: /predictions/
+Allow: /live-scores/
+
+# Disallow admin and private paths
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+Disallow: /backend/
+Disallow: /auth/
+Disallow: /user/
+Disallow: /*.json$
+Disallow: /*?*
+
+# Block specific paths for all bots
+Disallow: /cgi-bin/
+Disallow: /tmp/
+Disallow: /assets/downloads/
+
+# Paths to sitemap files
+Sitemap: https://predictionsport.com/sitemap.xml
+Sitemap: https://predictionsport.com/main-sitemap.xml
+Sitemap: https://predictionsport.com/news-sitemap.xml
+Sitemap: https://predictionsport.com/blog-sitemap.xml
+
+# Crawl-delay directive (optional)
+Crawl-delay: 10
+
+# Google specific directives
+User-agent: Googlebot
+Allow: /*.js$
+Allow: /*.css$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.gif$
+Allow: /*.svg$
+
+# Bing specific directives
+User-agent: Bingbot
+Allow: /*.js$
+Allow: /*.css$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.gif$
+Allow: /*.svg$

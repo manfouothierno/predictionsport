@@ -12,11 +12,11 @@ const Footer = () => {
     ];
 
     const quickLinks = [
-        { name: 'Today\'s Predictions', href: '#' },
-        { name: 'Live Scores', href: '#' },
-        { name: 'Statistics', href: '#' },
-        { name: 'News', href: '#' },
-        { name: 'VIP Predictions', href: '#', badge: 'New' }
+        { name: 'Today\'s Predictions', href: '/predictions/today' },
+        { name: 'Tomorrow\'s Predictions', href: '/predictions/tomorrow' },
+        { name: 'Live Scores', href: '/live-scores' },
+        { name: 'blog', href: '/blog' },
+        { name: 'News', href: '/news' },
     ];
 
     const leagues = [
@@ -31,10 +31,10 @@ const Footer = () => {
         <footer className="bg-gradient-to-b from-gray-900 to-black">
 
             {/* Main Footer */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12">
+            <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-16">
                     {/* Brand */}
-                    <div className="lg:col-span-4 space-y-6">
+                    <div className="lg:col-span-5 space-y-6">
                         <div>
                             <h2 className="text-white text-2xl font-bold">PredictionSport</h2>
                             <p className="text-gray-400 mt-4 leading-relaxed">
@@ -71,7 +71,7 @@ const Footer = () => {
                     </div>
 
                     {/* Quick Links */}
-                    <div className="lg:col-span-2">
+                    <div className="lg:col-span-3">
                         <h3 className="text-white font-semibold mb-6">Quick Links</h3>
                         <ul className="space-y-3">
                             {quickLinks.map((link) => (
@@ -90,21 +90,21 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    {/* Leagues */}
-                    <div className="lg:col-span-3">
-                        <h3 className="text-white font-semibold mb-6">Top Leagues</h3>
-                        <ul className="space-y-3">
-                            {leagues.map((league) => (
-                                <li key={league.name}>
-                                    <a href={league.href} className="group flex items-center text-gray-400 hover:text-white transition-colors">
-                                        <ArrowRight className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" />
-                                        <span>{league.name}</span>
-                                        <span className="ml-2 text-sm text-gray-500">({league.country})</span>
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                    {/*/!* Leagues *!/*/}
+                    {/*<div className="lg:col-span-3">*/}
+                    {/*    <h3 className="text-white font-semibold mb-6">Top Leagues</h3>*/}
+                    {/*    <ul className="space-y-3">*/}
+                    {/*        {leagues.map((league) => (*/}
+                    {/*            <li key={league.name}>*/}
+                    {/*                <a href={league.href} className="group flex items-center text-gray-400 hover:text-white transition-colors">*/}
+                    {/*                    <ArrowRight className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" />*/}
+                    {/*                    <span>{league.name}</span>*/}
+                    {/*                    <span className="ml-2 text-sm text-gray-500">({league.country})</span>*/}
+                    {/*                </a>*/}
+                    {/*            </li>*/}
+                    {/*        ))}*/}
+                    {/*    </ul>*/}
+                    {/*</div>*/}
 
                     {/* Contact */}
                     <div className="lg:col-span-3">

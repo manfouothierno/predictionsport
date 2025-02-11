@@ -58,6 +58,7 @@ export default function NewsHighlights() {
                     {news.splice(0,4).map((newsItem, index) => (
                         <NewsCard
                             id={index + 1}
+                            key={index}
                             slug={newsItem.link}
                             title={newsItem.title}
                             excerpt={newsItem.description}

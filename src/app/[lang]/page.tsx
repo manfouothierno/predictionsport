@@ -18,7 +18,7 @@ export default function Home() {
         <Navbar />
         {/*<HeroSection />*/}
         <TopPredictions />
-        <PopularLeagues />
+        {/*<PopularLeagues />*/}
         <NewsHighlights/>
         <PerformanceMetrics/>
         <NewsletterSignup/>

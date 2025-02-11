@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+    <url>
+        <loc>https://predictionsport.com/news/premier-league-transfer-updates</loc>
+        <news:news>
+            <news:publication>
+                <news:name>PredictionSport</news:name>
+                <news:language>en</news:language>
+            </news:publication>
+            <news:publication_date>2025-02-11T13:00:00+00:00</news:publication_date>
+            <news:title>Premier League Transfer Updates</news:title>
+            <news:keywords>Premier League, Transfers, Football</news:keywords>
+        </news:news>
+    </url>
+    <url>
+        <loc>https://predictionsport.com/news/champions-league-match-preview</loc>
+        <news:news>
+            <news:publication>
+                <news:name>PredictionSport</news:name>
+                <news:language>en</news:language>
+            </news:publication>
+            <news:publication_date>2025-02-11T12:00:00+00:00</news:publication_date>
+            <news:title>Champions League Match Preview</news:title>
+            <news:keywords>Champions League, Football, Preview</news:keywords>
+        </news:news>
+    </url>
+</urlset>
