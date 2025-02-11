@@ -82,6 +82,7 @@ export default function TomorrowMatches() {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-500 border-t-transparent"/>
+                <h1 className="text-2xl font-bold text-gray-900 mt-4">Loading Matches...</h1>
             </div>
         );
     }

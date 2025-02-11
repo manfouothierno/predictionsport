@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
     return {
         title: {
             template: '%s',
-            default: "Expert Football Tomorrow's Predictions | PredictionSport",
+            default: "Expert Football Tomorrow's Predictions ",
         },
         description: 'Get accurate football predictions, match analysis, and expert betting tips. Daily predictions for Premier League, Champions League, and other top competitions.',
         keywords: [
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
         ],
         authors: [{ name: 'PredictionSport Analysts' }],
         openGraph: {
-            title: 'Expert Football Predictions & Analysis | PredictionSport',
+            title: 'Expert Football Predictions & Analysis',
             description: 'Get accurate football predictions and expert betting tips.',
             url: `https://predictionsport.com/${params.lang}/predictions`,
             siteName: 'PredictionSport',

@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
     return {
         title: {
             template: '%s',
-            default: "Expert Football Today's Predictions | PredictionSport",
+            default: "Expert Football Today's Predictions",
         },
         description: 'Get accurate football predictions, match analysis, and expert betting tips. Daily predictions for Premier League, Champions League, and other top competitions.',
         keywords: [
