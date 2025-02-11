@@ -283,7 +283,7 @@ export default function TomorrowMatches() {
                                                         </span>
                                                     </div>
                                                     <div className="flex items-center gap-1.5 text-xs font-medium text-red-600 group-hover:text-red-700">
-                                                        View Analysis
+                                                        View Predictions
                                                         <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                                                     </div>
                                                 </div>

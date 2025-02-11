@@ -130,7 +130,7 @@ export default function TopPredictions() {
                                     <div className="mb-0">
                                         <Link  href={`/predictions/analysis/${match.match_id}`}  >
                                             <button   className="w-full py-2 px-4 mt-3 bg-gradient-to-r from-red-600 to-red-700 text-white  rounded-lg font-medium hover:from-red-700 hover:to-red-800 transition-all">
-                                                View Analysis
+                                                View Predictions
                                             </button>
                                         </Link>
                                     </div>
