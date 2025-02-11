@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
             template: '',
             default: "Expert Football Today's Predictions",
         },
-        description: 'Get accurate football predictions, match analysis, and expert betting tips. Daily predictions for Premier League, Champions League, and other top competitions.',
+        description: 'Get daily accurate football predictions, match analysis, and expert betting tips. Daily predictions for Premier League, Champions League, and other top competitions.',
         keywords: [
             'football predictions',
             'soccer predictions',
