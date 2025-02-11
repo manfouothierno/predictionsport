@@ -49,12 +49,12 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
             images: ['https://predictionsport.com/twitter-predictions.jpg'],
         },
         alternates: {
-            canonical: `https://predictionsport.com/${params.lang}/predictions`,
+            canonical: `https://predictionsport.com/${params.lang}/predictions/today`,
             languages: {
-                'en': 'https://predictionsport.com/en/predictions',
-                'fr': 'https://predictionsport.com/fr/predictions',
-                'de': 'https://predictionsport.com/de/predictions',
-                'es': 'https://predictionsport.com/es/predictions',
+                'en': 'https://predictionsport.com/en/predictions/today',
+                'fr': 'https://predictionsport.com/fr/predictions/today',
+                'de': 'https://predictionsport.com/de/predictions/today',
+                'es': 'https://predictionsport.com/es/predictions/today',
             }
         },
         robots: {

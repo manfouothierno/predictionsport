@@ -44,6 +44,15 @@ export const metadata: Metadata = {
             'max-snippet': -1,
         },
     },
+    alternates: {
+        canonical: `https://predictionsport.com/en`,
+        languages: {
+            'en': 'https://predictionsport.com/en',
+            'fr': 'https://predictionsport.com/fr',
+            'de': 'https://predictionsport.com/de',
+            'es': 'https://predictionsport.com/es',
+        }
+    },
     icons: {
         icon: '/favicon.ico',
         shortcut: '/favicon-16x16.png',

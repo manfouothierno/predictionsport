@@ -32,8 +32,17 @@ export const metadata: Metadata = {
         address: false,
         telephone: false,
     },
+    alternates: {
+        canonical: `https://predictionsport.com/en/page-not-found-test`,
+        languages: {
+            'en': 'https://predictionsport.com/en/page-not-found-test',
+            'fr': 'https://predictionsport.com/fr/page-not-found-test',
+            'de': 'https://predictionsport.com/de/page-not-found-test',
+            'es': 'https://predictionsport.com/es/page-not-found-test',
+        }
+    },
     robots: {
-        index: true,
+        index: false,
         follow: true,
         nocache: true,
         googleBot: {
