@@ -272,7 +272,23 @@ export default function MatchPredictions() {
                                                 </div>
 
                                                 {/* VS */}
-                                                <span className="text-sm font-medium text-gray-400">VS</span>
+                                                {/*<span className="text-sm font-medium text-gray-400">VS</span>*/}
+                                                {/* Match Status & Action */}
+                                                <div className="flex items-center  flex-col justify-between px-3 gap-2">
+                                                    <div className="inline-flex items-center px-2 py-1 bg-gray-50 rounded-md">
+
+                                                    <span className="text-xs font-medium text-gray-600">
+                                                           {match.match_date}
+                                                        </span>
+                                                    </div>
+                                                    <div className="inline-flex items-center px-2 py-1 bg-gray-50 rounded-md">
+                                                        <Clock className="w-3.5 h-3.5 text-gray-400 mr-1.5" />
+                                                        <span className="text-xs font-medium text-gray-600">
+                                                           {match.match_time}
+                                                        </span>
+                                                    </div>
+
+                                                </div>
 
                                                 {/* Away Team */}
                                                 <div className="flex flex-col items-center gap-3 flex-1 min-w-0 justify-end">
@@ -289,19 +305,13 @@ export default function MatchPredictions() {
                                                 </div>
                                             </div>
 
-                                            {/* Match Status & Action */}
-                                            <div className="flex items-center justify-between mt-3 pt-3 border-t">
-                                                <div className="inline-flex items-center px-2 py-1 bg-gray-50 rounded-md">
-                                                    <Clock className="w-3.5 h-3.5 text-gray-400 mr-1.5" />
-                                                    <span className="text-xs font-medium text-gray-600">
-                                                           {match.match_date} - {match.match_time}
-                                                        </span>
-                                                </div>
-                                                <button className="flex items-center gap-1.5 text-xs font-medium text-white bg-red-600 group-hover:bg-red-700 px-2 py-2 rounded-[5px] ">
+                                            <div className="flex items-center justify-end mt-3 pt-3 border-t">
+                                                <button className="flex items-center  gap-1.5 text-xs font-medium text-white bg-red-600 group-hover:bg-red-700 px-2 py-2 rounded-[5px] ">
                                                     View Predictions
                                                     <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                                                 </button>
                                             </div>
+
                                         </div>
                                     </div>
                                 </Link>
