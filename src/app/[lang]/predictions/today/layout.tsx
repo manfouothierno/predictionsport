@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
         openGraph: {
             title: 'Expert Football Predictions & Analysis | PredictionSport',
             description: 'Get accurate football predictions and expert betting tips.',
-            url: `https://predictionsport.com/${params.lang}/predictions`,
+            url: `https://predictionsport.com/${(await params).lang}/predictions`,
             siteName: 'PredictionSport',
             images: [
                 {
