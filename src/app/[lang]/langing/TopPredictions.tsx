@@ -30,7 +30,7 @@ export default function TopPredictions() {
                         match.match_status === '' ||
                         match.match_status === 'Time To Be Defined'
                     )
-                    .slice(0, 6);
+                    .slice(0, 12);
 
                 setMatches(upcomingMatches);
             } catch (error) {
@@ -62,9 +62,7 @@ export default function TopPredictions() {
                         </h1>
                         <p className="mt-2 text-gray-600">Expert picks with highest confidence</p>
                     </div>
-                    <Link href={'/predictions/today'} className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                        View All
-                    </Link>
+
                 </div>
 
                 {loading ? (
@@ -141,6 +139,12 @@ export default function TopPredictions() {
                         ))}
                     </div>
                 )}
+
+                <div className="flex justify-end mt-4 ">
+                    <Link href={'/predictions/today'} className="bg-red-600 hover:bg-red-800 text-white px-10 py-4 rounded-lg font-bold transition-colors">
+                        View All prdictions
+                    </Link>
+                </div>
 
                 <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="flex items-center space-x-4 bg-white p-4 rounded-lg shadow">
