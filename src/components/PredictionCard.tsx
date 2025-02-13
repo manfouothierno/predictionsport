@@ -11,7 +11,7 @@ export const PredictionCard = ({match}: {match: any}) => {
         >
             <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100 hover:border-red-100">
                 {/* League & Time Header */}
-                <div className="bg-gradient-to-r from-gray-50 to-white px-4 py-2.5 flex items-center justify-center  border-b">
+                <div className="bg-gradient-to-r shadow-sm  from-gray-50 to-white px-4 py-2.5 flex items-center justify-center  border-b">
                     <div className="flex items-center gap-2.5">
                         <div className="w-5 h-5 bg-white rounded-full p-0.5 shadow-sm">
                             <img
@@ -20,7 +20,7 @@ export const PredictionCard = ({match}: {match: any}) => {
                                 className="w-full h-full object-contain"
                             />
                         </div>
-                        <span className="text-sm text-gray-700  font-bold truncate">
+                        <span className="text-sm text-black  font-bold truncate">
                                                         {match.league_name}
                                                     </span>
                     </div>
@@ -39,7 +39,7 @@ export const PredictionCard = ({match}: {match: any}) => {
                                     className="w-full h-full object-contain"
                                 />
                             </div>
-                            <span className="text-sm font-medium text-gray-900 truncate">
+                            <span className="text-sm font-bold text-gray-900 truncate">
                                                             {match.match_hometeam_name}
                                                         </span>
                         </div>
@@ -73,7 +73,7 @@ export const PredictionCard = ({match}: {match: any}) => {
                                     className="w-full h-full object-contain"
                                 />
                             </div>
-                            <span className="text-sm font-medium text-gray-900 truncate">
+                            <span className="text-sm font-bold text-gray-900 truncate">
                                                             {match.match_awayteam_name}
                                                         </span>
                         </div>
