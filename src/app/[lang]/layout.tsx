@@ -4,7 +4,7 @@ import {i18n, Locale} from "@/i18n-config";
 import {Metadata} from "next";
 import Navbar from "@/app/[lang]/langing/Navbar";
 import Footer from "@/app/[lang]/langing/Footer";
-import { Poppins } from 'next/font/google'
+import { Open_Sans } from 'next/font/google'
 
 export type LayoutProps = {
     children: React.ReactNode;
@@ -13,7 +13,7 @@ export type LayoutProps = {
     };
 };
 
-const poppins = Poppins({ subsets: ['latin'], weight: '300' })
+const openSans = Open_Sans({ subsets: ['latin'], weight: '300' })
 
 
 export const metadata: Metadata = {
@@ -101,7 +101,7 @@ export default async function RootLayout({ children, params }: LayoutProps) {
     const dictionary = await getDictionary(lang);
 
     return (
-        <html lang={lang} className={poppins.className}>
+        <html lang={lang} className={openSans.className}>
         <body>
         <LanguageProvider
             initialLocale={lang}
