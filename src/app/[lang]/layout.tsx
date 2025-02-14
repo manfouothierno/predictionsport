@@ -16,6 +16,7 @@ export type LayoutProps = {
 const openSans =  Open_Sans({
     subsets: ['latin'],
     display: 'swap',
+    variable: '--font-opensans',
 })
 
 
@@ -104,7 +105,7 @@ export default async function RootLayout({ children, params }: LayoutProps) {
     const dictionary = await getDictionary(lang);
 
     return (
-        <html lang={lang} className={openSans.className}>
+        <html lang={lang} className={`${openSans.className} font-sans`}>
         <body>
         <LanguageProvider
             initialLocale={lang}

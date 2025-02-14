@@ -39,7 +39,7 @@ export const PredictionCard = ({match}: {match: any}) => {
                                     className="w-full h-full object-contain"
                                 />
                             </div>
-                            <span className="text-sm font-bold text-gray-900 truncate">
+                            <span className="text-sm font-medium text-gray-900 truncate">
                                                             {match.match_hometeam_name}
                                                         </span>
                         </div>
@@ -57,7 +57,7 @@ export const PredictionCard = ({match}: {match: any}) => {
                             </div>
                             <div className="inline-flex items-center px-2 py-1 bg-gray-50 rounded-md">
                                 <Clock className="w-3.5 h-3.5 text-black mr-1.5" />
-                                <span className="text-xs font-bold text-black">
+                                <span className="text-xs font-medium text-black">
                                                            {match.match_time}
                                                         </span>
                             </div>
@@ -73,7 +73,7 @@ export const PredictionCard = ({match}: {match: any}) => {
                                     className="w-full h-full object-contain"
                                 />
                             </div>
-                            <span className="text-sm font-bold text-gray-900 truncate">
+                            <span className="text-sm font-medium text-gray-900 truncate">
                                                             {match.match_awayteam_name}
                                                         </span>
                         </div>
@@ -81,7 +81,7 @@ export const PredictionCard = ({match}: {match: any}) => {
 
                     <div className="flex items-center justify-center mt-[-15px] pt-3 ">
                         <button className="flex items-center  gap-1.5 text-xs font-bold text-white bg-red-600 group-hover:bg-red-700 px-2 py-2 rounded-[5px] ">
-                            VIEW PREDICTIONS
+                            VIEW PREDICTION
                             {/*<ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />*/}
                         </button>
                     </div>
