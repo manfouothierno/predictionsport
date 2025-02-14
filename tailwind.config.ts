@@ -23,8 +23,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['var(--font-inter)'],
-        mono: ['var(--font-roboto-mono)']
+        sans: ["var(--font-opensans)"],
+        mono: ["var(--font-roboto-mono)"],
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in',
