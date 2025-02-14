@@ -48,7 +48,7 @@ export const PredictionCard = ({match}: {match: any}) => {
                         {/*<span className="text-sm font-medium text-gray-400">VS</span>*/}
                         {/* Match Status & Action */}
                         <div className="flex items-center  flex-col justify-between px-3 gap-2">
-                            <span className="text-xs font-bold text-black">Match time & date: </span>
+                            <span className="text-xs font-medium text-black">Match time & date: </span>
                             <div className="inline-flex items-center px-2 py-1 bg-gray-50 rounded-md">
 
                                                     <span className="text-xs font-medium text-black">
