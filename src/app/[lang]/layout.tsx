@@ -13,7 +13,10 @@ export type LayoutProps = {
     };
 };
 
-const openSans = Open_Sans({ subsets: ['latin'], weight: '300' })
+const openSans =  Open_Sans({
+    subsets: ['latin'],
+    display: 'swap',
+})
 
 
 export const metadata: Metadata = {
