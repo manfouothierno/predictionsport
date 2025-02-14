@@ -20,7 +20,7 @@ export default function Home() {
         <TopPredictions />
         {/*<PopularLeagues />*/}
         <NewsHighlights/>
-        <PerformanceMetrics/>
+        {/*<PerformanceMetrics/>*/}
         <NewsletterSignup/>
 
     </div>

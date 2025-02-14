@@ -140,41 +140,41 @@ export default function TopPredictions() {
                     </div>
                 )}
 
-                <div className="flex justify-end mt-4 ">
+                <div className="flex justify-center mt-4 ">
                     <Link href={'/predictions/today'} className="bg-red-600 hover:bg-red-800 text-white px-10 py-4 rounded-lg font-bold transition-colors">
                         View All prdictions
                     </Link>
                 </div>
 
-                <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="flex items-center space-x-4 bg-white p-4 rounded-lg shadow">
-                        <div className="bg-red-100 p-3 rounded-lg">
-                            <Trophy className="w-6 h-6 text-red-600" />
-                        </div>
-                        <div>
-                            <p className="text-lg font-semibold text-gray-900">92%</p>
-                            <p className="text-sm text-gray-500">Success Rate</p>
-                        </div>
-                    </div>
-                    <div className="flex items-center space-x-4 bg-white p-4 rounded-lg shadow">
-                        <div className="bg-green-100 p-3 rounded-lg">
-                            <TrendingUp className="w-6 h-6 text-green-600" />
-                        </div>
-                        <div>
-                            <p className="text-lg font-semibold text-gray-900">+150</p>
-                            <p className="text-sm text-gray-500">Daily Predictions</p>
-                        </div>
-                    </div>
-                    <div className="flex items-center space-x-4 bg-white p-4 rounded-lg shadow">
-                        <div className="bg-yellow-100 p-3 rounded-lg">
-                            <Star className="w-6 h-6 text-yellow-600" />
-                        </div>
-                        <div>
-                            <p className="text-lg font-semibold text-gray-900">4.8/5</p>
-                            <p className="text-sm text-gray-500">User Rating</p>
-                        </div>
-                    </div>
-                </div>
+                {/*<div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">*/}
+                {/*    <div className="flex items-center space-x-4 bg-white p-4 rounded-lg shadow">*/}
+                {/*        <div className="bg-red-100 p-3 rounded-lg">*/}
+                {/*            <Trophy className="w-6 h-6 text-red-600" />*/}
+                {/*        </div>*/}
+                {/*        <div>*/}
+                {/*            <p className="text-lg font-semibold text-gray-900">92%</p>*/}
+                {/*            <p className="text-sm text-gray-500">Success Rate</p>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*    <div className="flex items-center space-x-4 bg-white p-4 rounded-lg shadow">*/}
+                {/*        <div className="bg-green-100 p-3 rounded-lg">*/}
+                {/*            <TrendingUp className="w-6 h-6 text-green-600" />*/}
+                {/*        </div>*/}
+                {/*        <div>*/}
+                {/*            <p className="text-lg font-semibold text-gray-900">+150</p>*/}
+                {/*            <p className="text-sm text-gray-500">Daily Predictions</p>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*    <div className="flex items-center space-x-4 bg-white p-4 rounded-lg shadow">*/}
+                {/*        <div className="bg-yellow-100 p-3 rounded-lg">*/}
+                {/*            <Star className="w-6 h-6 text-yellow-600" />*/}
+                {/*        </div>*/}
+                {/*        <div>*/}
+                {/*            <p className="text-lg font-semibold text-gray-900">4.8/5</p>*/}
+                {/*            <p className="text-sm text-gray-500">User Rating</p>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
             </div>
         </section>
     );
