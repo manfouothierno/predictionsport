@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { TrendingUp, Calendar, Timer, ChevronLeft, BarChart2, Users, Percent, DollarSign } from 'lucide-react';
 import Navbar from "@/app/[lang]/langing/Navbar";
+import Link from "next/link";
 
 export default function MatchAnalysis({ params }: { params: Promise<{ match: string }> }) {
     const [matchDetails, setMatchDetails] = useState<any>(null);
@@ -267,6 +268,15 @@ export default function MatchAnalysis({ params }: { params: Promise<{ match: str
                                 </div>
                             </div>
                         )}
+
+                        <div className="flex flex-col items-center justify-center mt-10">
+                            <button className="bg-primary text-white w-full rounded-xl px-4 py-2 font-semibold">
+                                <Link href="#">
+                                    Place bet now
+                                </Link>
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             </div>
