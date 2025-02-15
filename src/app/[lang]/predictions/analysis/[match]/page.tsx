@@ -1,15 +1,234 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TrendingUp, Calendar, Timer, ChevronLeft, BarChart2, Users, Percent, DollarSign } from 'lucide-react';
-import Navbar from "@/app/[lang]/langing/Navbar";
+import { TrendingUp, Calendar, Timer, ChevronLeft, BarChart2, Users, Percent, DollarSign, Goal, Scale, ChevronRight } from 'lucide-react';
 import Link from "next/link";
+import Navbar from "@/app/[lang]/langing/Navbar";
 
-export default function MatchAnalysis({ params }: { params: Promise<{ match: string }> }) {
-    const [matchDetails, setMatchDetails] = useState<any>(null);
-    const [predictions, setPredictions] = useState<any>(null);
+// Score Prediction Component
+const ScorePrediction = ({ predictions }) => {
+    const getHighestProbScore = () => {
+        const overProb = parseFloat(predictions.prob_O) || 0;
+        const homeWinProb = parseFloat(predictions.prob_HW) || 0;
+
+        if (homeWinProb > 70 && overProb > 70) {
+            return { home: 2, away: 0, probability: Math.floor(homeWinProb * 0.8) };
+        } else if (homeWinProb > 70) {
+            return { home: 1, away: 0, probability: Math.floor(homeWinProb * 0.7) };
+        } else {
+            return { home: 1, away: 1, probability: Math.floor((100 - homeWinProb - parseFloat(predictions.prob_AW)) * 0.8) };
+        }
+    };
+
+    const scorePrediction = getHighestProbScore();
+
+    return (
+        <div className="bg-white rounded-xl shadow-sm p-6">
+            <h3 className="text-sm font-medium text-gray-900 mb-4">Most Likely Score</h3>
+            <div className="text-center">
+                <div className="inline-block bg-red-50 px-6 py-3 rounded-lg">
+                    <div className="text-3xl font-bold text-red-600">
+                        {scorePrediction.home} - {scorePrediction.away}
+                    </div>
+                    <div className="text-sm text-gray-500 mt-1">
+                        Probability: {scorePrediction.probability}%
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// Betting Tips Component
+const BettingTips = ({ predictions }) => {
+    const getTips = () => {
+        const tips = [];
+
+        // Over/Under tips
+        if (parseFloat(predictions.prob_O) > 75) {
+            tips.push({
+                tip: "Over 2.5 Goals",
+                confidence: predictions.prob_O,
+                reasoning: "High probability of a high-scoring match",
+                icon: Goal
+            });
+        }
+
+        // Win probability tips
+        if (parseFloat(predictions.prob_HW) > 80) {
+            tips.push({
+                tip: "Home Win",
+                confidence: predictions.prob_HW,
+                reasoning: "Strong home team advantage indicated",
+                icon: TrendingUp
+            });
+        }
+
+        // Both teams to score
+        if (parseFloat(predictions.prob_bts) > 50) {
+            tips.push({
+                tip: "Both Teams to Score",
+                confidence: predictions.prob_bts,
+                reasoning: "Both teams show good attacking form",
+                icon: Goal
+            });
+        }
+
+        return tips;
+    };
+
+    return (
+        <div className="bg-white rounded-xl shadow-sm p-6">
+            <h3 className="text-sm font-medium text-gray-900 mb-4">Key Betting Tips</h3>
+            <div className="space-y-4">
+                {getTips().map((tip, index) => (
+                    <div key={index} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                        <div className="flex-shrink-0">
+                            <tip.icon className="h-5 w-5 text-red-500" />
+                        </div>
+                        <div className="flex-1">
+                            <div className="font-medium text-gray-900">{tip.tip}</div>
+                            <div className="text-sm text-gray-500">{tip.reasoning}</div>
+                            <div className="mt-2">
+                                <div className="w-full bg-gray-200 rounded-full h-1.5">
+                                    <div
+                                        className="bg-red-500 h-1.5 rounded-full transition-all duration-500"
+                                        style={{ width: `${tip.confidence}%` }}
+                                    />
+                                </div>
+                                <div className="text-xs text-gray-500 mt-1">{tip.confidence}% confidence</div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+// Detailed Analysis Component
+const DetailedAnalysis = ({ predictions, matchDetails }) => {
+    return (
+        <div className="bg-white rounded-xl shadow-sm p-6">
+            <h3 className="text-sm font-medium text-gray-900 mb-4">Match Analysis</h3>
+            <div className="space-y-6">
+                {/* Team Formations */}
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                        <div className="text-sm text-gray-500">Home Formation</div>
+                        <div className="text-lg font-semibold text-gray-900">{matchDetails.match_hometeam_system}</div>
+                    </div>
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                        <div className="text-sm text-gray-500">Away Formation</div>
+                        <div className="text-lg font-semibold text-gray-900">{matchDetails.match_awayteam_system}</div>
+                    </div>
+                </div>
+
+                {/* Goal Probabilities */}
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                        <div className="text-sm text-gray-500 mb-1">Over 2.5 Goals</div>
+                        <div className="text-lg font-semibold text-gray-900">{predictions.prob_O}%</div>
+                        <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                            <div
+                                className="bg-green-500 h-1.5 rounded-full transition-all duration-500"
+                                style={{ width: `${predictions.prob_O}%` }}
+                            />
+                        </div>
+                    </div>
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                        <div className="text-sm text-gray-500 mb-1">Both Teams to Score</div>
+                        <div className="text-lg font-semibold text-gray-900">{predictions.prob_bts}%</div>
+                        <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                            <div
+                                className="bg-blue-500 h-1.5 rounded-full transition-all duration-500"
+                                style={{ width: `${predictions.prob_bts}%` }}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Asian Handicap Analysis */}
+                <div className="p-4 bg-gray-50 rounded-lg">
+                    <h4 className="text-sm font-medium text-gray-900 mb-3">Asian Handicap Analysis</h4>
+                    <div className="space-y-3">
+                        {[
+                            { label: "-0.5", home: predictions.prob_ah_h_05, away: predictions.prob_ah_a_05 },
+                            { label: "-1.5", home: predictions.prob_ah_h_15, away: predictions.prob_ah_a_15 },
+                            { label: "-2.5", home: predictions.prob_ah_h_25, away: predictions.prob_ah_a_25 }
+                        ].map((handicap, index) => (
+                            <div key={index} className="space-y-1">
+                                <div className="flex justify-between text-sm text-gray-500">
+                                    <span>AH {handicap.label}</span>
+                                    <span>{handicap.home}%</span>
+                                </div>
+                                <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                    <div
+                                        className="h-full bg-red-500 transition-all duration-500"
+                                        style={{ width: `${handicap.home}%` }}
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// Match Header Component
+const MatchHeader = ({ matchDetails, predictions }) => {
+    const getPrediction = () => {
+        const homeProb = parseFloat(predictions.prob_HW) || 0;
+        const awayProb = parseFloat(predictions.prob_AW) || 0;
+        const drawProb = parseFloat(predictions.prob_D) || 0;
+
+        if (homeProb > awayProb && homeProb > drawProb) return 'Home Win';
+        if (awayProb > homeProb && awayProb > drawProb) return 'Away Win';
+        return 'Draw';
+    };
+
+    return (
+        <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="grid grid-cols-3 gap-4 items-center">
+                <div className="text-center">
+                    <img
+                        src={matchDetails.team_home_badge || '/api/placeholder/64/64'}
+                        alt={matchDetails.match_hometeam_name}
+                        className="w-16 h-16 mx-auto object-contain"
+                    />
+                    <h3 className="mt-2 font-semibold text-gray-900">
+                        {matchDetails.match_hometeam_name}
+                    </h3>
+                </div>
+                <div className="text-center">
+                    <div className="text-sm text-gray-500 mb-2">Prediction</div>
+                    <div className="bg-red-50 text-red-700 px-4 py-2 rounded-lg font-medium">
+                        {getPrediction()}
+                    </div>
+                </div>
+                <div className="text-center">
+                    <img
+                        src={matchDetails.team_away_badge || '/api/placeholder/64/64'}
+                        alt={matchDetails.match_awayteam_name}
+                        className="w-16 h-16 mx-auto object-contain"
+                    />
+                    <h3 className="mt-2 font-semibold text-gray-900">
+                        {matchDetails.match_awayteam_name}
+                    </h3>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// Main Component
+export default function MatchAnalysis({ params }) {
+    const [matchDetails, setMatchDetails] = useState(null);
+    const [predictions, setPredictions] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchMatchData = async () => {
@@ -36,7 +255,6 @@ export default function MatchAnalysis({ params }: { params: Promise<{ match: str
 
                 setMatchDetails(matchData[0]);
                 setPredictions(predictionData[0]);
-
             } catch (err) {
                 console.error('Error fetching match data:', err);
                 setError('Failed to load match data. Please try again later.');
@@ -67,216 +285,110 @@ export default function MatchAnalysis({ params }: { params: Promise<{ match: str
         );
     }
 
-    // Calculate prediction confidence based on available data
-    const calculateConfidence = () => {
-        if (!predictions) return 65; // Default confidence
-
-        const factors = [
-            predictions.prob_HW || 0,
-            predictions.prob_AW || 0,
-            predictions.prob_D || 0
-        ];
-
-        return Math.max(...factors.map(f => parseInt(f) || 0));
-    };
-
-    // Determine match prediction
-    const getPrediction = () => {
-        if (!predictions) return 'No Prediction';
-
-        const homeProb = parseInt(predictions.prob_HW) || 0;
-        const awayProb = parseInt(predictions.prob_AW) || 0;
-        const drawProb = parseInt(predictions.prob_D) || 0;
-
-        if (homeProb > awayProb && homeProb > drawProb) return 'Home Win';
-        if (awayProb > homeProb && awayProb > drawProb) return 'Away Win';
-        return 'Draw';
-    };
-
     return (
         <div className="min-h-screen bg-gray-50">
             <Navbar />
+            <div className="">
 
-            <div className="max-w-7xl mx-auto pt-24 px-4 sm:px-6 lg:px-8 py-8">
+                {/* Back button */}
+                <Link href="/predictions" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-6">
+                    <ChevronLeft className="w-5 h-5 mr-1" />
+                    Back to Predictions
+                </Link>
+
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Main Analysis */}
+                    {/* Main Content - Left Column */}
                     <div className="lg:col-span-2 space-y-6">
-                        {/* Match Header */}
-                        <div className="bg-white rounded-xl shadow-sm p-6">
-                            <div className="grid grid-cols-3 gap-4 items-center">
-                                <div className="text-center">
-                                    <img
-                                        src={matchDetails.team_home_badge}
-                                        alt={matchDetails.match_hometeam_name}
-                                        className="w-16 h-16 mx-auto object-contain"
-                                    />
-                                    <h3 className="mt-2 font-semibold text-gray-900">
-                                        {matchDetails.match_hometeam_name}
-                                    </h3>
-                                </div>
-                                <div className="text-center">
-                                    <div className="text-sm text-gray-500 mb-2">VS</div>
-                                    <div className="bg-red-50 text-red-700 px-4 py-2 rounded-lg font-medium">
-                                        {getPrediction()}
-                                    </div>
-                                </div>
-                                <div className="text-center">
-                                    <img
-                                        src={matchDetails.team_away_badge}
-                                        alt={matchDetails.match_awayteam_name}
-                                        className="w-16 h-16 mx-auto object-contain"
-                                    />
-                                    <h3 className="mt-2 font-semibold text-gray-900">
-                                        {matchDetails.match_awayteam_name}
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Match Details */}
-                        <div className="bg-white rounded-xl shadow-sm p-6">
-                            <h2 className="text-lg font-semibold text-gray-900 mb-4">Match Details</h2>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                <div className="space-y-1">
-                                    <div className="text-sm text-gray-500">Date</div>
-                                    <div className="font-medium text-gray-900">{matchDetails.match_date}</div>
-                                </div>
-                                <div className="space-y-1">
-                                    <div className="text-sm text-gray-500">Time</div>
-                                    <div className="font-medium text-gray-900">{matchDetails.match_time}</div>
-                                </div>
-                                <div className="space-y-1">
-                                    <div className="text-sm text-gray-500">League</div>
-                                    <div className="font-medium text-gray-900">{matchDetails.league_name}</div>
-                                </div>
-                                <div className="space-y-1">
-                                    <div className="text-sm text-gray-500">Status</div>
-                                    <div className="font-medium text-gray-900">{matchDetails.match_status}</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Analysis */}
-                        <div className="bg-white rounded-xl shadow-sm p-6">
-                            <h2 className="text-lg font-semibold text-gray-900 mb-4">Analysis</h2>
-                            <div className="space-y-6">
-                                {predictions && (
-                                    <>
-                                        <div>
-                                            <h3 className="text-sm font-medium text-gray-900 mb-2">Key Stats</h3>
-                                            <ul className="space-y-2">
-                                                <li className="flex items-start">
-                                                    <span className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-2" />
-                                                    <span className="text-gray-600">
-                                                        Goals scored (avg): Home {predictions.goals_home} - Away {predictions.goals_away}
-                                                    </span>
-                                                </li>
-                                                <li className="flex items-start">
-                                                    <span className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-2" />
-                                                    <span className="text-gray-600">
-                                                        Win probability: Home {predictions.prob_HW}% - Away {predictions.prob_AW}%
-                                                    </span>
-                                                </li>
-                                            </ul>
-                                        </div>
-
-                                        <div>
-                                            <h3 className="text-sm font-medium text-gray-900 mb-2">Prediction Analysis</h3>
-                                            <p className="text-gray-600">
-                                                Based on recent form and historical data,
-                                                {getPrediction() === 'Home Win'
-                                                    ? ` ${matchDetails.match_hometeam_name} is favored to win`
-                                                    : getPrediction() === 'Away Win'
-                                                        ? ` ${matchDetails.match_awayteam_name} is favored to win`
-                                                        : ' the match is expected to be closely contested'
-                                                }.
-                                            </p>
-                                        </div>
-                                    </>
-                                )}
-                            </div>
-                        </div>
+                        <MatchHeader matchDetails={matchDetails} predictions={predictions} />
+                        <ScorePrediction predictions={predictions} />
+                        <DetailedAnalysis predictions={predictions} matchDetails={matchDetails} />
                     </div>
 
-                    {/* Sidebar */}
+                    {/* Sidebar - Right Column */}
                     <div className="space-y-6">
-                        {/* Confidence Score */}
                         <div className="bg-white rounded-xl shadow-sm p-6">
-                            <h3 className="text-sm font-medium text-gray-900 mb-4">Prediction Confidence</h3>
-                            <div className="relative pt-1">
-                                <div className="flex mb-2 items-center justify-between">
+                            <h3 className="text-sm font-medium text-gray-900 mb-4">Match Information</h3>
+                            <div className="space-y-4">
+                                <div className="flex items-center space-x-3">
+                                    <Calendar className="w-5 h-5 text-gray-400" />
                                     <div>
-                                        <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-red-600 bg-red-100">
-                                            Confidence
-                                        </span>
-                                    </div>
-                                    <div className="text-right">
-                                        <span className="text-xs font-semibold inline-block text-red-600">
-                                            {calculateConfidence()}%
-                                        </span>
+                                        <div className="text-sm text-gray-500">Date</div>
+                                        <div className="font-medium text-gray-900">{matchDetails.match_date}</div>
                                     </div>
                                 </div>
-                                <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-red-100">
-                                    <div
-                                        style={{ width: `${calculateConfidence()}%` }}
-                                        className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-600"
-                                    />
+                                <div className="flex items-center space-x-3">
+                                    <Timer className="w-5 h-5 text-gray-400" />
+                                    <div>
+                                        <div className="text-sm text-gray-500">Time</div>
+                                        <div className="font-medium text-gray-900">{matchDetails.match_time}</div>
+                                    </div>
+                                </div>
+                                <div className="flex items-center space-x-3">
+                                    <BarChart2 className="w-5 h-5 text-gray-400" />
+                                    <div>
+                                        <div className="text-sm text-gray-500">League</div>
+                                        <div className="font-medium text-gray-900">{matchDetails.league_name}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Odds */}
-                        {predictions && (
-                            <div className="bg-white rounded-xl shadow-sm p-6">
-                                <h3 className="text-sm font-medium text-gray-900 mb-4">Probabilities</h3>
-                                <div className="grid grid-cols-3 gap-4">
-                                    <div className="text-center">
-                                        <div className="text-sm text-gray-500 mb-1">Home Win</div>
-                                        <div className="text-lg font-semibold text-gray-900">{predictions.prob_HW}%</div>
+                        <BettingTips predictions={predictions} />
+
+                        {/* Win Probabilities */}
+                        <div className="bg-white rounded-xl shadow-sm p-6">
+                            <h3 className="text-sm font-medium text-gray-900 mb-4">Win Probabilities</h3>
+                            <div className="space-y-4">
+                                <div>
+                                    <div className="flex justify-between text-sm text-gray-500 mb-1">
+                                        <span>Home Win</span>
+                                        <span>{predictions.prob_HW}%</span>
                                     </div>
-                                    <div className="text-center">
-                                        <div className="text-sm text-gray-500 mb-1">Draw</div>
-                                        <div className="text-lg font-semibold text-gray-900">{predictions.prob_D}%</div>
+                                    <div className="w-full bg-gray-200 rounded-full h-2">
+                                        <div
+                                            className="bg-green-500 h-2 rounded-full transition-all duration-500"
+                                            style={{ width: `${predictions.prob_HW}%` }}
+                                        />
                                     </div>
-                                    <div className="text-center">
-                                        <div className="text-sm text-gray-500 mb-1">Away Win</div>
-                                        <div className="text-lg font-semibold text-gray-900">{predictions.prob_AW}%</div>
+                                </div>
+                                <div>
+                                    <div className="flex justify-between text-sm text-gray-500 mb-1">
+                                        <span>Draw</span>
+                                        <span>{predictions.prob_D}%</span>
+                                    </div>
+                                    <div className="w-full bg-gray-200 rounded-full h-2">
+                                        <div
+                                            className="bg-yellow-500 h-2 rounded-full transition-all duration-500"
+                                            style={{ width: `${predictions.prob_D}%` }}
+                                        />
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="flex justify-between text-sm text-gray-500 mb-1">
+                                        <span>Away Win</span>
+                                        <span>{predictions.prob_AW}%</span>
+                                    </div>
+                                    <div className="w-full bg-gray-200 rounded-full h-2">
+                                        <div
+                                            className="bg-red-500 h-2 rounded-full transition-all duration-500"
+                                            style={{ width: `${predictions.prob_AW}%` }}
+                                        />
                                     </div>
                                 </div>
                             </div>
-                        )}
+                        </div>
 
-                        {/* Stats Comparison */}
-                        {predictions && (
-                            <div className="bg-white rounded-xl shadow-sm p-6">
-                                <h3 className="text-sm font-medium text-gray-900 mb-4">Goals Prediction</h3>
-                                <div className="space-y-4">
-                                    <div>
-                                        <div className="text-sm text-gray-500 mb-2">Expected Goals</div>
-                                        <div className="flex justify-between items-center">
-                                            <span className="text-sm font-medium">{predictions.goals_home}</span>
-                                            <span className="text-xs text-gray-500">vs</span>
-                                            <span className="text-sm font-medium">{predictions.goals_away}</span>
-                                        </div>
-                                    </div>
-                                    {predictions.advice && (
-                                        <div>
-                                            <div className="text-sm text-gray-500 mb-2">Betting Advice</div>
-                                            <p className="text-sm text-gray-600">{predictions.advice}</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="flex flex-col items-center justify-center mt-10">
-                            <button className="bg-primary text-white w-full rounded-xl px-4 py-2 font-semibold">
-                                <Link href="#">
-                                    Place bet now
-                                </Link>
+                        {/* CTA Buttons */}
+                        <div className="space-y-3 px-1 py-2">
+                            <button className="w-full bg-red-600 hover:bg-red-700 text-white rounded-xl px-4 py-3 font-semibold flex items-center justify-center space-x-2 transition-colors">
+                                <span>Place Bet Now</span>
+                                <ChevronRight className="w-5 h-5" />
                             </button>
+                            {/*<button className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl px-4 py-3 font-semibold flex items-center justify-center space-x-2 transition-colors">*/}
+                            {/*    <Users className="w-5 h-5" />*/}
+                            {/*    <span>View More Stats</span>*/}
+                            {/*</button>*/}
                         </div>
-
                     </div>
                 </div>
             </div>
