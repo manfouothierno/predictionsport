@@ -8,6 +8,7 @@ import NewsHighlights from "@/app/[lang]/langing/NewsHighlights";
 import PerformanceMetrics from "@/app/[lang]/langing/PerformanceMetrics";
 import NewsletterSignup from "@/app/[lang]/langing/NewsletterSignup";
 import Footer from "@/app/[lang]/langing/Footer";
+import PromotionalBanner from "@/components/PromotionalBanner";
 
 
 
@@ -16,6 +17,7 @@ export default function Home() {
   return (
     <div >
         <Navbar />
+
         {/*<HeroSection />*/}
         <TopPredictions />
         {/*<PopularLeagues />*/}

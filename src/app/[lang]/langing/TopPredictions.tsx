@@ -4,6 +4,7 @@ import {Trophy, TrendingUp, Star, Clock, ChevronRight} from 'lucide-react';
 import Link from "next/link";
 import {Button} from "@nextui-org/react";
 import {PredictionCard} from "@/components/PredictionCard";
+import PromotionalBanner from "@/components/PromotionalBanner";
 
 export default function TopPredictions() {
     const [matches, setMatches] = useState([]);
@@ -45,7 +46,27 @@ export default function TopPredictions() {
 
     return (
         <section className="py-16 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto mt-1 sm:px-6 lg:px-8 py-4">
+                <PromotionalBanner
+                    brand="1xbet"
+                    promoUrl="#"
+                    bonus="50,000 FCFA"
+                    brandLogo={'https://v3.traincdn.com/genfiles/cms/55-654/desktop/media_asset/93f175f039aa059b186bc29c157e8cc4.svg'}
+                />
+                <PromotionalBanner
+                    brand="melbet"
+                    promoUrl="#"
+                    bonus="45,000 FCFA"
+                    brandLogo={'https://v3.traincdn.com/genfiles/cms/8-62/desktop/media_asset/dd77c8f1b5bd23e38cd81fb7d861af10.svg'}
+                />
+                {/*<PromotionalBanner*/}
+                {/*    brand="linebet"*/}
+                {/*    promoUrl="#"*/}
+                {/*    bonus="40,000 FCFA"*/}
+                {/*/>*/}
+            </div>
+            <div className="max-w-7xl mx-auto mt-2 px-4 sm:px-6 lg:px-8">
+
                 {/*<div className="my-10">*/}
                 {/*    <h1 className="text-4xl sm:text-3xl lg:text-5xl font-bold mt-5 leading-tight">*/}
                 {/*        Expert Football Predictions & Analysis*/}

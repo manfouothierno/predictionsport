@@ -1,27 +1,28 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, Home, Calendar, Radio, Newspaper, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 
 const navigation = [
-    { name: 'Home', href: '/' },
+    { name: 'Home', href: '/', icon: Home, color: 'text-blue-500' },
     {
         name: 'Predictions',
         href: '#',
+        icon: Calendar,
+        color: 'text-green-500',
         submenu: [
-            { name: 'Today\'s Matches', href: '/predictions/today' },
-            { name: 'Tomorrow\'s Matches', href: '/predictions/tomorrow' },
-            // { name: 'Analysis', href: '/predictions/analysis' },
+            { name: "Today's Matches", href: '/predictions/today' },
+            { name: "Tomorrow's Matches", href: '/predictions/tomorrow' },
         ]
     },
-    { name: 'Live Scores', href: '/live-scores' },
-    { name: 'News', href: '/news' },
-    { name: 'Blog', href: '/blog' },
+    { name: 'Live Scores', href: '/live-scores', icon: Radio, color: 'text-yellow-500' },
+    { name: 'News', href: '/news', icon: Newspaper, color: 'text-purple-500' },
+    { name: 'Blog', href: '/blog', icon: BookOpen, color: 'text-pink-500' },
 ];
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-    const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
+    const [activeSubmenu, setActiveSubmenu] = useState(null);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -38,6 +39,20 @@ export default function Navbar() {
         }`}>
             <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
+                    {/* Mobile menu button - Now on the left */}
+                    <div className="md:hidden">
+                        <button
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-red-800"
+                        >
+                            {isOpen ? (
+                                <X className="block h-6 w-6" />
+                            ) : (
+                                <Menu className="block h-6 w-6" />
+                            )}
+                        </button>
+                    </div>
+
                     {/* Logo */}
                     <div className="flex-shrink-0">
                         <Link href="/" className="text-white font-bold text-xl">
@@ -87,19 +102,8 @@ export default function Navbar() {
                         ))}
                     </div>
 
-                    {/* Mobile menu button */}
-                    <div className="md:hidden">
-                        <button
-                            onClick={() => setIsOpen(!isOpen)}
-                            className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-red-800"
-                        >
-                            {isOpen ? (
-                                <X className="block h-6 w-6" />
-                            ) : (
-                                <Menu className="block h-6 w-6" />
-                            )}
-                        </button>
-                    </div>
+                    {/* Empty div to maintain spacing */}
+                    <div className="md:hidden w-10"></div>
                 </div>
 
                 {/* Mobile menu */}
@@ -107,7 +111,7 @@ export default function Navbar() {
                     isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
                 }`}>
                     <div className="px-2 pt-2 pb-3 space-y-1">
-                        {navigation.map((item) => (
+                        {navigation.map((item, index) => (
                             <div key={item.name}>
                                 {item.submenu ? (
                                     <div>
@@ -115,9 +119,10 @@ export default function Navbar() {
                                             onClick={() => setActiveSubmenu(activeSubmenu === item.name ? null : item.name)}
                                             className="w-full text-left text-gray-300 hover:text-white block px-3 py-2 text-base font-medium"
                                         >
-                                            <div className="flex justify-between items-center">
-                                                {item.name}
-                                                <ChevronDown className={`h-4 w-4 transform transition-transform ${
+                                            <div className="flex items-center">
+                                                <item.icon className={`h-5 w-5 mr-3 ${item.color}`} />
+                                                <span>{item.name}</span>
+                                                <ChevronDown className={`ml-auto h-4 w-4 transform transition-transform ${
                                                     activeSubmenu === item.name ? 'rotate-180' : ''
                                                 }`} />
                                             </div>
@@ -139,8 +144,14 @@ export default function Navbar() {
                                         href={item.href}
                                         className="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium"
                                     >
-                                        {item.name}
+                                        <div className="flex items-center">
+                                            <item.icon className={`h-5 w-5 mr-3 ${item.color}`} />
+                                            <span>{item.name}</span>
+                                        </div>
                                     </Link>
+                                )}
+                                {index < navigation.length - 1 && (
+                                    <div className="border-b border-red-800 mx-3 my-2"></div>
                                 )}
                             </div>
                         ))}
