@@ -9,15 +9,44 @@ import Navbar from "@/app/[lang]/langing/Navbar";
 const ScorePrediction = ({ predictions }) => {
     const getHighestProbScore = () => {
         const overProb = parseFloat(predictions.prob_O) || 0;
+        const underProb = parseFloat(predictions.prob_U) || 0;
         const homeWinProb = parseFloat(predictions.prob_HW) || 0;
+        const awayWinProb = parseFloat(predictions.prob_AW) || 0;
+        const drawProb = parseFloat(predictions.prob_D) || 0;
+        const btsProb = parseFloat(predictions.prob_bts) || 0;
 
-        if (homeWinProb > 70 && overProb > 70) {
-            return { home: 2, away: 0, probability: Math.floor(homeWinProb * 0.8) };
-        } else if (homeWinProb > 70) {
-            return { home: 1, away: 0, probability: Math.floor(homeWinProb * 0.7) };
-        } else {
-            return { home: 1, away: 1, probability: Math.floor((100 - homeWinProb - parseFloat(predictions.prob_AW)) * 0.8) };
+        // High home win probability with high scoring
+        if (homeWinProb > 70 && overProb > 70 && btsProb > 60) {
+            return { home: 2, away: 1, probability: Math.floor(homeWinProb * 0.8) }; // 2-1
+        } else if (homeWinProb > 70 && overProb > 70) {
+            return { home: 2, away: 0, probability: Math.floor(homeWinProb * 0.8) }; // 2-0
         }
+
+        // High away win probability with high scoring
+        if (awayWinProb > 70 && overProb > 70 && btsProb > 60) {
+            return { home: 1, away: 2, probability: Math.floor(awayWinProb * 0.8) }; // 1-2
+        } else if (awayWinProb > 70 && overProb > 70) {
+            return { home: 0, away: 2, probability: Math.floor(awayWinProb * 0.8) }; // 0-2
+        }
+
+        // Draw scenarios
+        if (drawProb > 50 && btsProb > 60) {
+            return { home: 1, away: 1, probability: Math.floor(drawProb * 0.9) }; // 1-1
+        } else if (drawProb > 50) {
+            return { home: 0, away: 0, probability: Math.floor(drawProb * 0.8) }; // 0-0
+        }
+
+        // Low-scoring matches
+        if (underProb > 70) {
+            if (homeWinProb > awayWinProb) {
+                return { home: 1, away: 0, probability: Math.floor(homeWinProb * 0.7) }; // 1-0
+            } else if (awayWinProb > homeWinProb) {
+                return { home: 0, away: 1, probability: Math.floor(awayWinProb * 0.7) }; // 0-1
+            }
+        }
+
+        // Default scenario
+        return { home: 1, away: 1, probability: Math.floor((drawProb + btsProb) / 2) }; // 1-1
     };
 
     const scorePrediction = getHighestProbScore();
@@ -30,15 +59,14 @@ const ScorePrediction = ({ predictions }) => {
                     <div className="text-3xl font-bold text-red-600">
                         {scorePrediction.home} - {scorePrediction.away}
                     </div>
-                    {/*<div className="text-sm text-gray-500 mt-1">*/}
-                    {/*    Probability: {scorePrediction.probability}%*/}
-                    {/*</div>*/}
+                    <div className="text-sm text-gray-500 mt-1">
+                        Probability: {scorePrediction.probability}%
+                    </div>
                 </div>
             </div>
         </div>
     );
 };
-
 // Betting Tips Component
 const BettingTips = ({ predictions }) => {
     const getTips = () => {
