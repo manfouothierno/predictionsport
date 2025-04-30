@@ -185,7 +185,7 @@ const BettingTips = ({ predictions, matchDetails }) => {
 
 // Detailed Analysis Component - Use simplified Yes/No
 const DetailedAnalysis = ({ predictions, matchDetails }) => {
-    const threshold = 55; // Ensure consistent threshold
+    const threshold = 50; // Ensure consistent threshold
     // Use the Yes/No helper
     const overPrediction = getPredictionYesNo(predictions.prob_O, threshold);
     const btsPrediction = getPredictionYesNo(predictions.prob_bts, threshold);
