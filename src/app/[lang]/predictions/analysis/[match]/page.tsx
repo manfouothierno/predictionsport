@@ -65,7 +65,7 @@ const ScorePrediction = ({ predictions }) => {
 
 // Betting Tips Component - Simplified to Yes/No based on threshold
 const BettingTips = ({ predictions, matchDetails }) => {
-    const threshold = 55; // Define the threshold for 'Yes'
+    const threshold = 50; // Define the threshold for 'Yes'
 
     const getTips = () => {
         const tips = [];
