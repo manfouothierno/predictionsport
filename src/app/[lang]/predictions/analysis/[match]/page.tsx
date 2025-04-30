@@ -6,7 +6,7 @@ import Link from "next/link";
 import Navbar from "@/app/[lang]/langing/Navbar"; // Ensure correct path
 
 // Helper function to get Yes/No prediction based on percentage and threshold
-const getPredictionYesNo = (percentage, threshold = 55) => {
+const getPredictionYesNo = (percentage, threshold = 50) => {
     const p = parseFloat(percentage) || 0;
     if (p > threshold) {
         return { text: 'Yes', color: 'text-green-600', icon: CheckCircle };
