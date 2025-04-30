@@ -1,33 +1,21 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TrendingUp, Calendar, Timer, ChevronLeft, BarChart2, Users, Percent, DollarSign, Goal, Scale, ChevronRight, ShieldCheck, HelpCircle, ThumbsDown, CheckCircle, XCircle } from 'lucide-react'; // Added CheckCircle, XCircle
+import { TrendingUp, Calendar, Timer, ChevronLeft, BarChart2, CheckCircle, XCircle, Scale, ChevronRight, Goal, Users, DollarSign } from 'lucide-react'; // Ensure needed icons
 import Link from "next/link";
 import Navbar from "@/app/[lang]/langing/Navbar"; // Ensure correct path
 
-// Helper function to get text likelihood (Yes/No/Maybe) based on percentage
-const getLikelihoodTextYesNo = (percentage) => {
+// Helper function to get Yes/No prediction based on percentage and threshold
+const getPredictionYesNo = (percentage, threshold = 55) => {
     const p = parseFloat(percentage) || 0;
-    // Stricter threshold for a confident "Yes"
-    if (p > 65) return { text: 'Yes', color: 'text-green-600', icon: CheckCircle };
-    // Confident "No" for low probability
-    if (p < 35) return { text: 'No', color: 'text-red-600', icon: XCircle };
-    // Middle ground
-    return { text: 'Maybe', color: 'text-yellow-600', icon: HelpCircle };
+    if (p > threshold) {
+        return { text: 'Yes', color: 'text-green-600', icon: CheckCircle };
+    } else {
+        return { text: 'No', color: 'text-red-600', icon: XCircle };
+    }
 };
 
-
-// Helper function to get confidence level text
-const getConfidenceText = (percentage) => {
-    const p = parseFloat(percentage) || 0;
-    if (p > 80) return 'Very High Confidence';
-    if (p > 65) return 'High Confidence';
-    if (p > 50) return 'Medium Confidence';
-    return 'Considered';
-};
-
-
-// Score Prediction Component (No changes needed here)
+// Score Prediction Component (Remains the same)
 const ScorePrediction = ({ predictions }) => {
     const getHighestProbScore = () => {
         const overProb = parseFloat(predictions.prob_O) || 0;
@@ -37,7 +25,7 @@ const ScorePrediction = ({ predictions }) => {
         const drawProb = parseFloat(predictions.prob_D) || 0;
         const btsProb = parseFloat(predictions.prob_bts) || 0;
 
-        // Try to be slightly more robust, prioritize stronger indicators
+        // Prioritize higher probability scenarios for scorelines
         if (homeWinProb > 75 && overProb > 70 && btsProb > 65) return { home: 2, away: 1, probability: Math.min(95, Math.floor(homeWinProb * 0.7 + overProb * 0.15 + btsProb * 0.15)) };
         if (homeWinProb > 75 && overProb > 70) return { home: 2, away: 0, probability: Math.min(95, Math.floor(homeWinProb * 0.8 + overProb * 0.2)) };
         if (homeWinProb > 70 && underProb > 60) return { home: 1, away: 0, probability: Math.min(95, Math.floor(homeWinProb * 0.8 + underProb * 0.2)) };
@@ -49,9 +37,9 @@ const ScorePrediction = ({ predictions }) => {
         if (drawProb > 50 && btsProb > 60) return { home: 1, away: 1, probability: Math.min(90, Math.floor(drawProb * 0.8 + btsProb * 0.2)) };
         if (drawProb > 50 && underProb > 60) return { home: 0, away: 0, probability: Math.min(90, Math.floor(drawProb * 0.8 + underProb * 0.2)) };
 
-        // Less confident defaults
-        if (homeWinProb > awayWinProb && homeWinProb > drawProb) return { home: 1, away: 0, probability: Math.floor(homeWinProb * 0.6) };
-        if (awayWinProb > homeWinProb && awayWinProb > drawProb) return { home: 0, away: 1, probability: Math.floor(awayWinProb * 0.6) };
+        // Fallback based on most likely single outcome
+        if (homeWinProb >= awayWinProb && homeWinProb >= drawProb) return { home: 1, away: 0, probability: Math.floor(homeWinProb * 0.6) };
+        if (awayWinProb > homeWinProb && awayWinProb >= drawProb) return { home: 0, away: 1, probability: Math.floor(awayWinProb * 0.6) };
 
         return { home: 1, away: 1, probability: Math.floor(drawProb * 0.7) }; // Default draw if uncertain
     };
@@ -66,9 +54,8 @@ const ScorePrediction = ({ predictions }) => {
                     <div className="text-3xl font-bold text-red-600">
                         {scorePrediction.home} - {scorePrediction.away}
                     </div>
-                    {/* Optionally show derived probability, or remove if focusing away from percentages */}
                     <div className="text-sm text-gray-500 mt-1">
-                        Model Confidence for this score: {scorePrediction.probability}%
+                        Model Confidence: {scorePrediction.probability}%
                     </div>
                 </div>
             </div>
@@ -76,115 +63,116 @@ const ScorePrediction = ({ predictions }) => {
     );
 };
 
+// Betting Tips Component - Simplified to Yes/No based on threshold
+const BettingTips = ({ predictions, matchDetails }) => {
+    const threshold = 55; // Define the threshold for 'Yes'
 
-// Betting Tips Component - Modified to show Yes/No tips for BTS
-const BettingTips = ({ predictions, matchDetails }) => { // Pass matchDetails if needed for names
     const getTips = () => {
         const tips = [];
         const probO = parseFloat(predictions.prob_O) || 0;
+        const probU = parseFloat(predictions.prob_U) || 0;
         const probHW = parseFloat(predictions.prob_HW) || 0;
         const probAW = parseFloat(predictions.prob_AW) || 0;
         const probBTS = parseFloat(predictions.prob_bts) || 0;
-        const probU = parseFloat(predictions.prob_U) || 0;
+        const probNTS = 100 - probBTS; // Probability of Not Both Teams Scoring
 
-        // Over/Under Tips (still based on high probability threshold)
-        if (probO > 70) {
+        // Over/Under Tips
+        const overPred = getPredictionYesNo(probO, threshold);
+        if (overPred.text === 'Yes') {
             tips.push({
-                tip: "Over 2.5 Goals",
-                confidence: probO,
-                reasoning: "High probability of 3+ goals.",
-                icon: Goal,
-                likelihoodText: getLikelihoodTextYesNo(probO).text // Get Yes/Maybe
+                tip: "Over 2.5 Goals: Yes",
+                probability: probO, // Store the actual probability
+                prediction: overPred,
+                reasoning: `Model predicts >${threshold}% chance.`,
+                icon: Goal, // Or use prediction.icon? Stick with market icon.
             });
-        } else if (probU > 70) {
+        }
+        const underPred = getPredictionYesNo(probU, threshold);
+        if (underPred.text === 'Yes') { // Check if probability of Under > threshold
             tips.push({
-                tip: "Under 2.5 Goals",
-                confidence: probU,
-                reasoning: "High probability of fewer than 3 goals.",
-                icon: Scale, // Using Scale icon for balance/under
-                likelihoodText: getLikelihoodTextYesNo(100-probU).text // 'No' for over -> yes for under
+                tip: "Under 2.5 Goals: Yes",
+                probability: probU,
+                prediction: underPred,
+                reasoning: `Model predicts >${threshold}% chance.`,
+                icon: Scale,
             });
         }
 
-        // Win probability tips (still based on high probability threshold)
-        if (probHW > 75) {
+
+        // Win probability tips
+        const homeWinPred = getPredictionYesNo(probHW, threshold);
+        if (homeWinPred.text === 'Yes') {
             tips.push({
-                tip: `${matchDetails?.match_hometeam_name || 'Home'} to Win`, // Use matchDetails
-                confidence: probHW,
-                reasoning: "Strong home team advantage indicated.",
-                icon: TrendingUp,
-                likelihoodText: getLikelihoodTextYesNo(probHW).text // Get Yes
+                tip: `${matchDetails?.match_hometeam_name || 'Home'} to Win: Yes`,
+                probability: probHW,
+                prediction: homeWinPred,
+                reasoning: `Model predicts >${threshold}% chance.`,
+                icon: TrendingUp, // Could be CheckCircle if we only want Yes/No icons
             });
-        } else if (probAW > 75) {
+        }
+        const awayWinPred = getPredictionYesNo(probAW, threshold);
+        if (awayWinPred.text === 'Yes') {
             tips.push({
-                tip: `${matchDetails?.match_awayteam_name || 'Away'} to Win`, // Use matchDetails
-                confidence: probAW,
-                reasoning: "Strong away team performance expected.",
+                tip: `${matchDetails?.match_awayteam_name || 'Away'} to Win: Yes`,
+                probability: probAW,
+                prediction: awayWinPred,
+                reasoning: `Model predicts >${threshold}% chance.`,
                 icon: TrendingUp,
-                likelihoodText: getLikelihoodTextYesNo(probAW).text // Get Yes
             });
         }
 
         // Both teams to score Tip using Yes/No
-        const btsLikelihood = getLikelihoodTextYesNo(probBTS);
-        // Only add a tip if the prediction is strong Yes or No
-        if (btsLikelihood.text === 'Yes') {
+        const btsPred = getPredictionYesNo(probBTS, threshold);
+        if (btsPred.text === 'Yes') {
             tips.push({
                 tip: "Both Teams to Score: Yes",
-                confidence: probBTS, // The probability supports 'Yes'
-                reasoning: "Both teams likely find the net.",
-                icon: CheckCircle, // Use specific Yes icon
-                likelihoodText: "Yes"
+                probability: probBTS,
+                prediction: btsPred,
+                reasoning: `Model predicts >${threshold}% chance.`,
+                icon: Goal, // Use market icon Goal for BTS yes
             });
-        } else if (btsLikelihood.text === 'No') {
+        }
+        const ntsPred = getPredictionYesNo(probNTS, threshold); // Check NTS probability
+        if(ntsPred.text === 'Yes') { // If NTS > threshold
             tips.push({
                 tip: "Both Teams to Score: No",
-                // Confidence reflects probability supporting 'No'
-                confidence: 100 - probBTS, // Probability of NOT scoring
-                reasoning: "One or both teams likely to keep a clean sheet.",
-                icon: XCircle, // Use specific No icon
-                likelihoodText: "No"
+                probability: probNTS, // Probability supporting 'No'
+                prediction: ntsPred, // Use the NTS prediction which will be {text:'Yes', ...} here
+                reasoning: `Model predicts >${threshold}% chance of NO.`,
+                icon: XCircle, // Specific No icon
             });
         }
 
-        // Optional: Sort by confidence or relevance before slicing if needed
-        // tips.sort((a, b) => b.confidence - a.confidence);
-        // return tips.slice(0, 3); // Example: show top 3 tips
 
-        return tips;
+        // Optional: Prioritize tips with higher probability if list gets too long
+        tips.sort((a, b) => b.probability - a.probability);
+        return tips.slice(0, 4); // Limit to top 4 strongest tips
+
+        //return tips;
     };
 
     const displayedTips = getTips();
 
     return (
         <div className="bg-white rounded-xl shadow-sm p-6">
-            <h3 className="text-sm font-medium text-gray-900 mb-4">Key Betting Tips</h3>
+            <h3 className="text-sm font-medium text-gray-900 mb-4">Prediction Insights (>{threshold}% Probability)</h3>
             {displayedTips.length === 0 ? (
-                <p className="text-sm text-gray-500">No strong Yes/No betting tips identified for this match.</p>
+                <p className="text-sm text-gray-500">No predictions met the >{threshold}% confidence threshold.</p>
             ) : (
                 <div className="space-y-4">
                     {displayedTips.map((tip, index) => (
-                        <div key={index} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
-                            <div className="flex-shrink-0 mt-1">
-                                {/* Use the icon directly associated with the Yes/No/Market */}
-                                <tip.icon className={`h-5 w-5 ${getLikelihoodTextYesNo(tip.confidence).color}`} />
+                        <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                            {/* Show the icon associated with the market/outcome */}
+                            <div className="flex-shrink-0">
+                                <tip.prediction.icon className={`h-5 w-5 ${tip.prediction.color}`} />
+                                {/*<tip.icon className={`h-5 w-5 text-gray-600`} />*/} {/* Use market icon instead? */}
                             </div>
                             <div className="flex-1">
+                                {/* Display the tip (e.g., "Home to Win: Yes") */}
                                 <div className="font-medium text-gray-900">{tip.tip}</div>
-                                <div className="text-sm text-gray-500">{tip.reasoning}</div>
-                                <div className="mt-2">
-                                    {/* Display confidence text and likelihood (Yes/No/Maybe) */}
-                                    <div className={`text-xs font-semibold ${getLikelihoodTextYesNo(tip.confidence).color}`}>
-                                        {/* Show 'Yes' or 'No' prominently for BTS */}
-                                        {tip.tip.includes("Both Teams") ?
-                                            <span className="font-bold">{tip.likelihoodText}</span>
-                                            :
-                                            // For other markets, show confidence text
-                                            getConfidenceText(tip.confidence)
-                                        }
-                                        {/* Keep numeric % for context */}
-                                        ({tip.confidence.toFixed(0)}%)
-                                    </div>
+                                {/* Optionally show the exact probability */}
+                                <div className={`text-xs font-semibold ${tip.prediction.color}`}>
+                                    Probability: {tip.probability.toFixed(0)}%
                                 </div>
                             </div>
                         </div>
@@ -195,17 +183,18 @@ const BettingTips = ({ predictions, matchDetails }) => { // Pass matchDetails if
     );
 };
 
-// Detailed Analysis Component - Use Yes/No/Maybe for BTS and Over/Under
+// Detailed Analysis Component - Use simplified Yes/No
 const DetailedAnalysis = ({ predictions, matchDetails }) => {
-    // Use the new helper function
-    const overLikelihood = getLikelihoodTextYesNo(predictions.prob_O);
-    const btsLikelihood = getLikelihoodTextYesNo(predictions.prob_bts);
+    const threshold = 55; // Ensure consistent threshold
+    // Use the Yes/No helper
+    const overPrediction = getPredictionYesNo(predictions.prob_O, threshold);
+    const btsPrediction = getPredictionYesNo(predictions.prob_bts, threshold);
 
     return (
         <div className="bg-white rounded-xl shadow-sm p-6">
-            <h3 className="text-sm font-medium text-gray-900 mb-4">Detailed Match Analysis</h3>
+            <h3 className="text-sm font-medium text-gray-900 mb-4">Market Predictions (>{threshold}% Threshold)</h3>
             <div className="space-y-6">
-                {/* Team Formations - Check if data exists */}
+                {/* Team Formations */}
                 {(matchDetails.match_hometeam_system && matchDetails.match_hometeam_system !== '-' && matchDetails.match_awayteam_system && matchDetails.match_awayteam_system !== '-') && (
                     <div className="grid grid-cols-2 gap-4">
                         <div className="p-4 bg-gray-50 rounded-lg text-center">
@@ -219,53 +208,82 @@ const DetailedAnalysis = ({ predictions, matchDetails }) => {
                     </div>
                 )}
 
-                {/* Goal / BTS Probabilities - Using Yes/No/Maybe */}
+                {/* Goal / BTS Predictions - Using Yes/No */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="p-4 bg-gray-50 rounded-lg flex items-center space-x-3">
-                        {/* Use the icon from the helper */}
-                        <overLikelihood.icon className={`w-6 h-6 ${overLikelihood.color}`} />
+                        <overPrediction.icon className={`w-6 h-6 ${overPrediction.color}`} />
                         <div>
-                            <div className="text-sm text-gray-500 mb-1">Over 2.5 Goals</div>
-                            {/* Use the text (Yes/No/Maybe) */}
-                            <div className={`text-lg font-semibold ${overLikelihood.color}`}>{overLikelihood.text}</div>
-                            <div className="text-xs text-gray-400">({predictions.prob_O}%)</div> {/* Keep % small */}
+                            <div className="text-sm text-gray-500 mb-1">Over 2.5 Goals?</div>
+                            <div className={`text-lg font-semibold ${overPrediction.color}`}>{overPrediction.text}</div>
+                            <div className="text-xs text-gray-400">({predictions.prob_O}%)</div>
                         </div>
                     </div>
                     <div className="p-4 bg-gray-50 rounded-lg flex items-center space-x-3">
-                        {/* Use the icon from the helper */}
-                        <btsLikelihood.icon className={`w-6 h-6 ${btsLikelihood.color}`} />
+                        <btsPrediction.icon className={`w-6 h-6 ${btsPrediction.color}`} />
                         <div>
-                            <div className="text-sm text-gray-500 mb-1">Both Teams to Score</div>
-                            {/* Use the text (Yes/No/Maybe) */}
-                            <div className={`text-lg font-semibold ${btsLikelihood.color}`}>{btsLikelihood.text}</div>
-                            <div className="text-xs text-gray-400">({predictions.prob_bts}%)</div> {/* Keep % small */}
+                            <div className="text-sm text-gray-500 mb-1">Both Teams to Score?</div>
+                            <div className={`text-lg font-semibold ${btsPrediction.color}`}>{btsPrediction.text}</div>
+                            <div className="text-xs text-gray-400">({predictions.prob_bts}%)</div>
                         </div>
                     </div>
                 </div>
 
-                {/* Asian Handicap Analysis (Remains the same) */}
+                {/* Win Prediction Simplified */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {(() => { // Immediately invoked function to simplify conditional rendering
+                        const homeWinPred = getPredictionYesNo(predictions.prob_HW, threshold);
+                        return (
+                            <div className="p-4 bg-gray-50 rounded-lg flex items-center space-x-3">
+                                <homeWinPred.icon className={`w-6 h-6 ${homeWinPred.color}`} />
+                                <div>
+                                    <div className="text-sm text-gray-500 mb-1">{matchDetails.match_hometeam_name} to Win?</div>
+                                    <div className={`text-lg font-semibold ${homeWinPred.color}`}>{homeWinPred.text}</div>
+                                    <div className="text-xs text-gray-400">({predictions.prob_HW}%)</div>
+                                </div>
+                            </div>
+                        );
+                    })()}
+                    {(() => {
+                        const awayWinPred = getPredictionYesNo(predictions.prob_AW, threshold);
+                        return (
+                            <div className="p-4 bg-gray-50 rounded-lg flex items-center space-x-3">
+                                <awayWinPred.icon className={`w-6 h-6 ${awayWinPred.color}`} />
+                                <div>
+                                    <div className="text-sm text-gray-500 mb-1">{matchDetails.match_awayteam_name} to Win?</div>
+                                    <div className={`text-lg font-semibold ${awayWinPred.color}`}>{awayWinPred.text}</div>
+                                    <div className="text-xs text-gray-400">({predictions.prob_AW}%)</div>
+                                </div>
+                            </div>
+                        );
+                    })()}
+                </div>
+
+
+                {/* Asian Handicap Analysis (Kept as percentages are specific lines) */}
                 <div className="p-4 bg-gray-50 rounded-lg">
                     <h4 className="text-sm font-medium text-gray-900 mb-3">Asian Handicap Probability (Home Team)</h4>
                     <div className="space-y-3">
-                        {[ // Simplified AH lines for example
+                        {[ // Filter and map valid entries
                             { label: "-0.5", home: predictions.prob_ah_h_05 || 'N/A' },
                             { label: "-1.5", home: predictions.prob_ah_h_15 || 'N/A' },
-                        ].filter(h => h.home !== 'N/A' && h.home !== "").map((handicap, index) => ( // Filter out invalid before mapping
-                            <div key={index} className="space-y-1">
-                                <div className="flex justify-between text-sm text-gray-500">
-                                    <span>Home {handicap.label}</span>
-                                    <span>{handicap.home}%</span>
+                        ]
+                            .filter(h => h.home !== 'N/A' && h.home !== "" && parseFloat(h.home) >= 0) // Check valid number too
+                            .map((handicap, index) => (
+                                <div key={index} className="space-y-1">
+                                    <div className="flex justify-between text-sm text-gray-500">
+                                        <span>Home {handicap.label}</span>
+                                        <span>{parseFloat(handicap.home).toFixed(0)}%</span>
+                                    </div>
+                                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full bg-red-500 transition-all duration-500"
+                                            style={{ width: `${handicap.home}%` }}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                                    <div
-                                        className="h-full bg-red-500 transition-all duration-500"
-                                        style={{ width: `${handicap.home}%` }}
-                                    />
-                                </div>
-                            </div>
-                        ))}
-                        { ![predictions.prob_ah_h_05, predictions.prob_ah_h_15].some(p => p && p !== 'N/A' && p !== "") && // Check if ANY valid AH data exists
-                            <p className="text-sm text-gray-400 text-center">Asian Handicap data not available.</p>
+                            ))}
+                        { ![predictions.prob_ah_h_05, predictions.prob_ah_h_15].some(p => p && p !== 'N/A' && p !== "" && parseFloat(p) >= 0) &&
+                            <p className="text-sm text-gray-400 text-center">Asian Handicap data not available or probabilities are 0.</p>
                         }
                     </div>
                 </div>
@@ -274,24 +292,18 @@ const DetailedAnalysis = ({ predictions, matchDetails }) => {
     );
 };
 
-// Match Header Component (No changes needed here)
+// Match Header Component - Simplified Prediction Outcome Text
 const MatchHeader = ({ matchDetails, predictions }) => {
-    const getPredictionOutcome = () => {
+    const getPredictionOutcomeText = () => {
         const homeProb = parseFloat(predictions.prob_HW) || 0;
         const awayProb = parseFloat(predictions.prob_AW) || 0;
         const drawProb = parseFloat(predictions.prob_D) || 0;
 
-        // Prioritize strongest probability
-        if (homeProb > 65 && homeProb > awayProb && homeProb > drawProb) return `${matchDetails.match_hometeam_name} Win Likely`;
-        if (awayProb > 65 && awayProb > homeProb && awayProb > drawProb) return `${matchDetails.match_awayteam_name} Win Likely`;
-        if (drawProb > 50 && drawProb > homeProb && drawProb > awayProb) return 'Draw Likely'; // Draw needs lower threshold?
+        const maxProb = Math.max(homeProb, awayProb, drawProb);
 
-        // Less certain outcomes
-        if (homeProb > awayProb && homeProb > drawProb) return `${matchDetails.match_hometeam_name} Favoured`;
-        if (awayProb > homeProb && awayProb > drawProb) return `${matchDetails.match_awayteam_name} Favoured`;
-        if (drawProb > 35) return 'Draw Possible'; // If draw isn't lowest, but not highest >50
-
-        return 'Prediction Unclear'; // Fallback if probabilities are very low/close
+        if (maxProb === homeProb) return `${matchDetails.match_hometeam_name} Win`;
+        if (maxProb === awayProb) return `${matchDetails.match_awayteam_name} Win`;
+        return 'Draw'; // If draw is highest or all are equal/zero
     };
 
 
@@ -313,9 +325,10 @@ const MatchHeader = ({ matchDetails, predictions }) => {
                     <div className="text-xs text-gray-500">(Home)</div>
                 </div>
                 <div className="text-center">
-                    <div className="text-sm text-gray-500 mb-2">Predicted Outcome</div> {/* Changed text */}
+                    <div className="text-sm text-gray-500 mb-2">Most Likely Result</div>
+                    {/* Simplified outcome text */}
                     <div className="bg-red-50 text-red-700 px-3 py-2 rounded-lg font-medium text-xs md:text-sm">
-                        {getPredictionOutcome()}
+                        {getPredictionOutcomeText()}
                     </div>
                     <div className="text-xs text-gray-400 mt-3 truncate hidden md:block">{matchDetails.league_name}</div>
                 </div>
@@ -336,19 +349,21 @@ const MatchHeader = ({ matchDetails, predictions }) => {
     );
 };
 
-// Main Component (No changes needed here for functionality, added missing matchDetails prop to BettingTips call)
+// Main Component
 export default function MatchAnalysis({ params }) {
     const [matchDetails, setMatchDetails] = useState(null);
     const [predictions, setPredictions] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [apiKey] = useState("a416a23b2f17f2c7e90d41aab89229bb3d445f2b5616c45f03f054eef6876004"); // Replace with your actual API key or use environment variables
+    // IMPORTANT: Replace with your actual API key securely (e.g., environment variable)
+    const [apiKey] = useState(process.env.NEXT_PUBLIC_API_FOOTBALL_KEY || "a416a23b2f17f2c7e90d41aab89229bb3d445f2b5616c45f03f054eef6876004");
+
 
     useEffect(() => {
         // Make sure API Key is set
-        if (apiKey === "YOUR_API_FOOTBALL_API_KEY") {
+        if (!apiKey || apiKey === "YOUR_API_FOOTBALL_API_KEY") {
             console.error("API Key is not set!");
-            setError("API Key is missing. Please configure it in the component.");
+            setError("API Key is missing. Please configure it (e.g., using NEXT_PUBLIC_API_FOOTBALL_KEY environment variable).");
             setLoading(false);
             return;
         }
@@ -356,6 +371,8 @@ export default function MatchAnalysis({ params }) {
         const fetchMatchData = async () => {
             setLoading(true);
             setError(null);
+            setMatchDetails(null); // Reset details on new fetch
+            setPredictions(null); // Reset predictions on new fetch
             try {
                 const resolvedParams = await params;
                 const matchId = resolvedParams?.match;
@@ -368,48 +385,73 @@ export default function MatchAnalysis({ params }) {
                 const fromDate = new Date(today);
                 fromDate.setDate(today.getDate() - 1);
                 const toDate = new Date(today);
-                toDate.setDate(today.getDate() + 2);
+                toDate.setDate(today.getDate() + 2); // Check wider range JIC
 
                 const fromStr = fromDate.toISOString().split('T')[0];
                 const toStr = toDate.toISOString().split('T')[0];
+
+                console.log(`Fetching data for match ID: ${matchId}, Date Range: ${fromStr} to ${toStr}`);
 
                 const [matchResponse, predictionResponse] = await Promise.all([
                     fetch(`https://apiv3.apifootball.com/?action=get_events&APIkey=${apiKey}&from=${fromStr}&to=${toStr}&match_id=${matchId}`),
                     fetch(`https://apiv3.apifootball.com/?action=get_predictions&APIkey=${apiKey}&from=${fromStr}&to=${toStr}&match_id=${matchId}`)
                 ]);
 
-                if (!matchResponse.ok || !predictionResponse.ok) {
-                    console.error("API Response Error:", matchResponse.status, predictionResponse.status);
-                    // Try parsing error body if possible
-                    let errorMsg = `Failed to fetch data from API (Status: ${matchResponse.status}/${predictionResponse.status})`;
-                    try {
-                        if (!matchResponse.ok) errorMsg = (await matchResponse.json())?.message || errorMsg;
-                        if (!predictionResponse.ok) errorMsg = (await predictionResponse.json())?.message || errorMsg;
-                    } catch (e) { /* Ignore parsing error */ }
-
-                    throw new Error(errorMsg);
+                // Check HTTP status first
+                if (!matchResponse.ok) {
+                    console.error("Match API Response Error:", matchResponse.status, await matchResponse.text());
+                    throw new Error(`Failed to fetch match details (Status: ${matchResponse.status})`);
                 }
+                if (!predictionResponse.ok) {
+                    console.error("Prediction API Response Error:", predictionResponse.status, await predictionResponse.text());
+                    // Don't throw immediately, allow match details to load if possible
+                    console.warn(`Failed to fetch predictions (Status: ${predictionResponse.status}). Will attempt to display match details.`);
+                    const matchData = await matchResponse.json();
+                    if (matchData.error || !Array.isArray(matchData) || matchData.length === 0) {
+                        console.error("Match Data Error:", matchData);
+                        throw new Error(matchData.message || 'Match details not found or API error.');
+                    }
+                    setMatchDetails(matchData[0]);
+                    setError('Prediction data could not be loaded.'); // Set non-fatal error
+                    setLoading(false);
+                    return; // Exit early, but keep loaded match data
+                }
+
 
                 const matchData = await matchResponse.json();
                 const predictionData = await predictionResponse.json();
 
+                // Check for API-level errors in the response body
                 if (matchData.error || !Array.isArray(matchData) || matchData.length === 0) {
                     console.error("Match Data Error:", matchData);
-                    throw new Error(matchData.message || 'Match details not found or API error.');
+                    throw new Error(matchData.message || 'Match details not found.');
                 }
-                if (predictionData.error || !Array.isArray(predictionData) || predictionData.length === 0) {
+                if (predictionData.error || !Array.isArray(predictionData)) { // Allow empty array for no predictions
                     console.error("Prediction Data Error:", predictionData);
-                    // Provide more context if predictions are missing but match is found
-                    setMatchDetails(matchData[0]); // Still set match details if available
-                    throw new Error(predictionData.message || 'Prediction data not found for this match.');
+                    // Be more lenient if predictions just aren't available yet
+                    setMatchDetails(matchData[0]); // Keep match details
+                    if(predictionData.message && predictionData.message.includes("rate limit")){
+                        throw new Error(predictionData.message); // Rate limit is a hard error
+                    } else {
+                        console.warn("Prediction data error/missing:", predictionData.message || "No predictions available.");
+                        setError("Predictions not available for this match."); // Inform user
+                    }
+                } else {
+                    setMatchDetails(matchData[0]);
+                    setPredictions(predictionData.length > 0 ? predictionData[0] : null); // Set to null if array is empty
                 }
 
-                setMatchDetails(matchData[0]);
-                setPredictions(predictionData[0]);
 
             } catch (err) {
                 console.error('Error fetching match data:', err);
-                setError(err.message || 'Failed to load match data. Please try again later.');
+                // Provide specific error or a generic one
+                if (err.message.includes("APIkey")) {
+                    setError("Invalid API Key provided.");
+                } else if (err.message.includes("rate limit")) {
+                    setError("API rate limit exceeded. Please try again later.");
+                } else {
+                    setError(err.message || 'Failed to load match data. Please check the Match ID or try again later.');
+                }
             } finally {
                 setLoading(false);
             }
@@ -417,7 +459,7 @@ export default function MatchAnalysis({ params }) {
 
         fetchMatchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [params, apiKey]);
+    }, [params]); // Removed apiKey from dependency array - should be set once via env
 
     if (loading) {
         return (
@@ -427,16 +469,15 @@ export default function MatchAnalysis({ params }) {
         );
     }
 
-    // Adjusted Error/No Data Display
-    if (error || (!matchDetails && !loading)) { // Check if matchDetails is null *after* loading
+    // Error or No Match Found Display
+    if ((!matchDetails && !loading) || (error && !matchDetails) ) { // Check if matchDetails is truly null after loading, or hard error occurred
         return (
             <>
                 <Navbar />
                 <div className="min-h-[calc(100vh-100px)] bg-gray-50 flex items-center justify-center px-4">
                     <div className="text-center bg-white p-8 rounded-lg shadow-md max-w-md mx-auto">
-                        <h2 className="text-xl font-semibold text-red-600 mb-3">Error Loading Match Data</h2>
-                        {/* Display specific error message */}
-                        <p className="text-gray-600 mb-6">{error || 'Match details could not be found. The match might be outdated or the ID might be incorrect.'}</p>
+                        <h2 className="text-xl font-semibold text-red-600 mb-3">Could Not Load Match</h2>
+                        <p className="text-gray-600 mb-6">{error || 'Match details could not be found. Please check the match ID or select another match.'}</p>
                         <Link href="/predictions" className="inline-flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-lg px-5 py-2 font-semibold transition-colors">
                             <ChevronLeft className="w-5 h-5 mr-1" />
                             Back to Predictions
@@ -447,7 +488,8 @@ export default function MatchAnalysis({ params }) {
         );
     }
 
-    // Added check for missing predictions even if matchDetails exists
+
+    // If match loaded but predictions failed/missing, show limited info
     const showPredictions = matchDetails && predictions;
 
     return (
@@ -459,25 +501,33 @@ export default function MatchAnalysis({ params }) {
                     Back to Predictions
                 </Link>
 
+                {/* Display specific error about predictions if applicable */}
+                {matchDetails && !predictions && error && (
+                    <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-lg text-sm">
+                        <strong>Note:</strong> {error} Match details are shown below, but prediction analysis is unavailable.
+                    </div>
+                )}
+
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
                     <div className="lg:col-span-2 space-y-6">
-                        {/* Conditionally render prediction-based components */}
+                        {/* Always show MatchHeader if matchDetails exists */}
+                        {matchDetails && <MatchHeader matchDetails={matchDetails} predictions={predictions || {}} />} {/* Pass empty predictions obj if null */}
+
+                        {/* Show prediction components only if predictions are available */}
                         {showPredictions ? (
                             <>
-                                <MatchHeader matchDetails={matchDetails} predictions={predictions} />
                                 <ScorePrediction predictions={predictions} />
                                 <DetailedAnalysis predictions={predictions} matchDetails={matchDetails} />
                             </>
-                        ) : matchDetails ? ( // Show limited info if only match details loaded
+                        ) : matchDetails ? ( // Message if match exists but predictions don't
                             <div className="bg-white rounded-xl shadow-sm p-6 text-center">
-                                <h3 className="font-semibold text-gray-800 text-lg">{matchDetails.match_hometeam_name} vs {matchDetails.match_awayteam_name}</h3>
-                                <p className="text-gray-500 mt-2">Prediction data is not yet available for this match.</p>
+                                <p className="text-gray-500 mt-2">Prediction data is not available for this match.</p>
                             </div>
-                        ) : null /* Should be caught by error handler */ }
+                        ) : null }
                     </div>
 
+                    {/* Right Sidebar */}
                     <div className="space-y-6">
-                        {/* Always show Match Info if matchDetails exist */}
                         {matchDetails && (
                             <div className="bg-white rounded-xl shadow-sm p-6">
                                 <h3 className="text-base font-semibold text-gray-900 mb-4">Match Information</h3>
@@ -507,13 +557,13 @@ export default function MatchAnalysis({ params }) {
                             </div>
                         )}
 
-                        {/* Conditionally render prediction-based sidebar widgets */}
                         {showPredictions && (
                             <>
                                 <BettingTips predictions={predictions} matchDetails={matchDetails} />
 
                                 <div className="bg-white rounded-xl shadow-sm p-6">
                                     <h3 className="text-base font-semibold text-gray-900 mb-4">Win Probabilities</h3>
+                                    {/* Still useful to show raw probabilities here */}
                                     <div className="space-y-4">
                                         <div>
                                             <div className="flex justify-between text-sm mb-1">
