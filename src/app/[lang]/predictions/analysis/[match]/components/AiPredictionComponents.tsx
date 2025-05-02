@@ -15,7 +15,7 @@ export const AIScorePrediction = ({ aiAnalysis }) => {
 
     return (
         <div className="bg-white rounded-xl shadow-sm p-6">
-        <h3 className="text-sm font-medium text-gray-900 mb-4">AI Score Prediction</h3>
+        <h3 className="text-sm font-medium text-gray-900 mb-4"> Score Prediction</h3>
     <div className="text-center">
     <div className="inline-block bg-red-50 px-6 py-3 rounded-lg">
     <div className="text-3xl font-bold text-red-600">
