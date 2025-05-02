@@ -22,7 +22,7 @@ export const AIScorePrediction = ({ aiAnalysis }) => {
         {home} - {away}
         </div>
         <div className="text-sm text-gray-500 mt-1">
-        AI Confidence: {confidence}%
+         Confidence: {confidence}%
     </div>
     </div>
     </div>
@@ -80,7 +80,7 @@ export const AIKeyPredictions = ({ aiAnalysis, matchDetails }) => {
 
     return (
         <div className="bg-white rounded-xl shadow-sm p-6">
-        <h3 className="text-sm font-medium text-gray-900 mb-4">AI Key Predictions</h3>
+        <h3 className="text-sm font-medium text-gray-900 mb-4"> Key Predictions</h3>
     <div className="space-y-6">
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {aiAnalysis.over_goals && createPredictionItem(
@@ -134,7 +134,7 @@ export const AITacticalInsights = ({ aiAnalysis }) => {
         <div className="border-b pb-4">
         <h3 className="text-lg font-bold flex items-center gap-2">
         <Brain className="w-5 h-5 text-purple-600" />
-            AI Tactical Breakdown
+             Tactical Breakdown
     </h3>
     </div>
 
