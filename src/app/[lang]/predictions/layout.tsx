@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
                     alt: 'PredictionSport Predictions'
                 }
             ],
-            locale: params.lang,
+            // locale: params.lang,
             type: 'website',
         },
         twitter: {
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
             images: ['https://predictionsport.com/twitter-predictions.jpg'],
         },
         alternates: {
-            canonical: `https://predictionsport.com/${params.lang}/predictions/today`,
+            // canonical: `https://predictionsport.com/${params.lang}/predictions/today`,
             languages: {
                 'en': 'https://predictionsport.com/en/predictions/today',
                 'fr': 'https://predictionsport.com/fr/predictions/today',
