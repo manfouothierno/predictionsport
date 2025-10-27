@@ -9,6 +9,7 @@ import PerformanceMetrics from "@/app/[lang]/langing/PerformanceMetrics";
 import NewsletterSignup from "@/app/[lang]/langing/NewsletterSignup";
 import Footer from "@/app/[lang]/langing/Footer";
 import PromotionalBanner from "@/components/PromotionalBanner";
+import UpcomingMatches from "@/components/UpcomingMatches";
 
 
 
@@ -19,7 +20,7 @@ export default function Home() {
         <Navbar />
 
         {/*<HeroSection />*/}
-        <TopPredictions />
+        <UpcomingMatches limit={12} sport="Football" />
         {/*<PopularLeagues />*/}
         <NewsHighlights/>
         {/*<PerformanceMetrics/>*/}

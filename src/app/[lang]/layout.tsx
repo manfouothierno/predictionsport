@@ -105,8 +105,8 @@ export default async function RootLayout({ children, params }: LayoutProps) {
     const dictionary = await getDictionary(lang);
 
     return (
-        <html lang={lang} className={`${openSans.className} font-sans`}>
-        <body>
+        <html lang={lang}>
+        <body className={`${openSans.className} antialiased font-sans`}>
         <LanguageProvider
             initialLocale={lang}
             initialDictionary={dictionary}

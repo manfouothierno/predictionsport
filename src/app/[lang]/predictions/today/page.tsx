@@ -1,62 +1,57 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ChevronDown, Star, TrendingUp, BarChart, Clock, Search, Filter, ChevronRight, Info, X } from 'lucide-react';
+import { Star, Search, Calendar } from 'lucide-react';
 import Navbar from "@/app/[lang]/langing/Navbar";
-import Link from 'next/link';
-import {PredictionCard} from "@/components/PredictionCard";
+import { getTodayMatches } from '@/lib/matches';
+import { MatchWithDetails } from '@/types/database';
+import UpcomingMatchCard from '@/components/UpcomingMatchCard';
 
-const categoryFilters = [
-    { id: 'all', name: 'All Matches', count: 0 },
-    { id: 'top-picks', name: 'Top Picks', count: 0 },
-    { id: 'high-odds', name: 'High Odds', count: 0 },
-    { id: 'trending', name: 'Trending', count: 0 },
-    { id: 'live-now', name: 'Live Now', count: 0 }
-];
+// Type for grouped leagues
+type LeagueGroup = {
+    id: string;
+    name: string;
+    logo: string | null;
+    matches: MatchWithDetails[];
+};
 
-export default function MatchPredictions() {
-    const [matches, setMatches] = useState([]);
-    const [leagues, setLeagues] = useState([]);
+export default function TodayMatches() {
+    const [matches, setMatches] = useState<MatchWithDetails[]>([]);
+    const [leagues, setLeagues] = useState<LeagueGroup[]>([]);
     const [activeLeague, setActiveLeague] = useState('all');
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
-        const fetchMatches = async () => {
+        const fetchTodayMatches = async () => {
             try {
                 setLoading(true);
-                const today = new Date().toISOString().split('T')[0];
-                const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1))
-                    .toISOString().split('T')[0];
-
-                const response = await fetch(
-                    `https://apiv3.apifootball.com/?action=get_events&APIkey=a416a23b2f17f2c7e90d41aab89229bb3d445f2b5616c45f03f054eef6876004&from=${today}&to=${today}`
-                );
-
-                if (!response.ok) throw new Error('Failed to fetch matches');
-                const data = await response.json();
+                const data = await getTodayMatches();
 
                 // Group matches by league
-                const groupedMatches = data.reduce((acc, match) => {
-                    if (!acc[match.league_id]) {
-                        acc[match.league_id] = {
-                            id: match.league_id,
-                            name: match.league_name,
-                            country: match.country_name,
-                            logo: match.league_logo || '/placeholder-league.png',
-                            matches: []
-                        };
+                const groupedMatches: { [key: string]: LeagueGroup } = {};
+
+                data.forEach(match => {
+                    // Use the first league or competition
+                    const league = match.leagues?.[0] || match.competitions?.[0];
+
+                    if (league) {
+                        if (!groupedMatches[league.id]) {
+                            groupedMatches[league.id] = {
+                                id: league.id,
+                                name: league.name,
+                                logo: league.logo_url,
+                                matches: []
+                            };
+                        }
+                        groupedMatches[league.id].matches.push(match);
                     }
-                    acc[match.league_id].matches.push(match);
-                    return acc;
-                }, {});
+                });
 
                 setLeagues(Object.values(groupedMatches));
                 setMatches(data);
-                if (Object.values(groupedMatches).length > 0) {
-                    setActiveLeague(Object.values(groupedMatches)[0].id);
-                }
+                setActiveLeague('all');
             } catch (err) {
                 console.error('Error fetching matches:', err);
                 setError('Failed to load matches');
@@ -65,24 +60,38 @@ export default function MatchPredictions() {
             }
         };
 
-        fetchMatches();
+        fetchTodayMatches();
     }, []);
 
     const filteredMatches = activeLeague === 'all'
         ? matches
-        : matches.filter(match => match.league_id === activeLeague);
+        : matches.filter(match => {
+            const league = match.leagues?.[0] || match.competitions?.[0];
+            return league?.id === activeLeague;
+        });
 
     const searchFilteredMatches = filteredMatches.filter(match =>
-        match.match_hometeam_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        match.match_awayteam_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        match.league_name.toLowerCase().includes(searchQuery.toLowerCase())
+        match.home_team.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        match.away_team.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        match.leagues?.[0]?.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        match.competitions?.[0]?.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-500 border-t-transparent"/>
-                <h1 className="text-2xl font-bold text-gray-900 mt-4">Loading Matches...</h1>
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-500 border-t-transparent mx-auto"/>
+                    <h1 className="text-2xl font-bold text-gray-900 mt-4">Loading Today's Matches...</h1>
+                </div>
             </div>
         );
     }
@@ -93,6 +102,12 @@ export default function MatchPredictions() {
                 <div className="text-center">
                     <h2 className="text-xl font-medium text-gray-900 mb-2">Error Loading Matches</h2>
                     <p className="text-gray-500">{error}</p>
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                    >
+                        Try Again
+                    </button>
                 </div>
             </div>
         );
@@ -101,137 +116,143 @@ export default function MatchPredictions() {
     return (
         <div className="min-h-screen bg-gray-50">
             <Navbar/>
-            <div className="bg-white">
-                <div className="mx-auto pt-20 px-4 sm:px-6 lg:px-8 py-4">
-                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                        <div>
-                            <h1 className="text-2xl font-bold text-gray-900">Match Predictions</h1>
-                            <p className="text-sm text-gray-500 mt-1">
-                                {searchFilteredMatches.length} matches available today
-                            </p>
-                        </div>
-
-                        <div className="flex flex-wrap gap-3">
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    placeholder="Search teams or leagues..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                                />
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                            </div>
+            <div className="pt-20">
+                {/* Date Header */}
+                <div className="bg-white border-b">
+                    <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                        <h1 className="text-2xl font-bold text-gray-900">Match Predictions</h1>
+                        <p className="text-sm text-gray-500 mt-1">
+                            {searchFilteredMatches.length} matches available today
+                        </p>
+                        <div className="flex items-center gap-3 mt-2">
+                            <Calendar className="w-5 h-5 text-red-500" />
+                            <h4 className="text-xl font-bold text-gray-900">{formattedDate}</h4>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Mobile League Selector */}
-                <div className="lg:hidden mb-6">
-                    <select
-                        value={activeLeague}
-                        onChange={(e) => setActiveLeague(e.target.value)}
-                        className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                    >
-                        <option value="all">All Leagues ({matches.length})</option>
-                        {leagues.map(league => (
-                            <option key={league.id} value={league.id}>
-                                {league.name} ({league.matches.length})
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                {/* Search Bar - Mobile Optimized */}
-                <div className="mb-6">
-                    <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input
-                            type="text"
-                            placeholder="Search teams or leagues..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent shadow-sm"
-                        />
+                <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    {/* Mobile League Selector */}
+                    <div className="lg:hidden mb-6">
+                        <select
+                            value={activeLeague}
+                            onChange={(e) => setActiveLeague(e.target.value)}
+                            className="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        >
+                            <option value="all">All Leagues ({matches.length})</option>
+                            {leagues.map(league => (
+                                <option key={league.id} value={league.id}>
+                                    {league.name} ({league.matches.length})
+                                </option>
+                            ))}
+                        </select>
                     </div>
-                </div>
 
-                <div className="flex flex-col lg:flex-row gap-8">
-                    {/* League Sidebar - Desktop */}
-                    <div className="hidden lg:block w-72 flex-shrink-0">
-                        <div className="bg-white rounded-xl shadow-sm overflow-hidden sticky top-24">
-                            <div className="p-4 border-b bg-gray-50">
-                                <h2 className="font-semibold text-gray-900">Leagues</h2>
-                            </div>
-                            <div className="divide-y max-h-[calc(100vh-220px)] overflow-y-auto">
-                                <button
-                                    onClick={() => setActiveLeague('all')}
-                                    className={`w-full flex items-center gap-3 p-3 transition-colors ${
-                                        activeLeague === 'all'
-                                            ? 'bg-red-50 text-red-600'
-                                            : 'hover:bg-gray-50 text-gray-600'
-                                    }`}
-                                >
-                                    <div className="w-8 h-8 bg-white rounded-full shadow-sm flex items-center justify-center">
-                                        <Star className="w-4 h-4" />
-                                    </div>
-                                    <div className="flex-1 flex items-center justify-between">
-                                        <span className="font-medium">All Leagues</span>
-                                        <span className="text-sm bg-gray-100 px-2 py-0.5 rounded-full">
-                                            {matches.length}
-                                        </span>
-                                    </div>
-                                </button>
+                    {/* Search Bar - Mobile Optimized */}
+                    <div className="mb-6">
+                        <div className="relative">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                            <input
+                                type="text"
+                                placeholder="Search teams or leagues..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent shadow-sm"
+                            />
+                        </div>
+                    </div>
 
-                                {leagues.map((league) => (
+                    <div className="flex flex-col lg:flex-row gap-8">
+                        {/* League Sidebar - Desktop */}
+                        <div className="hidden lg:block w-72 flex-shrink-0">
+                            <div className="bg-white rounded-xl shadow-sm overflow-hidden sticky top-24">
+                                <div className="p-4 border-b bg-gray-50">
+                                    <h2 className="font-semibold text-gray-900">Leagues</h2>
+                                </div>
+                                <div className="divide-y max-h-[calc(100vh-220px)] overflow-y-auto">
                                     <button
-                                        key={league.id}
-                                        onClick={() => setActiveLeague(league.id)}
+                                        onClick={() => setActiveLeague('all')}
                                         className={`w-full flex items-center gap-3 p-3 transition-colors ${
-                                            activeLeague === league.id
+                                            activeLeague === 'all'
                                                 ? 'bg-red-50 text-red-600'
                                                 : 'hover:bg-gray-50 text-gray-600'
                                         }`}
                                     >
-                                        <div className="w-8 h-8 bg-white rounded-full shadow-sm p-1.5">
-                                            <img
-                                                src={league.logo}
-                                                alt={league.name}
-                                                className="w-full h-full object-contain"
-                                            />
+                                        <div className="w-8 h-8 bg-white rounded-full shadow-sm flex items-center justify-center">
+                                            <Star className="w-4 h-4" />
                                         </div>
                                         <div className="flex-1 flex items-center justify-between">
-                                            <span className="font-medium truncate">{league.name}</span>
-                                            <span className="text-sm bg-gray-100 px-2 py-0.5 rounded-full ml-2">
-                                                {league.matches.length}
+                                            <span className="font-medium">All Leagues</span>
+                                            <span className="text-sm bg-gray-100 px-2 py-0.5 rounded-full">
+                                                {matches.length}
                                             </span>
                                         </div>
                                     </button>
-                                ))}
+
+                                    {leagues.map((league) => (
+                                        <button
+                                            key={league.id}
+                                            onClick={() => setActiveLeague(league.id)}
+                                            className={`w-full flex items-center gap-3 p-3 transition-colors ${
+                                                activeLeague === league.id
+                                                    ? 'bg-red-50 text-red-600'
+                                                    : 'hover:bg-gray-50 text-gray-600'
+                                            }`}
+                                        >
+                                            <div className="w-8 h-8 bg-white rounded-full shadow-sm p-1.5">
+                                                {league.logo ? (
+                                                    <img
+                                                        src={league.logo}
+                                                        alt={league.name}
+                                                        className="w-full h-full object-contain"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full bg-gray-100 rounded-full" />
+                                                )}
+                                            </div>
+                                            <div className="flex-1 flex items-center justify-between">
+                                                <span className="font-medium truncate">{league.name}</span>
+                                                <span className="text-sm bg-gray-100 px-2 py-0.5 rounded-full ml-2">
+                                                    {league.matches.length}
+                                                </span>
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    {/* Main Content */}
-                    <div className="flex-1">
-                        <div className="flex items-center justify-between mb-6">
-                            <div>
-                                <h2 className="text-xl font-bold text-gray-900">
-                                    {activeLeague === 'all' ? 'All Matches' : leagues.find(l => l.id === activeLeague)?.name}
-                                </h2>
-                                <p className="text-sm text-gray-500 mt-1">
-                                    {searchFilteredMatches.length} matches found
-                                </p>
+                        {/* Main Content */}
+                        <div className="flex-1">
+                            <div className="flex items-center justify-between mb-6">
+                                <div>
+                                    <h2 className="text-xl font-bold text-gray-900">
+                                        {activeLeague === 'all' ? 'All Matches' : leagues.find(l => l.id === activeLeague)?.name}
+                                    </h2>
+                                    <p className="text-sm text-gray-500 mt-1">
+                                        {searchFilteredMatches.length} matches found
+                                    </p>
+                                </div>
                             </div>
-                        </div>
 
-                        {/* Matches Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                            {searchFilteredMatches.map((match) => (
-                                <PredictionCard match={match}/>
-                            ))}
+                            {/* Empty State */}
+                            {searchFilteredMatches.length === 0 && (
+                                <div className="text-center py-12">
+                                    <p className="text-gray-500 text-lg">No matches found</p>
+                                    <p className="text-gray-400 text-sm mt-2">
+                                        {searchQuery ? 'Try adjusting your search' : 'Check back later for today\'s matches'}
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Matches Grid */}
+                            {searchFilteredMatches.length > 0 && (
+                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                                    {searchFilteredMatches.map((match) => (
+                                        <UpcomingMatchCard key={match.id} match={match} />
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

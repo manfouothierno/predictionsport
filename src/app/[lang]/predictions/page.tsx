@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Star, Search, Clock, ChevronRight, Calendar } from 'lucide-react';
+import { Star, Search, Calendar, TrendingUp } from 'lucide-react';
 import Navbar from "@/app/[lang]/langing/Navbar";
-import Link from 'next/link';
-import { getTomorrowMatches } from '@/lib/matches';
+import { getAllUpcomingMatches } from '@/lib/matches';
 import { MatchWithDetails } from '@/types/database';
 import UpcomingMatchCard from '@/components/UpcomingMatchCard';
+import Link from 'next/link';
 
 // Type for grouped leagues
 type LeagueGroup = {
@@ -16,7 +16,7 @@ type LeagueGroup = {
     matches: MatchWithDetails[];
 };
 
-export default function TomorrowMatches() {
+export default function PredictionsPage() {
     const [matches, setMatches] = useState<MatchWithDetails[]>([]);
     const [leagues, setLeagues] = useState<LeagueGroup[]>([]);
     const [activeLeague, setActiveLeague] = useState('all');
@@ -25,16 +25,15 @@ export default function TomorrowMatches() {
     const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
-        const fetchTomorrowMatches = async () => {
+        const fetchMatches = async () => {
             try {
                 setLoading(true);
-                const data = await getTomorrowMatches();
+                const data = await getAllUpcomingMatches(100);
 
                 // Group matches by league
                 const groupedMatches: { [key: string]: LeagueGroup } = {};
 
                 data.forEach(match => {
-                    // Use the first league or competition
                     const league = match.leagues?.[0] || match.competitions?.[0];
 
                     if (league) {
@@ -61,7 +60,7 @@ export default function TomorrowMatches() {
             }
         };
 
-        fetchTomorrowMatches();
+        fetchMatches();
     }, []);
 
     const filteredMatches = activeLeague === 'all'
@@ -78,20 +77,12 @@ export default function TomorrowMatches() {
         match.competitions?.[0]?.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1));
-    const formattedDate = tomorrow.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
-
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-500 border-t-transparent mx-auto"/>
-                    <h1 className="text-2xl font-bold text-gray-900 mt-4">Loading Tomorrow's Matches...</h1>
+                    <h1 className="text-2xl font-bold text-gray-900 mt-4">Loading Predictions...</h1>
                 </div>
             </div>
         );
@@ -118,16 +109,32 @@ export default function TomorrowMatches() {
         <div className="min-h-screen bg-gray-50">
             <Navbar />
             <div className="pt-20">
-                {/* Date Header */}
+                {/* Header */}
                 <div className="bg-white border-b">
-                    <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                        <h1 className="text-2xl font-bold text-gray-900">Match Predictions</h1>
-                        <p className="text-sm text-gray-500 mt-1">
-                            {searchFilteredMatches.length} matches available tomorrow
-                        </p>
-                        <div className="flex items-center gap-3 mt-2">
-                            <Calendar className="w-5 h-5 text-red-500" />
-                            <h4 className="text-xl font-bold text-gray-900">{formattedDate}</h4>
+                    <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                            <div>
+                                <h1 className="text-3xl font-bold text-gray-900">All Predictions</h1>
+                                <p className="text-sm text-gray-500 mt-2">
+                                    {searchFilteredMatches.length} upcoming matches in the next 7 days
+                                </p>
+                            </div>
+
+                            {/* Quick Links */}
+                            <div className="flex gap-3">
+                                <Link
+                                    href="/predictions/today"
+                                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium text-sm"
+                                >
+                                    Today's Matches
+                                </Link>
+                                <Link
+                                    href="/predictions/tomorrow"
+                                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm"
+                                >
+                                    Tomorrow
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -149,7 +156,7 @@ export default function TomorrowMatches() {
                         </select>
                     </div>
 
-                    {/* Search Bar - Mobile Optimized */}
+                    {/* Search Bar */}
                     <div className="mb-6">
                         <div className="relative">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -231,7 +238,7 @@ export default function TomorrowMatches() {
                                         {activeLeague === 'all' ? 'All Matches' : leagues.find(l => l.id === activeLeague)?.name}
                                     </h2>
                                     <p className="text-sm text-gray-500 mt-1">
-                                        {searchFilteredMatches.length} matches scheduled
+                                        {searchFilteredMatches.length} matches found
                                     </p>
                                 </div>
                             </div>
@@ -239,9 +246,10 @@ export default function TomorrowMatches() {
                             {/* Empty State */}
                             {searchFilteredMatches.length === 0 && (
                                 <div className="text-center py-12">
-                                    <p className="text-gray-500 text-lg">No matches found</p>
-                                    <p className="text-gray-400 text-sm mt-2">
-                                        {searchQuery ? 'Try adjusting your search' : 'Check back later for upcoming matches'}
+                                    <TrendingUp className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                                    <p className="text-gray-500 text-lg mb-2">No matches found</p>
+                                    <p className="text-gray-400 text-sm">
+                                        {searchQuery ? 'Try adjusting your search' : 'No upcoming matches in the next 7 days'}
                                     </p>
                                 </div>
                             )}
