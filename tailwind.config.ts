@@ -12,7 +12,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: colors.red[600],
+        primary: {
+          DEFAULT: '#532020',
+          50: '#fdf6f6',
+          100: '#f9e8e8',
+          200: '#f3d1d1',
+          300: '#e8adad',
+          400: '#d87f7f',
+          500: '#c45757',
+          600: '#a93d3d',
+          700: '#8b2f2f',
+          800: '#6f2626',
+          900: '#532020',
+          950: '#3a1616',
+        },
         secondary: colors.gray[600],
         success: colors.green[500],
         warning: colors.yellow[500],
@@ -23,8 +36,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ["var(--font-opensans)"],
-        mono: ["var(--font-roboto-mono)"],
+        sans: ["var(--font-roboto)", "system-ui", "sans-serif"],
+        mono: ["var(--font-roboto-mono)", "monospace"],
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in',

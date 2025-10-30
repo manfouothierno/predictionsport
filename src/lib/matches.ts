@@ -1,11 +1,39 @@
 import { supabase } from '@/lib/supabase'
-import { MatchWithDetails, Match, Team, League, Competition } from '@/types/database'
+import { MatchWithDetails, Match, Team, League, Competition, Sport } from '@/types/database'
 import { getLeagueIdFromName, LEAGUE_NAME_MAPPING } from '@/lib/leagues'
 
 export type DateFilter = 'all' | 'today' | 'tomorrow'
 
 /**
- * Fetch upcoming matches from Supabase
+ * Get all sports from the database
+ * @returns Array of sports
+ */
+export async function getAllSports(): Promise<Sport[]> {
+  if (!supabase) {
+    console.error('Supabase client not initialized')
+    return []
+  }
+
+  try {
+    const { data: sports, error } = await supabase
+      .from('sports')
+      .select('*')
+      .order('name', { ascending: true })
+
+    if (error) {
+      console.error('Error fetching sports:', error)
+      return []
+    }
+
+    return sports || []
+  } catch (error) {
+    console.error('Error in getAllSports:', error)
+    return []
+  }
+}
+
+/**
+ * Fetch upcoming matches from Supabase (only scheduled and live)
  * @param limit - Number of matches to fetch (default: 12)
  * @param sport - Filter by sport name (optional)
  * @returns Array of matches with team and league details
@@ -32,7 +60,7 @@ export async function getUpcomingMatches(
       return []
     }
 
-    // Fetch upcoming matches with team details
+    // Fetch upcoming matches with team details (only scheduled and live)
     const { data: matches, error: matchError } = await supabase
       .from('matches')
       .select(`
@@ -41,7 +69,7 @@ export async function getUpcomingMatches(
         away_team:teams!matches_away_team_id_fkey(*)
       `)
       .eq('sport_id', sportData.id)
-      .eq('status', 'scheduled')
+      .in('status', ['scheduled', 'live'])
       .gte('match_date', new Date().toISOString())
       .order('match_date', { ascending: true })
       .limit(limit)
@@ -139,7 +167,7 @@ export async function getMatchById(matchId: string): Promise<MatchWithDetails | 
 }
 
 /**
- * Get matches by date range
+ * Get matches by date range (only scheduled and live)
  */
 export async function getMatchesByDateRange(
   startDate: Date,
@@ -161,6 +189,7 @@ export async function getMatchesByDateRange(
       `)
       .gte('match_date', startDate.toISOString())
       .lte('match_date', endDate.toISOString())
+      .in('status', ['scheduled', 'live'])
       .order('match_date', { ascending: true })
       .limit(limit)
 
@@ -207,9 +236,14 @@ export async function getMatchesByDateRange(
 }
 
 /**
- * Get tomorrow's matches
+ * Get tomorrow's matches (only scheduled and live)
  */
 export async function getTomorrowMatches(limit: number = 100): Promise<MatchWithDetails[]> {
+  if (!supabase) {
+    console.error('Supabase client not initialized')
+    return []
+  }
+
   const tomorrow = new Date()
   tomorrow.setDate(tomorrow.getDate() + 1)
   tomorrow.setHours(0, 0, 0, 0)
@@ -218,20 +252,127 @@ export async function getTomorrowMatches(limit: number = 100): Promise<MatchWith
   dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 1)
   dayAfterTomorrow.setHours(23, 59, 59, 999)
 
-  return getMatchesByDateRange(tomorrow, dayAfterTomorrow, limit)
+  try {
+    const { data: matches, error } = await supabase
+      .from('matches')
+      .select(`
+        *,
+        home_team:teams!matches_home_team_id_fkey(*),
+        away_team:teams!matches_away_team_id_fkey(*)
+      `)
+      .gte('match_date', tomorrow.toISOString())
+      .lte('match_date', dayAfterTomorrow.toISOString())
+      .in('status', ['scheduled', 'live'])
+      .order('match_date', { ascending: true })
+      .limit(limit)
+
+    if (error) {
+      console.error('Error fetching tomorrow matches:', error)
+      return []
+    }
+
+    if (!matches || matches.length === 0) {
+      return []
+    }
+
+    // Fetch leagues and competitions for each match
+    const matchesWithDetails: MatchWithDetails[] = await Promise.all(
+      matches.map(async (match) => {
+        const { data: leagueData } = await supabase
+          .from('match_leagues')
+          .select('league_id, leagues(*)')
+          .eq('match_id', match.id)
+
+        const { data: competitionData } = await supabase
+          .from('match_competitions')
+          .select('competition_id, competitions(*)')
+          .eq('match_id', match.id)
+
+        const leagues = leagueData?.map((ml: any) => ml.leagues).filter(Boolean) || []
+        const competitions = competitionData?.map((mc: any) => mc.competitions).filter(Boolean) || []
+
+        return {
+          ...match,
+          leagues,
+          competitions,
+        }
+      })
+    )
+
+    return matchesWithDetails
+  } catch (error) {
+    console.error('Error in getTomorrowMatches:', error)
+    return []
+  }
 }
 
 /**
- * Get today's matches
+ * Get today's matches (only scheduled and live)
  */
 export async function getTodayMatches(limit: number = 100): Promise<MatchWithDetails[]> {
+  if (!supabase) {
+    console.error('Supabase client not initialized')
+    return []
+  }
+
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
   const endOfToday = new Date(today)
   endOfToday.setHours(23, 59, 59, 999)
 
-  return getMatchesByDateRange(today, endOfToday, limit)
+  try {
+    const { data: matches, error } = await supabase
+      .from('matches')
+      .select(`
+        *,
+        home_team:teams!matches_home_team_id_fkey(*),
+        away_team:teams!matches_away_team_id_fkey(*)
+      `)
+      .gte('match_date', today.toISOString())
+      .lte('match_date', endOfToday.toISOString())
+      .in('status', ['scheduled', 'live'])
+      .order('match_date', { ascending: true })
+      .limit(limit)
+
+    if (error) {
+      console.error('Error fetching today matches:', error)
+      return []
+    }
+
+    if (!matches || matches.length === 0) {
+      return []
+    }
+
+    // Fetch leagues and competitions for each match
+    const matchesWithDetails: MatchWithDetails[] = await Promise.all(
+      matches.map(async (match) => {
+        const { data: leagueData } = await supabase
+          .from('match_leagues')
+          .select('league_id, leagues(*)')
+          .eq('match_id', match.id)
+
+        const { data: competitionData } = await supabase
+          .from('match_competitions')
+          .select('competition_id, competitions(*)')
+          .eq('match_id', match.id)
+
+        const leagues = leagueData?.map((ml: any) => ml.leagues).filter(Boolean) || []
+        const competitions = competitionData?.map((mc: any) => mc.competitions).filter(Boolean) || []
+
+        return {
+          ...match,
+          leagues,
+          competitions,
+        }
+      })
+    )
+
+    return matchesWithDetails
+  } catch (error) {
+    console.error('Error in getTodayMatches:', error)
+    return []
+  }
 }
 
 /**
@@ -299,7 +440,7 @@ export async function getLiveMatches(limit: number = 100): Promise<MatchWithDeta
 }
 
 /**
- * Get all matches for today (both live and scheduled)
+ * Get all matches for today (only live and scheduled)
  */
 export async function getAllTodayMatches(limit: number = 100): Promise<MatchWithDetails[]> {
   if (!supabase) {
@@ -323,7 +464,7 @@ export async function getAllTodayMatches(limit: number = 100): Promise<MatchWith
       `)
       .gte('match_date', today.toISOString())
       .lte('match_date', endOfToday.toISOString())
-      .in('status', ['live', 'scheduled', 'completed'])
+      .in('status', ['live', 'scheduled'])
       .order('match_date', { ascending: true })
       .limit(limit)
 
@@ -408,7 +549,7 @@ export async function getMatchWithPredictions(matchId: string) {
 }
 
 /**
- * Get all upcoming matches (next 7 days)
+ * Get all upcoming matches (next 7 days, only scheduled and live)
  */
 export async function getAllUpcomingMatches(limit: number = 50): Promise<MatchWithDetails[]> {
   if (!supabase) {
@@ -433,7 +574,7 @@ export async function getAllUpcomingMatches(limit: number = 50): Promise<MatchWi
       `)
       .gte('match_date', today.toISOString())
       .lte('match_date', nextWeek.toISOString())
-      .eq('status', 'scheduled')
+      .in('status', ['scheduled', 'live'])
       .order('match_date', { ascending: true })
       .limit(limit)
 
@@ -510,15 +651,17 @@ export async function getMatchesByLeague(
 }
 
 /**
- * Get matches with combined filters (date + league/competition)
+ * Get matches with combined filters (date + league/competition + sport)
  * @param dateFilter - Filter by date: 'all', 'today', or 'tomorrow'
  * @param leagueOrCompetitionId - Optional database ID to filter by (league or competition)
  * @param limit - Number of matches to fetch
+ * @param sportName - Optional sport name to filter by (e.g., 'Football', 'Basketball')
  */
 export async function getMatchesWithFilters(
   dateFilter: DateFilter = 'all',
   leagueOrCompetitionId: string | null = null,
-  limit: number = 50
+  limit: number = 50,
+  sportName: string | null = null
 ): Promise<MatchWithDetails[]> {
   if (!supabase) {
     console.error('Supabase client not initialized')
@@ -526,7 +669,23 @@ export async function getMatchesWithFilters(
   }
 
   try {
-    // First, get matches based on date filter
+    // First, get sport ID if sport filter is specified
+    let sportId: string | null = null
+    if (sportName && sportName !== 'all') {
+      const { data: sportData, error: sportError } = await supabase
+        .from('sports')
+        .select('id')
+        .eq('name', sportName)
+        .single()
+
+      if (sportError) {
+        console.error('Error fetching sport:', sportError)
+      } else {
+        sportId = sportData?.id || null
+      }
+    }
+
+    // Get matches based on date filter
     let matches: MatchWithDetails[] = []
 
     switch (dateFilter) {
@@ -542,7 +701,12 @@ export async function getMatchesWithFilters(
         break
     }
 
-    // If league/competition filter is specified, filter the results
+    // Filter by sport if specified
+    if (sportId) {
+      matches = matches.filter(match => match.sport_id === sportId)
+    }
+
+    // Filter by league/competition if specified
     if (leagueOrCompetitionId) {
       matches = matches.filter(match => {
         // Check if any league matches the ID

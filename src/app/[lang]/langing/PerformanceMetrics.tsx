@@ -74,7 +74,7 @@ const CustomTooltip = ({ active=false, payload = [] as any, label='' }) => {
 
 export default function PerformanceMetrics() {
     return (
-        <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
+        <section className="py-16 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
                     <div>
@@ -100,7 +100,7 @@ export default function PerformanceMetrics() {
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-6 text-white"
+                            className="bg-primary rounded-xl p-6 text-white"
                         >
                             <div className="flex justify-between items-start mb-4">
                                 <div className="bg-red-400/30 rounded-lg p-2">

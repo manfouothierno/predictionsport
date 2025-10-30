@@ -37,9 +37,9 @@ export default function NewsletterSignup() {
     return (
         <section className="relative py-20 overflow-hidden">
             {/* Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-red-900 via-red-800 to-indigo-900">
+            <div className="absolute inset-0 bg-primary">
                 <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                <div className="absolute inset-0 bg-black/20" />
             </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">

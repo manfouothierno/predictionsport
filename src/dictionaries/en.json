@@ -18,11 +18,31 @@
     }
   },
   "footballPredictions": "Football Predictions",
+  "sportsPredictions": {
+    "all": "All Sports Predictions",
+    "football": "Football Predictions",
+    "basketball": "Basketball Predictions",
+    "tennis": "Tennis Predictions",
+    "rugby": "Rugby Predictions",
+    "baseball": "Baseball Predictions",
+    "hockey": "Hockey Predictions"
+  },
   "betTypes": "Bet types",
   "allBetTypes": "All bet types available",
+  "competitions": "Competitions",
+  "seeAllCompetitions": "See all competitions",
   "all": "All",
   "today": "Today",
   "tomorrow": "Tomorrow",
+  "sports": {
+    "all": "All",
+    "football": "Football",
+    "basketball": "Basketball",
+    "tennis": "Tennis",
+    "rugby": "Rugby",
+    "baseball": "Baseball",
+    "hockey": "Hockey"
+  },
   "clearFilters": "Clear Filters",
   "predictions": "Predictions",
   "detail": "Detail",

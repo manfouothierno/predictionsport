@@ -18,11 +18,31 @@
     }
   },
   "footballPredictions": "Pronostics Football",
+  "sportsPredictions": {
+    "all": "Tous les Pronostics Sportifs",
+    "football": "Pronostics Football",
+    "basketball": "Pronostics Basketball",
+    "tennis": "Pronostics Tennis",
+    "rugby": "Pronostics Rugby",
+    "baseball": "Pronostics Baseball",
+    "hockey": "Pronostics Hockey"
+  },
   "betTypes": "Types de paris",
   "allBetTypes": "Tous les types de paris disponibles",
+  "competitions": "Compétitions",
+  "seeAllCompetitions": "Voir toutes les compétitions",
   "all": "Tous",
   "today": "Aujourd'hui",
   "tomorrow": "Demain",
+  "sports": {
+    "all": "Tous",
+    "football": "Football",
+    "basketball": "Basketball",
+    "tennis": "Tennis",
+    "rugby": "Rugby",
+    "baseball": "Baseball",
+    "hockey": "Hockey"
+  },
   "clearFilters": "Effacer les filtres",
   "predictions": "Pronostics",
   "detail": "Détail",

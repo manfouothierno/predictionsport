@@ -28,7 +28,7 @@ const MatchCard = ({ match }) => {
     return (
         <div className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-300">
             {/* League Header */}
-            <div className="bg-gradient-to-r from-gray-50 to-white px-4 py-3 flex items-center justify-between border-b">
+            <div className="bg-gray-50 px-4 py-3 flex items-center justify-between border-b">
                 <div className="flex items-center gap-3">
                     <span className="text-sm font-medium text-gray-700">{match.league_name}</span>
                     <div className={`

@@ -12,8 +12,8 @@ interface PromotionalBannerProps {
 const PromotionalBanner = ({ brand, brandLogo, promoUrl, bonus }: PromotionalBannerProps) => {
     const brandConfigs = {
         '1xbet': {
-            bgGradient: 'bg-gradient-to-r from-blue-900 to-blue-800',
-            hoverGradient: 'hover:from-blue-800 hover:to-blue-700',
+            bgColor: 'bg-blue-900',
+            hoverBgColor: 'hover:bg-blue-800',
             textColor: 'text-white',
             accentColor: 'bg-orange-500',
             accentText: 'text-orange-500',
@@ -22,8 +22,8 @@ const PromotionalBanner = ({ brand, brandLogo, promoUrl, bonus }: PromotionalBan
             icon: Gift
         },
         'melbet': {
-            bgGradient: 'bg-gradient-to-r from-green-900 to-green-800',
-            hoverGradient: 'hover:from-green-800 hover:to-green-700',
+            bgColor: 'bg-green-900',
+            hoverBgColor: 'hover:bg-green-800',
             textColor: 'text-white',
             accentColor: 'bg-yellow-500',
             accentText: 'text-yellow-500',
@@ -32,8 +32,8 @@ const PromotionalBanner = ({ brand, brandLogo, promoUrl, bonus }: PromotionalBan
             icon: Star
         },
         'linebet': {
-            bgGradient: 'bg-gradient-to-r from-purple-900 to-purple-800',
-            hoverGradient: 'hover:from-purple-800 hover:to-purple-700',
+            bgColor: 'bg-purple-900',
+            hoverBgColor: 'hover:bg-purple-800',
             textColor: 'text-white',
             accentColor: 'bg-pink-500',
             accentText: 'text-pink-500',
@@ -59,7 +59,7 @@ const PromotionalBanner = ({ brand, brandLogo, promoUrl, bonus }: PromotionalBan
                 href={promoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`block ${config.bgGradient} ${config.hoverGradient} transition-all duration-300`}
+                className={`block ${config.bgColor} ${config.hoverBgColor} transition-all duration-300`}
             >
                 <div className="relative p-4 sm:p-6">
                     {/* Content wrapper */}

@@ -131,7 +131,7 @@ export default function PredictionCardWithBetting({
             href={bettingLink}
             target="_blank"
             rel="noopener noreferrer sponsored"
-            className="flex items-center justify-center gap-3 px-10 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold text-base rounded-full transition-all shadow-md hover:shadow-lg"
+            className="flex items-center justify-center gap-3 px-10 py-3 bg-primary hover:bg-primary-800 text-white font-bold text-base rounded-full transition-all shadow-md hover:shadow-lg"
           >
             <span>{dictionary?.betNow || 'BET NOW!'}</span>
           </a>

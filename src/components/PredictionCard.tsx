@@ -11,7 +11,7 @@ export const PredictionCard = ({match}: {match: any}) => {
         >
             <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100 hover:border-red-100">
                 {/* League & Time Header */}
-                <div className="bg-gradient-to-r shadow-sm  from-gray-50 to-white px-4 py-2.5 flex items-center justify-center  border-b">
+                <div className="bg-gray-50 shadow-sm px-4 py-2.5 flex items-center justify-center border-b">
                     <div className="flex items-center gap-2.5">
                         <div className="w-5 h-5 bg-white rounded-full p-0.5 shadow-sm">
                             <img

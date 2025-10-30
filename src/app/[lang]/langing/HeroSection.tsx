@@ -81,11 +81,11 @@ export default function HeroSection() {
     }, [currentSlide]);
 
     return (
-        <section className="relative min-h-[600px] lg:min-h-[700px] bg-gradient-to-br from-red-500 via-red-900 to-indigo-900 overflow-hidden">
+        <section className="relative min-h-[600px] lg:min-h-[700px] bg-primary overflow-hidden">
             {/* Background Pattern */}
             <div className="absolute inset-0">
                 <div className="absolute inset-0 bg-[url('/hero-pattern.svg')] opacity-10" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <div className="absolute inset-0 bg-black/30" />
             </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full py-12 lg:py-20">

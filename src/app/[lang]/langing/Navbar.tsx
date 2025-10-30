@@ -35,7 +35,7 @@ export default function Navbar() {
 
     return (
         <header className={`fixed w-full z-50 transition-all duration-300 ${
-            scrolled ? 'bg-red-900/95 backdrop-blur-md shadow-lg' : 'bg-red-900 opacity-100'
+            scrolled ? 'bg-primary/95 backdrop-blur-md shadow-lg' : 'bg-primary opacity-100'
         }`}>
             <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
@@ -43,7 +43,7 @@ export default function Navbar() {
                     <div className="md:hidden">
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-red-800"
+                            className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-primary-800"
                         >
                             {isOpen ? (
                                 <X className="block h-6 w-6" />

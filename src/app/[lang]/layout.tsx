@@ -4,7 +4,7 @@ import { i18n, Locale } from "@/i18n-config";
 import { Metadata } from "next";
 import Navbar from "@/app/[lang]/langing/Navbar";
 import Footer from "@/app/[lang]/langing/Footer";
-// import { Open_Sans } from 'next/font/google'
+import { Roboto } from 'next/font/google'
 
 export type LayoutProps = {
   children: React.ReactNode;
@@ -13,11 +13,12 @@ export type LayoutProps = {
   };
 };
 
-// const openSans =  Open_Sans({
-//     subsets: ['latin'],
-//     display: 'swap',
-//     variable: '--font-opensans',
-// })
+const roboto = Roboto({
+    weight: ['300', '400', '500', '700'],
+    subsets: ['latin'],
+    display: 'swap',
+    variable: '--font-roboto',
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://predictionsport.com"),
@@ -115,7 +116,7 @@ export default async function RootLayout({ children, params }: LayoutProps) {
 
   return (
     <html lang={lang}>
-      <body className={` antialiased font-sans`}>
+      <body className={`${roboto.variable} antialiased font-sans`}>
         <LanguageProvider initialLocale={lang} initialDictionary={dictionary}>
           {children}
           <Footer />
