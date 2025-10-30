@@ -1,12 +1,15 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { MatchWithDetails } from '@/types/database'
-import { getMatchesWithFilters, DateFilter } from '@/lib/matches'
-import { getLeagueIdFromName } from '@/lib/leagues'
+import { MatchWithDetails, League, Competition } from '@/types/database'
+import { getMatchesWithFilters, DateFilter, getUniqueLeaguesAndCompetitions } from '@/lib/matches'
 import PredictionCardWithBetting from './PredictionCardWithBetting'
 import PredictionsSidebar from './PredictionsSidebar'
 import PromotionalBanner from './PromotionalBanner'
+
+type LeagueOrCompetition = (League | Competition) & {
+  type?: 'league' | 'competition'
+}
 
 interface FeaturedPredictionsProps {
   locale?: string
@@ -21,30 +24,20 @@ export default function FeaturedPredictions({
   const [selectedDate, setSelectedDate] = useState<DateFilter>('all')
   const [matches, setMatches] = useState<MatchWithDetails[]>([])
   const [allMatches, setAllMatches] = useState<MatchWithDetails[]>([])
-  const [availableLeagues, setAvailableLeagues] = useState<string[]>([])
+  const [availableLeaguesAndCompetitions, setAvailableLeaguesAndCompetitions] = useState<LeagueOrCompetition[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Fetch all matches to determine available leagues
+  // Fetch all matches to determine available leagues and competitions
   useEffect(() => {
     async function fetchAllMatches() {
       try {
         const fetchedMatches = await getMatchesWithFilters(selectedDate, null, 100)
         setAllMatches(fetchedMatches)
 
-        // Extract unique leagues from matches
-        const leagueIds = new Set<string>()
-        fetchedMatches.forEach(match => {
-          match.leagues?.forEach(league => {
-            const leagueId = getLeagueIdFromName(league.name)
-            if (leagueId) leagueIds.add(leagueId)
-          })
-          match.competitions?.forEach(competition => {
-            const leagueId = getLeagueIdFromName(competition.name)
-            if (leagueId) leagueIds.add(leagueId)
-          })
-        })
-        setAvailableLeagues(Array.from(leagueIds))
+        // Extract unique leagues and competitions from matches
+        const uniqueItems = getUniqueLeaguesAndCompetitions(fetchedMatches)
+        setAvailableLeaguesAndCompetitions(uniqueItems)
       } catch (err) {
         console.error('Error fetching all matches:', err)
       }
@@ -74,7 +67,7 @@ export default function FeaturedPredictions({
   }, [selectedLeague, selectedDate, dictionary])
 
   return (
-    <section className="py-12 bg-gray-50">
+    <section className="py-12 bg-gray-50 pt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
@@ -173,7 +166,7 @@ export default function FeaturedPredictions({
               selectedDate={selectedDate}
               onLeagueChange={setSelectedLeague}
               onDateChange={setSelectedDate}
-              availableLeagues={availableLeagues}
+              availableLeaguesAndCompetitions={availableLeaguesAndCompetitions}
               dictionary={dictionary}
             />
           </div>

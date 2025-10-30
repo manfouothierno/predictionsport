@@ -478,12 +478,12 @@ export async function getAllUpcomingMatches(limit: number = 50): Promise<MatchWi
 }
 
 /**
- * Get matches filtered by league ID
- * @param leagueId - The league ID from our league configuration
+ * Get matches filtered by league or competition ID
+ * @param id - The database ID of the league or competition
  * @param limit - Number of matches to fetch
  */
 export async function getMatchesByLeague(
-  leagueId: string,
+  id: string,
   limit: number = 50
 ): Promise<MatchWithDetails[]> {
   if (!supabase) {
@@ -491,22 +491,17 @@ export async function getMatchesByLeague(
     return []
   }
 
-  // Get all matches first, then filter by league
+  // Get all matches first, then filter by league/competition
   // This is necessary because leagues are in a junction table
   const allMatches = await getAllUpcomingMatches(100)
 
-  // Filter matches that belong to the specified league
+  // Filter matches that belong to the specified league or competition
   const filteredMatches = allMatches.filter(match => {
-    // Check if any league or competition matches our league ID
-    const hasMatchingLeague = match.leagues?.some(league => {
-      const dbLeagueId = getLeagueIdFromName(league.name)
-      return dbLeagueId === leagueId
-    })
+    // Check if any league matches the ID
+    const hasMatchingLeague = match.leagues?.some(league => league.id === id)
 
-    const hasMatchingCompetition = match.competitions?.some(competition => {
-      const dbCompetitionId = getLeagueIdFromName(competition.name)
-      return dbCompetitionId === leagueId
-    })
+    // Check if any competition matches the ID
+    const hasMatchingCompetition = match.competitions?.some(competition => competition.id === id)
 
     return hasMatchingLeague || hasMatchingCompetition
   })
@@ -515,14 +510,14 @@ export async function getMatchesByLeague(
 }
 
 /**
- * Get matches with combined filters (date + league)
+ * Get matches with combined filters (date + league/competition)
  * @param dateFilter - Filter by date: 'all', 'today', or 'tomorrow'
- * @param leagueId - Optional league ID to filter by
+ * @param leagueOrCompetitionId - Optional database ID to filter by (league or competition)
  * @param limit - Number of matches to fetch
  */
 export async function getMatchesWithFilters(
   dateFilter: DateFilter = 'all',
-  leagueId: string | null = null,
+  leagueOrCompetitionId: string | null = null,
   limit: number = 50
 ): Promise<MatchWithDetails[]> {
   if (!supabase) {
@@ -547,18 +542,16 @@ export async function getMatchesWithFilters(
         break
     }
 
-    // If league filter is specified, filter the results
-    if (leagueId) {
+    // If league/competition filter is specified, filter the results
+    if (leagueOrCompetitionId) {
       matches = matches.filter(match => {
-        const hasMatchingLeague = match.leagues?.some(league => {
-          const dbLeagueId = getLeagueIdFromName(league.name)
-          return dbLeagueId === leagueId
-        })
+        // Check if any league matches the ID
+        const hasMatchingLeague = match.leagues?.some(league => league.id === leagueOrCompetitionId)
 
-        const hasMatchingCompetition = match.competitions?.some(competition => {
-          const dbCompetitionId = getLeagueIdFromName(competition.name)
-          return dbCompetitionId === leagueId
-        })
+        // Check if any competition matches the ID
+        const hasMatchingCompetition = match.competitions?.some(
+          competition => competition.id === leagueOrCompetitionId
+        )
 
         return hasMatchingLeague || hasMatchingCompetition
       })
@@ -567,6 +560,71 @@ export async function getMatchesWithFilters(
     return matches.slice(0, limit)
   } catch (error) {
     console.error('Error in getMatchesWithFilters:', error)
+    return []
+  }
+}
+
+/**
+ * Get unique leagues and competitions from a set of matches
+ * @param matches - Array of matches with details
+ * @returns Combined array of unique leagues and competitions
+ */
+export function getUniqueLeaguesAndCompetitions(matches: MatchWithDetails[]): Array<League | Competition> {
+  const uniqueItems = new Map<string, League | Competition>()
+
+  matches.forEach(match => {
+    // Add leagues
+    match.leagues?.forEach(league => {
+      if (!uniqueItems.has(league.id)) {
+        uniqueItems.set(league.id, league)
+      }
+    })
+
+    // Add competitions
+    match.competitions?.forEach(competition => {
+      if (!uniqueItems.has(competition.id)) {
+        uniqueItems.set(competition.id, competition)
+      }
+    })
+  })
+
+  return Array.from(uniqueItems.values())
+}
+
+/**
+ * Get all leagues and competitions from database
+ * @returns Combined array of all leagues and competitions
+ */
+export async function getAllLeaguesAndCompetitions(): Promise<Array<League | Competition>> {
+  if (!supabase) {
+    console.error('Supabase client not initialized')
+    return []
+  }
+
+  try {
+    // Fetch all leagues
+    const { data: leagues, error: leaguesError } = await supabase
+      .from('leagues')
+      .select('*')
+      .order('name', { ascending: true })
+
+    if (leaguesError) {
+      console.error('Error fetching leagues:', leaguesError)
+    }
+
+    // Fetch all competitions
+    const { data: competitions, error: competitionsError } = await supabase
+      .from('competitions')
+      .select('*')
+      .order('name', { ascending: true })
+
+    if (competitionsError) {
+      console.error('Error fetching competitions:', competitionsError)
+    }
+
+    return [...(leagues || []), ...(competitions || [])]
+  } catch (error) {
+    console.error('Error in getAllLeaguesAndCompetitions:', error)
     return []
   }
 }

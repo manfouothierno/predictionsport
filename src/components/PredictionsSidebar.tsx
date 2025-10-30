@@ -1,17 +1,22 @@
 'use client'
 
 import { useState } from 'react'
-import { LEAGUES, getLeaguesByPriority } from '@/lib/leagues'
-import { ChevronDown } from 'lucide-react'
+import Image from 'next/image'
+import { ChevronDown, Trophy } from 'lucide-react'
+import { League, Competition } from '@/types/database'
 
 export type DateFilter = 'all' | 'today' | 'tomorrow'
+
+type LeagueOrCompetition = (League | Competition) & {
+  type?: 'league' | 'competition'
+}
 
 interface PredictionsSidebarProps {
   selectedLeague: string | null
   selectedDate: DateFilter
   onLeagueChange: (leagueId: string | null) => void
   onDateChange: (date: DateFilter) => void
-  availableLeagues: string[]
+  availableLeaguesAndCompetitions: LeagueOrCompetition[]
   dictionary?: any
 }
 
@@ -20,16 +25,10 @@ export default function PredictionsSidebar({
   selectedDate,
   onLeagueChange,
   onDateChange,
-  availableLeagues,
+  availableLeaguesAndCompetitions,
   dictionary
 }: PredictionsSidebarProps) {
   const [betTypesOpen, setBetTypesOpen] = useState(false)
-  const allLeagues = getLeaguesByPriority()
-
-  // Filter to show only leagues with available matches
-  const sortedLeagues = allLeagues.filter(league =>
-    availableLeagues.includes(league.id)
-  )
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 sticky top-4">
@@ -100,35 +99,44 @@ export default function PredictionsSidebar({
 
       {/* League Filter List */}
       <div className="space-y-1">
-        {sortedLeagues.length === 0 ? (
+        {availableLeaguesAndCompetitions.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-sm text-gray-500">
               {dictionary?.noLeaguesAvailable || 'No leagues available for selected date'}
             </p>
           </div>
         ) : (
-          sortedLeagues.map((league) => {
-            const Icon = league.icon
-            const isSelected = selectedLeague === league.id
+          availableLeaguesAndCompetitions.map((item) => {
+            const isSelected = selectedLeague === item.id
 
             return (
               <button
-                key={league.id}
-                onClick={() => onLeagueChange(isSelected ? null : league.id)}
+                key={item.id}
+                onClick={() => onLeagueChange(isSelected ? null : item.id)}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
                   isSelected
                     ? 'bg-orange-50 text-orange-600'
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center overflow-hidden ${
                   isSelected ? 'bg-orange-100' : 'bg-gray-100'
                 }`}>
-                  <Icon className="w-4 h-4" />
+                  {item.logo_url ? (
+                    <Image
+                      src={item.logo_url}
+                      alt={item.name}
+                      width={20}
+                      height={20}
+                      className="object-contain"
+                    />
+                  ) : (
+                    <Trophy className="w-4 h-4" />
+                  )}
                 </div>
 
                 <span className="text-sm font-medium flex-1 text-left">
-                  {league.name}
+                  {item.name}
                 </span>
 
                 {isSelected && (

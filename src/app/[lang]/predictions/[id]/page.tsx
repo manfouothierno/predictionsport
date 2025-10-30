@@ -14,9 +14,15 @@ interface PredictionWithExpert extends Prediction {
 }
 
 // Match Header Component
-const MatchHeader = ({ match }: { match: MatchWithDetails }) => {
+const MatchHeader = ({ match, predictions }: { match: MatchWithDetails; predictions: PredictionWithExpert[] }) => {
   const league = match.leagues?.[0] || match.competitions?.[0];
   const matchDate = new Date(match.match_date);
+
+  // Get the first prediction's score
+  const firstPrediction = predictions[0];
+  const hasPredictedScore = firstPrediction &&
+    firstPrediction.home_prediction !== null &&
+    firstPrediction.away_prediction !== null;
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">
@@ -34,28 +40,35 @@ const MatchHeader = ({ match }: { match: MatchWithDetails }) => {
           <div className="text-xs text-gray-500 mt-1">(Home)</div>
         </div>
 
-        {/* Match Info */}
+        {/* Match Info with Predicted Score */}
         <div className="text-center">
-          <div className="text-sm text-gray-500 mb-2">
-            {match.status === 'live' ? (
-              <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full font-medium">
-                LIVE
-              </span>
-            ) : match.status === 'completed' ? (
-              <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full font-medium">
-                FT: {match.home_score} - {match.away_score}
-              </span>
-            ) : (
-              <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium">
-                Upcoming
-              </span>
-            )}
+          {/* Status Badge */}
+          <div className="text-sm text-gray-500 mb-3">
+            <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium">
+              Upcoming
+            </span>
           </div>
-          {match.status === 'scheduled' && (
-            <div className="text-xs text-gray-400 mt-2">
-              {format(matchDate, 'MMM dd, yyyy • HH:mm')}
+
+          {/* Predicted Score */}
+          {hasPredictedScore && (
+            <div className="mb-3">
+              <div className="flex items-center justify-center gap-3">
+                <span className="text-4xl md:text-5xl font-bold text-gray-900">
+                  {firstPrediction.home_prediction}
+                </span>
+                <span className="text-2xl md:text-3xl font-bold text-gray-400">-</span>
+                <span className="text-4xl md:text-5xl font-bold text-gray-900">
+                  {firstPrediction.away_prediction}
+                </span>
+              </div>
+              <div className="text-xs text-gray-500 mt-1">Predicted Score</div>
             </div>
           )}
+
+          {/* Match Date and Time */}
+          <div className="text-xs text-gray-400 mt-2">
+            {format(matchDate, 'MMM dd, yyyy • HH:mm')}
+          </div>
           <div className="text-xs text-gray-400 mt-1">
             {league?.name}
           </div>
@@ -263,7 +276,7 @@ export default function PredictionDetail({ params }: { params: Promise<{ id: str
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Main Content Area */}
           <div className="lg:col-span-2 space-y-6">
-            <MatchHeader match={match} />
+            <MatchHeader match={match} predictions={predictions} />
 
             {/* Expert Predictions */}
             <div className="space-y-4">
