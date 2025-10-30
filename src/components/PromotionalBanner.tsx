@@ -1,7 +1,15 @@
 import React from 'react';
 import { ArrowRight, Gift, Star } from 'lucide-react';
+import Image from 'next/image';
 
- const PromotionalBanner = ({ brand, brandLogo, promoUrl, bonus }) => {
+interface PromotionalBannerProps {
+  brand: '1xbet' | 'melbet' | 'linebet';
+  brandLogo: string;
+  promoUrl: string;
+  bonus?: string;
+}
+
+const PromotionalBanner = ({ brand, brandLogo, promoUrl, bonus }: PromotionalBannerProps) => {
     const brandConfigs = {
         '1xbet': {
             bgGradient: 'bg-gradient-to-r from-blue-900 to-blue-800',
@@ -39,7 +47,7 @@ import { ArrowRight, Gift, Star } from 'lucide-react';
     const Icon = config.icon;
 
     return (
-        <div className="group relative w-full  overflow-hidden shadow-lg transition-all duration-300 hover:shadow-2xl">
+        <div className="group relative w-full rounded-xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-2xl">
             {/* Hot badge */}
             <div className="absolute -right-12 top-6 rotate-45 z-10">
                 <div className={`${config.accentColor} py-1 px-12`}>
@@ -58,12 +66,12 @@ import { ArrowRight, Gift, Star } from 'lucide-react';
                     <div className="flex items-center justify-between ">
                         {/* Left section */}
                         <div className="flex items-center space-x-4 ">
-                            <div className={`w-18 h-6`}>
-                                {/*<div className="absolute inset-0 rounded-full border-2 border-white/20 animate-pulse"></div>*/}
-                                <img
+                            <div className="relative w-20 h-8">
+                                <Image
                                     src={brandLogo}
                                     alt={`${brand} logo`}
-                                    className=" w-16 h-4 "
+                                    fill
+                                    className="object-contain"
                                 />
                             </div>
 

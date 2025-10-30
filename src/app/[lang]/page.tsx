@@ -1,31 +1,26 @@
 'use client';
 
-import HeroSection from "@/app/[lang]/langing/HeroSection";
+import { useLanguage } from "@/contexts/LanguageContext";
 import Navbar from "@/app/[lang]/langing/Navbar";
-import TopPredictions from "@/app/[lang]/langing/TopPredictions";
-import PopularLeagues from "@/app/[lang]/langing/PopularLeagues";
 import NewsHighlights from "@/app/[lang]/langing/NewsHighlights";
-import PerformanceMetrics from "@/app/[lang]/langing/PerformanceMetrics";
 import NewsletterSignup from "@/app/[lang]/langing/NewsletterSignup";
-import Footer from "@/app/[lang]/langing/Footer";
-import PromotionalBanner from "@/components/PromotionalBanner";
-import UpcomingMatches from "@/components/UpcomingMatches";
-
-
+import FeaturedPredictions from "@/components/FeaturedPredictions";
 
 export default function Home() {
+  const { locale, dictionary } = useLanguage();
 
   return (
-    <div >
-        <Navbar />
+    <div>
+      <Navbar />
 
-        {/*<HeroSection />*/}
-        <UpcomingMatches limit={12} sport="Football" />
-        {/*<PopularLeagues />*/}
-        <NewsHighlights/>
-        {/*<PerformanceMetrics/>*/}
-        <NewsletterSignup/>
+      {/* Featured Predictions Section with Sidebar Filters */}
+      <FeaturedPredictions locale={locale} dictionary={dictionary} />
 
+      {/* News Highlights Section */}
+      <NewsHighlights />
+
+      {/* Newsletter Signup Section */}
+      <NewsletterSignup />
     </div>
   );
 }

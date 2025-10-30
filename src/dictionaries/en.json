@@ -16,5 +16,25 @@
       "lose": "Lose",
       "confidence": "Confidence"
     }
-  }
+  },
+  "footballPredictions": "Football Predictions",
+  "betTypes": "Bet types",
+  "allBetTypes": "All bet types available",
+  "all": "All",
+  "today": "Today",
+  "tomorrow": "Tomorrow",
+  "clearFilters": "Clear Filters",
+  "predictions": "Predictions",
+  "detail": "Detail",
+  "bonus": "Bonus",
+  "bonusUpTo": "Bonus",
+  "upTo": "up to",
+  "betNow": "BET NOW!",
+  "viewPrediction": "View Prediction",
+  "exclusiveOffer": "Exclusive Offer",
+  "errorLoadingMatches": "Failed to load matches. Please try again later.",
+  "retry": "Retry",
+  "noMatchesFound": "No matches found for the selected filters.",
+  "noLeaguesAvailable": "No leagues available for selected date",
+  "showingResults": "Showing {count} predictions"
 }

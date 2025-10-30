@@ -1,20 +1,40 @@
 {
   "navigation": {
-    "home": "Home",
-    "predictions": "Predictions",
-    "live_scores": "Live Scores",
-    "news": "News",
+    "home": "Startseite",
+    "predictions": "Vorhersagen",
+    "live_scores": "Live-Ergebnisse",
+    "news": "Nachrichten",
     "blog": "Blog"
   },
   "matches": {
-    "upcoming": "Upcoming Matches",
-    "live": "Live Matches",
-    "finished": "Finished Matches",
+    "upcoming": "Kommende Spiele",
+    "live": "Live-Spiele",
+    "finished": "Beendete Spiele",
     "prediction": {
-      "win": "Win",
-      "draw": "Draw",
-      "lose": "Lose",
-      "confidence": "Confidence"
+      "win": "Sieg",
+      "draw": "Unentschieden",
+      "lose": "Niederlage",
+      "confidence": "Vertrauen"
     }
-  }
+  },
+  "footballPredictions": "Fußball Vorhersagen",
+  "betTypes": "Wettarten",
+  "allBetTypes": "Alle Wettarten verfügbar",
+  "all": "Alle",
+  "today": "Heute",
+  "tomorrow": "Morgen",
+  "clearFilters": "Filter löschen",
+  "predictions": "Vorhersagen",
+  "detail": "Detail",
+  "bonus": "Bonus",
+  "bonusUpTo": "Bonus",
+  "upTo": "bis zu",
+  "betNow": "JETZT WETTEN!",
+  "viewPrediction": "Vorhersage anzeigen",
+  "exclusiveOffer": "Exklusives Angebot",
+  "errorLoadingMatches": "Fehler beim Laden der Spiele. Bitte versuchen Sie es später erneut.",
+  "retry": "Erneut versuchen",
+  "noMatchesFound": "Keine Spiele für die ausgewählten Filter gefunden.",
+  "noLeaguesAvailable": "Keine Ligen für das ausgewählte Datum verfügbar",
+  "showingResults": "{count} Vorhersagen anzeigen"
 }

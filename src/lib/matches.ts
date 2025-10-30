@@ -1,5 +1,8 @@
 import { supabase } from '@/lib/supabase'
 import { MatchWithDetails, Match, Team, League, Competition } from '@/types/database'
+import { getLeagueIdFromName, LEAGUE_NAME_MAPPING } from '@/lib/leagues'
+
+export type DateFilter = 'all' | 'today' | 'tomorrow'
 
 /**
  * Fetch upcoming matches from Supabase
@@ -470,6 +473,100 @@ export async function getAllUpcomingMatches(limit: number = 50): Promise<MatchWi
     return matchesWithDetails
   } catch (error) {
     console.error('Error in getAllUpcomingMatches:', error)
+    return []
+  }
+}
+
+/**
+ * Get matches filtered by league ID
+ * @param leagueId - The league ID from our league configuration
+ * @param limit - Number of matches to fetch
+ */
+export async function getMatchesByLeague(
+  leagueId: string,
+  limit: number = 50
+): Promise<MatchWithDetails[]> {
+  if (!supabase) {
+    console.error('Supabase client not initialized')
+    return []
+  }
+
+  // Get all matches first, then filter by league
+  // This is necessary because leagues are in a junction table
+  const allMatches = await getAllUpcomingMatches(100)
+
+  // Filter matches that belong to the specified league
+  const filteredMatches = allMatches.filter(match => {
+    // Check if any league or competition matches our league ID
+    const hasMatchingLeague = match.leagues?.some(league => {
+      const dbLeagueId = getLeagueIdFromName(league.name)
+      return dbLeagueId === leagueId
+    })
+
+    const hasMatchingCompetition = match.competitions?.some(competition => {
+      const dbCompetitionId = getLeagueIdFromName(competition.name)
+      return dbCompetitionId === leagueId
+    })
+
+    return hasMatchingLeague || hasMatchingCompetition
+  })
+
+  return filteredMatches.slice(0, limit)
+}
+
+/**
+ * Get matches with combined filters (date + league)
+ * @param dateFilter - Filter by date: 'all', 'today', or 'tomorrow'
+ * @param leagueId - Optional league ID to filter by
+ * @param limit - Number of matches to fetch
+ */
+export async function getMatchesWithFilters(
+  dateFilter: DateFilter = 'all',
+  leagueId: string | null = null,
+  limit: number = 50
+): Promise<MatchWithDetails[]> {
+  if (!supabase) {
+    console.error('Supabase client not initialized')
+    return []
+  }
+
+  try {
+    // First, get matches based on date filter
+    let matches: MatchWithDetails[] = []
+
+    switch (dateFilter) {
+      case 'today':
+        matches = await getTodayMatches(100)
+        break
+      case 'tomorrow':
+        matches = await getTomorrowMatches(100)
+        break
+      case 'all':
+      default:
+        matches = await getAllUpcomingMatches(100)
+        break
+    }
+
+    // If league filter is specified, filter the results
+    if (leagueId) {
+      matches = matches.filter(match => {
+        const hasMatchingLeague = match.leagues?.some(league => {
+          const dbLeagueId = getLeagueIdFromName(league.name)
+          return dbLeagueId === leagueId
+        })
+
+        const hasMatchingCompetition = match.competitions?.some(competition => {
+          const dbCompetitionId = getLeagueIdFromName(competition.name)
+          return dbCompetitionId === leagueId
+        })
+
+        return hasMatchingLeague || hasMatchingCompetition
+      })
+    }
+
+    return matches.slice(0, limit)
+  } catch (error) {
+    console.error('Error in getMatchesWithFilters:', error)
     return []
   }
 }

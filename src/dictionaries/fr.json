@@ -1,20 +1,40 @@
 {
   "navigation": {
-    "home": "Home",
-    "predictions": "Predictions",
-    "live_scores": "Live Scores",
-    "news": "News",
+    "home": "Accueil",
+    "predictions": "Pronostics",
+    "live_scores": "Scores en direct",
+    "news": "Actualités",
     "blog": "Blog"
   },
   "matches": {
-    "upcoming": "Upcoming Matches",
-    "live": "Live Matches",
-    "finished": "Finished Matches",
+    "upcoming": "Matchs à venir",
+    "live": "Matchs en direct",
+    "finished": "Matchs terminés",
     "prediction": {
-      "win": "Win",
-      "draw": "Draw",
-      "lose": "Lose",
-      "confidence": "Confidence"
+      "win": "Victoire",
+      "draw": "Match nul",
+      "lose": "Défaite",
+      "confidence": "Confiance"
     }
-  }
+  },
+  "footballPredictions": "Pronostics Football",
+  "betTypes": "Types de paris",
+  "allBetTypes": "Tous les types de paris disponibles",
+  "all": "Tous",
+  "today": "Aujourd'hui",
+  "tomorrow": "Demain",
+  "clearFilters": "Effacer les filtres",
+  "predictions": "Pronostics",
+  "detail": "Détail",
+  "bonus": "Bonus",
+  "bonusUpTo": "Bonus",
+  "upTo": "jusqu'à",
+  "betNow": "PARIER MAINTENANT!",
+  "viewPrediction": "Voir le pronostic",
+  "exclusiveOffer": "Offre Exclusive",
+  "errorLoadingMatches": "Échec du chargement des matchs. Veuillez réessayer plus tard.",
+  "retry": "Réessayer",
+  "noMatchesFound": "Aucun match trouvé pour les filtres sélectionnés.",
+  "noLeaguesAvailable": "Aucune ligue disponible pour la date sélectionnée",
+  "showingResults": "Affichage de {count} pronostics"
 }

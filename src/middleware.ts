@@ -6,12 +6,13 @@ import { i18n } from '@/i18n-config'
 export function middleware(request: NextRequest) {
     const pathname = request.nextUrl.pathname
 
-    // Check if request is for robots.txt or sitemaps
+    // Check if request is for robots.txt, sitemaps, or manifest.json
     if (
         pathname === '/robots.txt' ||
         pathname === '/sitemap.xml' ||
         pathname === '/news-sitemap.xml' ||
-        pathname === '/blog-sitemap.xml'
+        pathname === '/blog-sitemap.xml' ||
+        pathname === '/manifest.json'
     ) {
         // Remove language prefix for these paths
         return NextResponse.rewrite(new URL(pathname, request.url))
@@ -58,10 +59,11 @@ export const config = {
     matcher: [
         // Skip all internal paths (_next, api)
         '/((?!api|_next/static|_next/image|favicon.ico).*)',
-        // Include robots.txt and sitemaps
+        // Include robots.txt, sitemaps, and manifest.json
         '/robots.txt',
         '/sitemap.xml',
         '/news-sitemap.xml',
-        '/blog-sitemap.xml'
+        '/blog-sitemap.xml',
+        '/manifest.json'
     ]
 }
