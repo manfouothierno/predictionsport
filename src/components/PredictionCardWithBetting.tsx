@@ -3,6 +3,7 @@ import { format } from 'date-fns'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ChevronRight } from 'lucide-react'
+import { useUserCurrency } from '@/hooks/useUserCurrency'
 
 interface PredictionCardWithBettingProps {
   match: MatchWithDetails
@@ -19,6 +20,9 @@ export default function PredictionCardWithBetting({
   locale = 'en',
   dictionary
 }: PredictionCardWithBettingProps) {
+  // Get user's currency
+  const { formattedBonus, loading: currencyLoading } = useUserCurrency()
+
   // Format match date and time
   const matchDate = new Date(match.match_date)
   const formattedDate = format(matchDate, 'dd MMM yyyy, HH:mm')
@@ -36,8 +40,8 @@ export default function PredictionCardWithBetting({
      prediction?.winner_prediction === 'draw' ? 'Draw' :
      `${match.home_team.name} wins`)
 
-  // Bonus amount (randomized for demo, should come from API/config)
-  const bonusAmount = '260000XAF'
+  // Bonus amount (use dynamic currency)
+  const bonusAmount = currencyLoading ? '€390' : formattedBonus
 
   // 1XBET link (should be affiliate link in production)
   const bettingLink = process.env.NEXT_PUBLIC_1XBET_LINK || 'https://1xbet.com'

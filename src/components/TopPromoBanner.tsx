@@ -3,8 +3,10 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import { useUserCurrency } from '@/hooks/useUserCurrency';
 
 const TopPromoBanner = () => {
+    const { formattedBonus, loading } = useUserCurrency();
     return (
         <div className="w-full fixed top-16 z-40 shadow-md">
             {/* Desktop Banner */}
@@ -37,7 +39,9 @@ const TopPromoBanner = () => {
                                 </div>
                                 <div className="text-gray-900">
                                     <span className="text-base font-medium">Bonus up to </span>
-                                    <span className="text-orange-500 font-bold text-lg">260000XAF</span>
+                                    <span className="text-orange-500 font-bold text-lg">
+                                        {loading ? '€390' : formattedBonus}
+                                    </span>
                                 </div>
                             </div>
 
@@ -61,7 +65,9 @@ const TopPromoBanner = () => {
                             <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0">
                                 <span className="text-white text-xs font-bold">!</span>
                             </div>
-                            <span className="font-medium">1xbet Exclusive offer : Bonus 260000XAF</span>
+                            <span className="font-medium">
+                                1xbet Exclusive offer : Bonus {loading ? '€390' : formattedBonus}
+                            </span>
                             <span className="text-gray-300">|</span>
                             <a
                                 href="https://1xbet.com"
@@ -106,7 +112,9 @@ const TopPromoBanner = () => {
                                 </div>
                                 <div className="text-xs">
                                     <div className="text-gray-700">Bonus up to</div>
-                                    <div className="text-orange-500 font-bold">260000XAF</div>
+                                    <div className="text-orange-500 font-bold">
+                                        {loading ? '€390' : formattedBonus}
+                                    </div>
                                 </div>
                             </div>
 
@@ -130,7 +138,9 @@ const TopPromoBanner = () => {
                             <div className="w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0">
                                 <span className="text-white text-[10px] font-bold">!</span>
                             </div>
-                            <span className="font-medium">1xbet Exclusive offer : Bonus 260000XAF</span>
+                            <span className="font-medium">
+                                1xbet Exclusive offer : Bonus {loading ? '€390' : formattedBonus}
+                            </span>
                             <span className="text-gray-300">|</span>
                             <a
                                 href="https://1xbet.com"
