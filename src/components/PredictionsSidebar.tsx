@@ -34,13 +34,13 @@ export default function PredictionsSidebar({
     : dictionary?.all || 'All'
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4 lg:sticky lg:top-24">
+    <div className="bg-white rounded-lg border border-gray-200 p-3 lg:p-4 lg:sticky lg:top-24">
       {/* League Select - Mobile Only */}
-      <div className="mb-6 lg:hidden relative">
+      <div className="mb-3 lg:hidden relative">
         <select
           value={selectedLeague || ''}
           onChange={(e) => onLeagueChange(e.target.value || null)}
-          className="w-full px-4 py-2.5 bg-white border-2 border-gray-300 rounded-full text-sm font-medium text-gray-700 hover:border-gray-400 focus:border-primary focus:outline-none transition-colors appearance-none cursor-pointer"
+          className="w-full px-4 py-2 bg-white border-2 border-gray-300 rounded-full text-sm font-medium text-gray-700 hover:border-gray-400 focus:border-primary focus:outline-none transition-colors appearance-none cursor-pointer"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
             backgroundRepeat: 'no-repeat',
@@ -64,11 +64,11 @@ export default function PredictionsSidebar({
       </div>
 
       {/* Date Filter Tabs */}
-      <div className="mb-6">
+      <div className="mb-0 lg:mb-6">
         <div className="flex gap-2 border-b border-gray-200">
           <button
             onClick={() => onDateChange('all')}
-            className={`flex-1 pb-3 text-sm font-medium transition-colors relative ${
+            className={`flex-1 pb-2 lg:pb-3 text-sm font-medium transition-colors relative ${
               selectedDate === 'all'
                 ? 'text-primary'
                 : 'text-gray-600 hover:text-gray-900'
@@ -82,7 +82,7 @@ export default function PredictionsSidebar({
 
           <button
             onClick={() => onDateChange('today')}
-            className={`flex-1 pb-3 text-sm font-medium transition-colors relative ${
+            className={`flex-1 pb-2 lg:pb-3 text-sm font-medium transition-colors relative ${
               selectedDate === 'today'
                 ? 'text-primary'
                 : 'text-gray-600 hover:text-gray-900'
@@ -96,7 +96,7 @@ export default function PredictionsSidebar({
 
           <button
             onClick={() => onDateChange('tomorrow')}
-            className={`flex-1 pb-3 text-sm font-medium transition-colors relative ${
+            className={`flex-1 pb-2 lg:pb-3 text-sm font-medium transition-colors relative ${
               selectedDate === 'tomorrow'
                 ? 'text-primary'
                 : 'text-gray-600 hover:text-gray-900'

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Star, Search, Calendar } from 'lucide-react';
 import Navbar from "@/app/[lang]/langing/Navbar";
+import TopPromoBanner from "@/components/TopPromoBanner";
 import { getTodayMatches } from '@/lib/matches';
 import { MatchWithDetails } from '@/types/database';
 import UpcomingMatchCard from '@/components/UpcomingMatchCard';
@@ -116,7 +117,8 @@ export default function TodayMatches() {
     return (
         <div className="min-h-screen bg-gray-50">
             <Navbar/>
-            <div className="pt-20">
+            <TopPromoBanner/>
+            <div className="pt-32 md:pt-36">
                 {/* Date Header */}
                 <div className="bg-white border-b">
                     <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-4">

@@ -6,6 +6,7 @@ import { Chip, Button } from "@nextui-org/react";
 import {useRouter} from "next/navigation";
 import NewsCard from "@/components/NewsCard";
 import Navbar from "@/app/[lang]/langing/Navbar";
+import TopPromoBanner from "@/components/TopPromoBanner";
 import {formatDistanceToNow} from "date-fns";
 import Link from "next/link";
 
@@ -57,7 +58,8 @@ export default function NewsPage() {
         <div className="min-h-screen bg-gray-50">
             <div className="bg-white">
                 <Navbar/>
-                <div className="pt-20">
+                <TopPromoBanner/>
+                <div className="pt-32 md:pt-36">
                     <div className="max-w-7xl mx-auto px-4">
                         <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-4">
                             <h1 className="text-2xl font-bold text-gray-900">Latest News</h1>

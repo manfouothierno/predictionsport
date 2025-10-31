@@ -2,6 +2,7 @@
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import Navbar from "@/app/[lang]/langing/Navbar";
+import TopPromoBanner from "@/components/TopPromoBanner";
 import NewsHighlights from "@/app/[lang]/langing/NewsHighlights";
 import NewsletterSignup from "@/app/[lang]/langing/NewsletterSignup";
 import FeaturedPredictions from "@/components/FeaturedPredictions";
@@ -12,15 +13,18 @@ export default function Home() {
   return (
     <div>
       <Navbar />
+      <TopPromoBanner />
 
       {/* Featured Predictions Section with Sidebar Filters */}
-      <FeaturedPredictions locale={locale} dictionary={dictionary} />
+      <div className="pt-32 md:pt-36">
+        <FeaturedPredictions locale={locale} dictionary={dictionary} />
 
-      {/* News Highlights Section */}
-      <NewsHighlights />
+        {/* News Highlights Section */}
+        <NewsHighlights />
 
-      {/* Newsletter Signup Section */}
-      <NewsletterSignup />
+        {/* Newsletter Signup Section */}
+        <NewsletterSignup />
+      </div>
     </div>
   );
 }

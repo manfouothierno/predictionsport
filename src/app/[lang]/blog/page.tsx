@@ -5,6 +5,7 @@ import { Search, Tag, Calendar, Filter, ArrowRight } from 'lucide-react';
 import {  Button, Card, Avatar } from "@nextui-org/react";
 import {useRouter} from "next/navigation";
 import Navbar from "@/app/[lang]/langing/Navbar";
+import TopPromoBanner from "@/components/TopPromoBanner";
 import Image from "next/image";
 import {BlogPost, getBlogCategories, getBlogPosts} from "@/lib/api/blogs";
 import {formatDistanceToNow} from "date-fns";
@@ -125,7 +126,8 @@ export default function BlogPage() {
     return (
         <div className="min-h-screen bg-gray-50">
             <Navbar/>
-            <div className="bg-white pt-20 border-b">
+            <TopPromoBanner/>
+            <div className="bg-white pt-32 md:pt-36 border-b">
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 py-12">
                         <div>

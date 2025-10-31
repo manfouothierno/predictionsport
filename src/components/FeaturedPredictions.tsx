@@ -121,8 +121,8 @@ export default function FeaturedPredictions({
     <section className="bg-gray-50">
       {/* Sport Filter - Mobile Only (sticky at top) */}
       <div className="lg:hidden sticky top-0 z-10 bg-white border-b border-gray-200 pt-20">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex gap-3 overflow-x-auto no-scrollbar">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <div className="flex gap-2 overflow-x-auto no-scrollbar">
             {/* "All" button */}
             <button
               onClick={() => handleSportChange(null, 'all')}
@@ -174,9 +174,9 @@ export default function FeaturedPredictions({
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:pt-24">
-        {/* Header */}
-        <div className="mb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-12 lg:pt-24">
+        {/* Header - Desktop Only */}
+        <div className="hidden lg:block mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
             {dictionary?.sportsPredictions?.[selectedSportName.toLowerCase()] ||
               dictionary?.footballPredictions ||
@@ -200,7 +200,7 @@ export default function FeaturedPredictions({
         </div>*/}
 
         {/* Main Layout: Content + Sidebar */}
-        <div className="flex flex-col lg:grid lg:grid-cols-4 gap-8">
+        <div className="flex flex-col lg:grid lg:grid-cols-4 gap-4 lg:gap-8">
           {/* Sidebar - Shows first on mobile, right side on desktop */}
           <div className="order-1 lg:order-2 lg:col-span-1">
             {/* Sport Filter - Shows above sidebar on desktop */}
@@ -223,8 +223,18 @@ export default function FeaturedPredictions({
             />
           </div>
 
-          {/* Main Content Area - Shows second on mobile, left side on desktop */}
-          <div className="order-2 lg:order-1 lg:col-span-3">
+          {/* Header - Mobile Only (shows between sidebar and content) */}
+          <div className="lg:hidden order-2 mb-4">
+            <h1 className="text-2xl font-bold text-gray-900">
+              {dictionary?.sportsPredictions?.[selectedSportName.toLowerCase()] ||
+                dictionary?.footballPredictions ||
+                "Football Predictions"}
+            </h1>
+            <div className="mt-2 h-1 w-20 bg-primary rounded-full" />
+          </div>
+
+          {/* Main Content Area - Shows third on mobile, left side on desktop */}
+          <div className="order-3 lg:order-1 lg:col-span-3">
             {loading && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[...Array(6)].map((_, index) => (
@@ -267,7 +277,7 @@ export default function FeaturedPredictions({
             )}
 
             {!loading && !error && matches.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 {matches.map((match) => (
                   <PredictionCardWithBetting
                     key={match.id}
@@ -281,7 +291,7 @@ export default function FeaturedPredictions({
 
             {/* Results Count */}
             {!loading && !error && matches.length > 0 && (
-              <div className="mt-8 text-center">
+              <div className="mt-6 md:mt-8 text-center">
                 <p className="text-sm text-gray-600">
                   {dictionary?.showingResults?.replace(
                     "{count}",

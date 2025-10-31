@@ -16,6 +16,7 @@ import {Button} from "@nextui-org/react";
 import {Chip} from "@nextui-org/chip";
 import {Tooltip} from "recharts";
 import Navbar from "@/app/[lang]/langing/Navbar";
+import TopPromoBanner from "@/components/TopPromoBanner";
 import {useRouter} from "next/navigation";
 
 const mockMatches = [
@@ -129,7 +130,8 @@ export default function AnalysisList() {
     return (
         <div>
             <Navbar/>
-            <div className="min-h-screen pt-20 bg-gray-50">
+            <TopPromoBanner/>
+            <div className="min-h-screen pt-32 md:pt-36 bg-gray-50">
 
                 <div className="bg-white shadow-sm">
 

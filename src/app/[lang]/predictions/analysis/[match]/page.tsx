@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { TrendingUp, Calendar, Timer, ChevronLeft, BarChart2, CheckCircle, XCircle, Scale, ChevronRight, Goal, Users, DollarSign } from 'lucide-react';
 import Link from "next/link";
-import Navbar from "@/app/[lang]/langing/Navbar"; // Adjust this path if your Navbar is located elsewhere
+import Navbar from "@/app/[lang]/langing/Navbar";
+import TopPromoBanner from "@/components/TopPromoBanner";
 
 // Helper function to get Yes/No prediction based on percentage and threshold
 const getPredictionYesNo = (percentage, threshold = 50) => {
@@ -601,7 +602,8 @@ export default function MatchAnalysis({ params }) {
         return (
             <>
                 <Navbar />
-                <div className="min-h-[calc(100vh-100px)] bg-gray-50 flex items-center justify-center px-4">
+                <TopPromoBanner />
+                <div className="min-h-[calc(100vh-100px)] bg-gray-50 flex items-center justify-center px-4 pt-32 md:pt-36">
                     <div className="text-center bg-white p-8 rounded-lg shadow-md max-w-md mx-auto">
                         <XCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
                         <h2 className="text-xl font-semibold text-red-600 mb-3">Could Not Load Match</h2>
@@ -621,7 +623,8 @@ export default function MatchAnalysis({ params }) {
         return (
             <>
                 <Navbar />
-                <div className="min-h-[calc(100vh-100px)] bg-gray-50 flex items-center justify-center px-4">
+                <TopPromoBanner />
+                <div className="min-h-[calc(100vh-100px)] bg-gray-50 flex items-center justify-center px-4 pt-32 md:pt-36">
                     <div className="text-center bg-white p-8 rounded-lg shadow-md max-w-md mx-auto">
                         <h2 className="text-xl font-semibold text-gray-700 mb-3">Match Not Found</h2>
                         <p className="text-gray-600 mb-6">The requested match could not be found. Please check the ID or browse other predictions.</p>
@@ -641,7 +644,8 @@ export default function MatchAnalysis({ params }) {
     return (
         <div className="min-h-screen bg-gray-50">
             <Navbar />
-            <div className="container mx-auto px-4 py-8 max-w-7xl">
+            <TopPromoBanner />
+            <div className="container mx-auto px-4 py-8 max-w-7xl pt-32 md:pt-36">
                 {/* Back Link */}
                 <Link href="/predictions" className="inline-flex items-center text-gray-600 hover:text-red-700 mb-6 text-sm font-medium group">
                     <ChevronLeft className="w-5 h-5 mr-1 transition-transform duration-200 group-hover:-translate-x-1" />

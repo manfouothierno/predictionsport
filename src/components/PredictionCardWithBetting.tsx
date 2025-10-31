@@ -45,15 +45,15 @@ export default function PredictionCardWithBetting({
   return (
     <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
       {/* Header with date and league */}
-      <div className="pt-6 px-6 pb-4">
+      <div className="pt-4 px-4 pb-3 md:pt-6 md:px-6 md:pb-4">
         <div className="text-center">
-          <p className="text-lg font-bold text-gray-900">{formattedDate}</p>
-          <p className="text-sm text-gray-600 mt-1">{countryName} - {leagueName}</p>
+          <p className="text-base md:text-lg font-bold text-gray-900">{formattedDate}</p>
+          <p className="text-xs md:text-sm text-gray-600 mt-1">{countryName} - {leagueName}</p>
         </div>
       </div>
 
       {/* Teams - Horizontal layout */}
-      <div className="px-6 pb-4">
+      <div className="px-4 pb-3 md:px-6 md:pb-4">
         <div className="flex items-center justify-center gap-3">
           {/* Home Team */}
           <div className="flex items-center gap-2">
@@ -103,27 +103,27 @@ export default function PredictionCardWithBetting({
       </div>
 
       {/* Prediction Box */}
-      <div className="mx-6 mb-5 bg-gray-100 rounded-lg p-4 text-center">
-        <p className="text-sm text-gray-700 mb-2">
+      <div className="mx-4 mb-4 md:mx-6 md:mb-5 bg-gray-100 rounded-lg p-3 md:p-4 text-center">
+        <p className="text-xs md:text-sm text-gray-700 mb-2">
           {match.home_team.name} {match.away_team.name} {dictionary?.predictions || 'Predictions'}
         </p>
-        <p className="text-lg font-bold text-gray-900 mb-2">{predictionText}</p>
+        <p className="text-base md:text-lg font-bold text-gray-900 mb-2">{predictionText}</p>
         <Link
           href={`/${locale}/predictions/${match.id}`}
-          className="inline-flex items-center text-sm text-gray-900 hover:text-gray-700 font-medium underline"
+          className="inline-flex items-center text-xs md:text-sm text-gray-900 hover:text-gray-700 font-medium underline"
         >
           {dictionary?.detail || 'Detail'} <ChevronRight className="w-4 h-4 ml-1" />
         </Link>
       </div>
 
       {/* Betting Section */}
-      <div className="px-6 pb-5">
+      <div className="px-4 pb-4 md:px-6 md:pb-5">
         <div className="flex items-center justify-between gap-4">
           {/* Bonus Amount */}
           <div className="flex flex-col">
-            <p className="text-sm text-gray-700">{dictionary?.bonus || 'Bonus'}</p>
-            <p className="text-sm text-gray-700">{dictionary?.upTo || 'up to'} :</p>
-            <p className="text-lg font-bold text-orange-500 mt-1">{bonusAmount}</p>
+            <p className="text-xs md:text-sm text-gray-700">{dictionary?.bonus || 'Bonus'}</p>
+            <p className="text-xs md:text-sm text-gray-700">{dictionary?.upTo || 'up to'} :</p>
+            <p className="text-base md:text-lg font-bold text-orange-500 mt-1">{bonusAmount}</p>
           </div>
 
           {/* BET NOW Button */}
@@ -131,21 +131,29 @@ export default function PredictionCardWithBetting({
             href={bettingLink}
             target="_blank"
             rel="noopener noreferrer sponsored"
-            className="flex items-center justify-center gap-3 px-10 py-3 bg-primary hover:bg-primary-800 text-white font-bold text-base rounded-full transition-all shadow-md hover:shadow-lg"
+            className="flex items-center justify-center gap-2 md:gap-3 px-4 py-2.5 md:px-6 md:py-3 bg-primary hover:bg-primary-800 text-white font-bold text-sm md:text-base rounded-full transition-all shadow-md hover:shadow-lg"
           >
+            <div className="w-10 h-5 md:w-12 md:h-6 relative flex-shrink-0">
+              <Image
+                src="https://w7.pngwing.com/pngs/305/694/png-transparent-1xbet-logo-bookmaker-sports-betting-1xbet-logo-betting-blue-text-sport-thumbnail.png"
+                alt="1xbet"
+                fill
+                className="object-contain"
+              />
+            </div>
             <span>{dictionary?.betNow || 'BET NOW!'}</span>
           </a>
         </div>
       </div>
 
       {/* View Prediction Button */}
-      <div className="px-6 pb-5">
+      <div className="px-4 pb-4 md:px-6 md:pb-5">
         <Link
           href={`/${locale}/predictions/${match.id}`}
-          className="flex items-center justify-center gap-2 w-full py-3 bg-gray-900 hover:bg-gray-800 text-white font-semibold text-base rounded-lg transition-all"
+          className="flex items-center justify-center gap-2 w-full py-2.5 md:py-3 bg-gray-900 hover:bg-gray-800 text-white font-semibold text-sm md:text-base rounded-lg transition-all"
         >
           <span>{dictionary?.viewPrediction || 'View Prediction'}</span>
-          <ChevronRight className="w-5 h-5" />
+          <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
         </Link>
       </div>
     </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Star, Calendar, Search, Clock, RefreshCcw } from 'lucide-react';
 import Navbar from "@/app/[lang]/langing/Navbar";
+import TopPromoBanner from "@/components/TopPromoBanner";
 import LiveMatchCard from "@/components/LiveMatchCard";
 import { getLiveMatches } from '@/lib/matches';
 import { MatchWithDetails } from '@/types/database';
@@ -78,9 +79,10 @@ export default function LiveScores() {
     return (
         <div className="min-h-screen bg-gray-100">
             <Navbar />
+            <TopPromoBanner />
 
             {/* Sticky Header */}
-            <div className="sticky pt-16 bg-white shadow-sm z-10">
+            <div className="sticky pt-32 md:pt-36 bg-white shadow-sm z-10">
                 <div className="max-w-8xl mx-auto">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between p-4 gap-4">
                         {/* Left Section */}
