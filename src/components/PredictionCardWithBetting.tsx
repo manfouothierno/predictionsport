@@ -1,58 +1,69 @@
-import { MatchWithDetails, Prediction } from '@/types/database'
-import { format } from 'date-fns'
-import Link from 'next/link'
-import Image from 'next/image'
-import { ChevronRight } from 'lucide-react'
-import { useUserCurrency } from '@/hooks/useUserCurrency'
+import { MatchWithDetails, Prediction } from "@/types/database";
+import { format } from "date-fns";
+import Link from "next/link";
+import Image from "next/image";
+import { ChevronRight } from "lucide-react";
+import { useUserCurrency } from "@/hooks/useUserCurrency";
 
 interface PredictionCardWithBettingProps {
-  match: MatchWithDetails
+  match: MatchWithDetails;
   prediction?: Prediction & {
-    prediction_text?: string
-  }
-  locale?: string
-  dictionary?: any
+    prediction_text?: string;
+  };
+  locale?: string;
+  dictionary?: any;
 }
 
 export default function PredictionCardWithBetting({
   match,
   prediction,
-  locale = 'en',
-  dictionary
+  locale = "en",
+  dictionary,
 }: PredictionCardWithBettingProps) {
   // Get user's currency
-  const { formattedBonus, loading: currencyLoading } = useUserCurrency()
+  const { formattedBonus, loading: currencyLoading } = useUserCurrency();
 
   // Format match date and time
-  const matchDate = new Date(match.match_date)
-  const formattedDate = format(matchDate, 'dd MMM yyyy, HH:mm')
+  const matchDate = new Date(match.match_date);
+  const formattedDate = format(matchDate, "dd MMM yyyy, HH:mm");
 
   // Get league or competition name
-  const leagueName = match.leagues?.[0]?.name || match.competitions?.[0]?.name || 'Football'
-  const countryName = match.leagues?.[0]?.name ?
-    (match.competitions?.[0]?.is_international ? 'International' : 'League') :
-    'International'
+  const leagueName =
+    match.leagues?.[0]?.name || match.competitions?.[0]?.name || "Football";
+  const countryName = match.leagues?.[0]?.name
+    ? match.competitions?.[0]?.is_international
+      ? "International"
+      : "League"
+    : "International";
 
   // Generate prediction text
-  const predictionText = prediction?.prediction_text ||
-    (prediction?.winner_prediction === 'home' ? `${match.home_team.name} wins` :
-     prediction?.winner_prediction === 'away' ? `${match.away_team.name} wins` :
-     prediction?.winner_prediction === 'draw' ? 'Draw' :
-     `${match.home_team.name} wins`)
+  const predictionText =
+    prediction?.prediction_text ||
+    (prediction?.winner_prediction === "home"
+      ? `${match.home_team.name} wins`
+      : prediction?.winner_prediction === "away"
+        ? `${match.away_team.name} wins`
+        : prediction?.winner_prediction === "draw"
+          ? "Draw"
+          : `${match.home_team.name} wins`);
 
   // Bonus amount (use dynamic currency)
-  const bonusAmount = currencyLoading ? '€390' : formattedBonus
+  const bonusAmount = currencyLoading ? "€390" : formattedBonus;
 
   // 1XBET link (should be affiliate link in production)
-  const bettingLink = process.env.NEXT_PUBLIC_1XBET_LINK || 'https://1xbet.com'
+  const bettingLink = process.env.NEXT_PUBLIC_1XBET_LINK || "https://1xbet.com";
 
   return (
     <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
       {/* Header with date and league */}
       <div className="pt-4 px-4 pb-3 md:pt-6 md:px-6 md:pb-4">
         <div className="text-center">
-          <p className="text-base md:text-lg font-bold text-gray-900">{formattedDate}</p>
-          <p className="text-xs md:text-sm text-gray-600 mt-1">{countryName} - {leagueName}</p>
+          <p className="text-base md:text-lg font-bold text-gray-900">
+            {formattedDate}
+          </p>
+          <p className="text-xs md:text-sm text-gray-600 mt-1">
+            {countryName} - {leagueName}
+          </p>
         </div>
       </div>
 
@@ -61,7 +72,9 @@ export default function PredictionCardWithBetting({
         <div className="flex items-center justify-center gap-3">
           {/* Home Team */}
           <div className="flex items-center gap-2">
-            <span className="text-base font-bold text-gray-900">{match.home_team.name}</span>
+            <span className="text-base font-bold text-gray-900">
+              {match.home_team.name}
+            </span>
             <div className="w-10 h-10 relative flex-shrink-0">
               {match.home_team.logo_url ? (
                 <Image
@@ -101,7 +114,9 @@ export default function PredictionCardWithBetting({
                 </div>
               )}
             </div>
-            <span className="text-base font-bold text-gray-900">{match.away_team.name}</span>
+            <span className="text-base font-bold text-gray-900">
+              {match.away_team.name}
+            </span>
           </div>
         </div>
       </div>
@@ -109,14 +124,18 @@ export default function PredictionCardWithBetting({
       {/* Prediction Box */}
       <div className="mx-4 mb-4 md:mx-6 md:mb-5 bg-gray-100 rounded-lg p-3 md:p-4 text-center">
         <p className="text-xs md:text-sm text-gray-700 mb-2">
-          {match.home_team.name} {match.away_team.name} {dictionary?.predictions || 'Predictions'}
+          {match.home_team.name} {match.away_team.name}{" "}
+          {dictionary?.predictions || "Predictions"}
         </p>
-        <p className="text-base md:text-lg font-bold text-gray-900 mb-2">{predictionText}</p>
+        <p className="text-base md:text-lg font-bold text-gray-900 mb-2">
+          {predictionText}
+        </p>
         <Link
           href={`/${locale}/predictions/${match.id}`}
           className="inline-flex items-center text-xs md:text-sm text-gray-900 hover:text-gray-700 font-medium underline"
         >
-          {dictionary?.detail || 'Detail'} <ChevronRight className="w-4 h-4 ml-1" />
+          {dictionary?.detail || "Detail"}{" "}
+          <ChevronRight className="w-4 h-4 ml-1" />
         </Link>
       </div>
 
@@ -125,9 +144,15 @@ export default function PredictionCardWithBetting({
         <div className="flex items-center justify-between gap-4">
           {/* Bonus Amount */}
           <div className="flex flex-col">
-            <p className="text-xs md:text-sm text-gray-700">{dictionary?.bonus || 'Bonus'}</p>
-            <p className="text-xs md:text-sm text-gray-700">{dictionary?.upTo || 'up to'} :</p>
-            <p className="text-base md:text-lg font-bold text-orange-500 mt-1">{bonusAmount}</p>
+            <p className="text-xs md:text-sm text-gray-700">
+              {dictionary?.bonus || "Bonus"}
+            </p>
+            <p className="text-xs md:text-sm text-gray-700">
+              {dictionary?.upTo || "up to"} :
+            </p>
+            <p className="text-base md:text-lg font-bold text-orange-500 mt-1">
+              {bonusAmount}
+            </p>
           </div>
 
           {/* BET NOW Button */}
@@ -139,13 +164,13 @@ export default function PredictionCardWithBetting({
           >
             <div className="w-10 h-5 md:w-12 md:h-6 relative flex-shrink-0">
               <Image
-                src="https://w7.pngwing.com/pngs/305/694/png-transparent-1xbet-logo-bookmaker-sports-betting-1xbet-logo-betting-blue-text-sport-thumbnail.png"
+                src="1xbet_logo.png"
                 alt="1xbet"
                 fill
                 className="object-contain"
               />
             </div>
-            <span>{dictionary?.betNow || 'BET NOW!'}</span>
+            <span>{dictionary?.betNow || "BET NOW!"}</span>
           </a>
         </div>
       </div>
@@ -156,10 +181,10 @@ export default function PredictionCardWithBetting({
           href={`/${locale}/predictions/${match.id}`}
           className="flex items-center justify-center gap-2 w-full py-2.5 md:py-3 bg-gray-900 hover:bg-gray-800 text-white font-semibold text-sm md:text-base rounded-lg transition-all"
         >
-          <span>{dictionary?.viewPrediction || 'View Prediction'}</span>
+          <span>{dictionary?.viewPrediction || "View Prediction"}</span>
           <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
         </Link>
       </div>
     </div>
-  )
+  );
 }
