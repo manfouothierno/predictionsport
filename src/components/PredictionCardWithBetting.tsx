@@ -164,7 +164,7 @@ export default function PredictionCardWithBetting({
           >
             <div className="w-10 h-5 md:w-12 md:h-6 relative flex-shrink-0">
               <Image
-                src="1xbet_logo.png"
+                src="/1xbet_logo.png"
                 alt="1xbet"
                 fill
                 className="object-contain"
