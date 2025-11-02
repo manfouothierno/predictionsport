@@ -32,11 +32,11 @@ const TopPromoBanner = () => {
 
               {/* Center - 1xbet Logo and Bonus */}
               <div className="flex items-center space-x-3">
-                <div className="bg-[#134a91] px-3 py-1.5 rounded flex items-center">
+                <div className=" px-3 py-1.5 rounded flex items-center">
                   <Image
                     src="/en/1xbet.jpg"
                     alt="1xbet logo"
-                    width={50}
+                    width={80}
                     height={30}
                     className="object-contain"
                   />
@@ -110,7 +110,7 @@ const TopPromoBanner = () => {
 
               {/* Center - 1xbet Logo and Bonus */}
               <div className="flex items-center space-x-2">
-                <div className="bg-[#134a91] px-2 py-1 rounded flex items-center">
+                <div className=" px-2 py-1 rounded flex items-center">
                   <Image
                     src="/en/1xbet.jpg"
                     alt="1xbet logo"
