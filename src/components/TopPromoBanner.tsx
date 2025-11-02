@@ -34,7 +34,7 @@ const TopPromoBanner = () => {
               <div className="flex items-center space-x-3">
                 <div className="bg-[#134a91] px-3 py-1.5 rounded flex items-center">
                   <Image
-                    src="/en/1xbet-logo.svg"
+                    src="/en/1xbet.jpg"
                     alt="1xbet logo"
                     width={50}
                     height={30}
@@ -112,7 +112,7 @@ const TopPromoBanner = () => {
               <div className="flex items-center space-x-2">
                 <div className="bg-[#134a91] px-2 py-1 rounded flex items-center">
                   <Image
-                    src="/en/1xbet-logo.svg"
+                    src="/en/1xbet.jpg"
                     alt="1xbet logo"
                     width={30}
                     height={20}

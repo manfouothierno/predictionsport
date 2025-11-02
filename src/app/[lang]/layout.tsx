@@ -4,7 +4,7 @@ import { i18n, Locale } from "@/i18n-config";
 import { Metadata } from "next";
 import Navbar from "@/app/[lang]/langing/Navbar";
 import Footer from "@/app/[lang]/langing/Footer";
-// import { Roboto } from "next/font/google";
+import { Roboto } from "next/font/google";
 
 export type LayoutProps = {
   children: React.ReactNode;
@@ -13,12 +13,12 @@ export type LayoutProps = {
   };
 };
 
-// const roboto = Roboto({
-//   weight: ["300", "400", "500", "700"],
-//   subsets: ["latin"],
-//   display: "swap",
-//   variable: "--font-roboto",
-// });
+const roboto = Roboto({
+  weight: ["300", "400", "500", "700"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-roboto",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://predictionsport.com"),
@@ -118,7 +118,7 @@ export default async function RootLayout({ children, params }: LayoutProps) {
     <html lang={lang}>
       <body
         className={`
-
+        ${roboto.className}
         antialiased font-sans`}
       >
         <LanguageProvider initialLocale={lang} initialDictionary={dictionary}>

@@ -162,15 +162,15 @@ export default function PredictionCardWithBetting({
             rel="noopener noreferrer sponsored"
             className="flex items-center justify-center gap-2 md:gap-3 px-4 py-2.5 md:px-6 md:py-3 bg-primary hover:bg-primary-800 text-white font-bold text-sm md:text-base rounded-full transition-all shadow-md hover:shadow-lg"
           >
+            <span>{dictionary?.betNow || "BET NOW!"}</span>
             <div className="w-10 h-5 md:w-12 md:h-6 relative flex-shrink-0">
               <Image
-                src="/en/1xbet-logo.svg"
+                src="/en/1xbet-logo-slim.png"
                 alt="1xbet"
                 fill
                 className="object-contain"
               />
             </div>
-            <span>{dictionary?.betNow || "BET NOW!"}</span>
           </a>
         </div>
       </div>
