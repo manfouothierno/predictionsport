@@ -36,6 +36,8 @@ export default function PredictionCardWithBetting({
       : "League"
     : "International";
 
+  console.log("prediction ", prediction);
+
   // Generate prediction text
   const predictionText =
     prediction?.prediction_text ||
@@ -51,7 +53,9 @@ export default function PredictionCardWithBetting({
   const bonusAmount = currencyLoading ? "€390" : formattedBonus;
 
   // 1XBET link (should be affiliate link in production)
-  const bettingLink = process.env.NEXT_PUBLIC_1XBET_LINK || "https://1xbet.com";
+  const bettingLink =
+    process.env.NEXT_PUBLIC_1XBET_LINK ||
+    "https://refpa58144.com/L?tag=d_4907789m_1599c_&site=4907789&ad=1599";
 
   return (
     <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">

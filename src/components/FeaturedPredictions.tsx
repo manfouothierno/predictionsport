@@ -46,7 +46,7 @@ export default function FeaturedPredictions({
 
       // Set default to Football if available
       const footballSport = fetchedSports.find(
-        (s) => s.name.toLowerCase() === "football"
+        (s) => s.name.toLowerCase() === "football",
       );
       if (footballSport) {
         setSelectedSportId(footballSport.id);
@@ -60,7 +60,8 @@ export default function FeaturedPredictions({
   useEffect(() => {
     async function fetchAllMatches() {
       try {
-        const sportName = selectedSportName === "all" ? null : selectedSportName;
+        const sportName =
+          selectedSportName === "all" ? null : selectedSportName;
         const fetchedMatches = await getMatchesWithFilters(
           selectedDate,
           null,
@@ -87,7 +88,8 @@ export default function FeaturedPredictions({
       setError(null);
 
       try {
-        const sportName = selectedSportName === "all" ? null : selectedSportName;
+        const sportName =
+          selectedSportName === "all" ? null : selectedSportName;
         const fetchedMatches = await getMatchesWithFilters(
           selectedDate,
           selectedLeague,
@@ -107,7 +109,13 @@ export default function FeaturedPredictions({
     }
 
     fetchMatches();
-  }, [selectedLeague, selectedDate, selectedSportId, selectedSportName, dictionary]);
+  }, [
+    selectedLeague,
+    selectedDate,
+    selectedSportId,
+    selectedSportName,
+    dictionary,
+  ]);
 
   // Handler for sport change
   const handleSportChange = (sportId: string | null, sportName: string) => {
@@ -125,33 +133,37 @@ export default function FeaturedPredictions({
           <div className="flex gap-2 overflow-x-auto no-scrollbar">
             {/* "All" button */}
             <button
-              onClick={() => handleSportChange(null, 'all')}
+              onClick={() => handleSportChange(null, "all")}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-full whitespace-nowrap text-sm font-semibold transition-all shrink-0 ${
                 selectedSportId === null
-                  ? 'bg-primary text-white shadow-md'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? "bg-primary text-white shadow-md"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
               <span className="text-base">🏆</span>
-              <span>{dictionary?.sports?.all || 'All'}</span>
+              <span>{dictionary?.sports?.all || "All"}</span>
             </button>
 
             {/* Dynamic sports from database */}
             {sports.map((sport) => {
-              const isSelected = selectedSportId === sport.id
-              const sportKey = sport.name.toLowerCase()
+              const isSelected = selectedSportId === sport.id;
+              const sportKey = sport.name.toLowerCase();
 
               // Get sport icon
               const getSportIcon = () => {
-                const lowerName = sport.name.toLowerCase()
-                if (lowerName.includes('football') || lowerName.includes('soccer')) return '⚽'
-                if (lowerName.includes('basketball')) return '🏀'
-                if (lowerName.includes('tennis')) return '🎾'
-                if (lowerName.includes('rugby')) return '🏉'
-                if (lowerName.includes('baseball')) return '⚾'
-                if (lowerName.includes('hockey')) return '🏒'
-                return '🏆'
-              }
+                const lowerName = sport.name.toLowerCase();
+                if (
+                  lowerName.includes("football") ||
+                  lowerName.includes("soccer")
+                )
+                  return "⚽";
+                if (lowerName.includes("basketball")) return "🏀";
+                if (lowerName.includes("tennis")) return "🎾";
+                if (lowerName.includes("rugby")) return "🏉";
+                if (lowerName.includes("baseball")) return "⚾";
+                if (lowerName.includes("hockey")) return "🏒";
+                return "🏆";
+              };
 
               return (
                 <button
@@ -159,16 +171,14 @@ export default function FeaturedPredictions({
                   onClick={() => handleSportChange(sport.id, sport.name)}
                   className={`flex items-center gap-2 px-5 py-2.5 rounded-full whitespace-nowrap text-sm font-semibold transition-all shrink-0 ${
                     isSelected
-                      ? 'bg-primary text-white shadow-md'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      ? "bg-primary text-white shadow-md"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
                   <span className="text-base">{getSportIcon()}</span>
-                  <span>
-                    {dictionary?.sports?.[sportKey] || sport.name}
-                  </span>
+                  <span>{dictionary?.sports?.[sportKey] || sport.name}</span>
                 </button>
-              )
+              );
             })}
           </div>
         </div>
@@ -190,7 +200,7 @@ export default function FeaturedPredictions({
           <PromotionalBanner
             brand="1xbet"
             brandLogo="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/1xBet_logo.svg/320px-1xBet_logo.svg.png"
-            promoUrl={process.env.NEXT_PUBLIC_1XBET_LINK || "https://1xbet.com"}
+            promoUrl={process.env.NEXT_PUBLIC_1XBET_LINK || "https://refpa58144.com/L?tag=d_4907789m_1599c_&site=4907789&ad=1599"}
           />
           <PromotionalBanner
             brand="melbet"
@@ -226,7 +236,9 @@ export default function FeaturedPredictions({
           {/* Header - Mobile Only (shows between sidebar and content) */}
           <div className="lg:hidden order-2 mb-4">
             <h1 className="text-2xl font-bold text-gray-900">
-              {dictionary?.sportsPredictions?.[selectedSportName.toLowerCase()] ||
+              {dictionary?.sportsPredictions?.[
+                selectedSportName.toLowerCase()
+              ] ||
                 dictionary?.footballPredictions ||
                 "Football Predictions"}
             </h1>

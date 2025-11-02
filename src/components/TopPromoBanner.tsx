@@ -51,7 +51,7 @@ const TopPromoBanner = () => {
 
               {/* Right - Arrow Button */}
               <a
-                href="https://1xbet.com"
+                href="https://refpa58144.com/L?tag=d_4907789m_1599c_&site=4907789&ad=1599"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 bg-orange-500 hover:bg-orange-600 rounded-full flex items-center justify-center transition-colors"
@@ -63,7 +63,7 @@ const TopPromoBanner = () => {
         </div>
 
         {/* Bottom Blue Bar */}
-        <div className="bg-[#1a4d8f] text-white">
+        <div className="bg-[#1a5685] text-white">
           <div className="max-w-7xl mx-auto px-4 py-1.5 text-center">
             <div className="flex items-center justify-center space-x-2 text-sm">
               <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0">
@@ -75,7 +75,7 @@ const TopPromoBanner = () => {
               </span>
               <span className="text-gray-300">|</span>
               <a
-                href="https://1xbet.com"
+                href="https://refpa58144.com/L?tag=d_4907789m_1599c_&site=4907789&ad=1599"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-orange-400 hover:text-orange-300 font-semibold underline transition-colors"
@@ -129,7 +129,7 @@ const TopPromoBanner = () => {
 
               {/* Right - Arrow Button */}
               <a
-                href="https://1xbet.com"
+                href="https://refpa58144.com/L?tag=d_4907789m_1599c_&site=4907789&ad=1599"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 bg-orange-500 hover:bg-orange-600 rounded-full flex items-center justify-center flex-shrink-0 transition-colors"
@@ -141,8 +141,8 @@ const TopPromoBanner = () => {
         </div>
 
         {/* Bottom Blue Bar - Compact */}
-        <div className="bg-[#1a4d8f] text-white">
-          <div className="px-3 py-1.5 text-center">
+        <div className="bg-[#1a5685] text-white">
+          <div className="px-3 py-2 text-center">
             <div className="flex items-center justify-center space-x-1.5 text-xs">
               <div className="w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0">
                 <span className="text-white text-[10px] font-bold">!</span>
@@ -153,7 +153,7 @@ const TopPromoBanner = () => {
               </span>
               <span className="text-gray-300">|</span>
               <a
-                href="https://1xbet.com"
+                href="https://refpa58144.com/L?tag=d_4907789m_1599c_&site=4907789&ad=1599"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-orange-400 hover:text-orange-300 font-semibold underline transition-colors"
