@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import Navbar from "@/app/[lang]/langing/Navbar";
@@ -16,7 +16,7 @@ export default function Home() {
       <TopPromoBanner />
 
       {/* Featured Predictions Section with Sidebar Filters */}
-      <div className="pt-32 md:pt-36">
+      <div className="pt-16 md:pt-36">
         <FeaturedPredictions locale={locale} dictionary={dictionary} />
 
         {/* News Highlights Section */}
