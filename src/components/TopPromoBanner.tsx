@@ -91,17 +91,17 @@ const TopPromoBanner = () => {
       <div className="md:hidden">
         {/* White section */}
         <div className="bg-white border-b border-gray-200">
-          <div className="w-full/2 border-1 border-gray-200 m-2 rounded  flex  self-center  gap-5 justify-around p-3">
+          <div className=" border-1 border-gray-200 m-2 rounded-lg  flex  mx-2 justify-center ">
             {/* Left side */}
             <div className="flex items-center gap-1.5">
-              <span className="text-xl leading-none">
+              <span className="text-xl  leading-none">
                 {loading ? "🇪🇺" : flag}
               </span>
               <div className="leading-tight">
-                <p className="text-[10px] font-semibold text-gray-900 leading-tight">
+                <p className="text-[14px] font-semibold text-gray-900 leading-tight">
                   Exclusive
                 </p>
-                <p className="text-[10px] font-semibold text-gray-900 leading-tight">
+                <p className="text-[14px] font-semibold text-gray-900 leading-tight">
                   offer
                 </p>
               </div>
@@ -118,10 +118,13 @@ const TopPromoBanner = () => {
                   className="object-contain rounded-md"
                 />
               </div>
-              <div className="text-[10px] leading-tight text-gray-900">
-                <p>Bonus up to</p>
-                <p className="text-[#ff7f00] font-bold text-[12px]">
-                  {loading ? "€390" : formattedBonus}
+              <div className=" leading-tight text-gray-900">
+                <p className="text-[13px] font-bold">1xbet</p>
+                <p>
+                  <span className="text-[12px]">Bonus up to </span>
+                  <span className="text-[#ff7f00] font-bold text-[14px]">
+                    {loading ? "€390" : formattedBonus}
+                  </span>
                 </p>
               </div>
             </div>

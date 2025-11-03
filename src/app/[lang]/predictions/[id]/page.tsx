@@ -19,6 +19,7 @@ import { getMatchWithPredictions } from "@/lib/matches";
 import { MatchWithDetails } from "@/types/database";
 import { Prediction, User } from "@/types/database";
 import { format } from "date-fns";
+import { pre } from "framer-motion/m";
 
 interface PredictionWithExpert extends Prediction {
   expert: User;
@@ -115,13 +116,6 @@ const ExpertPredictionCard = ({
 }: {
   prediction: PredictionWithExpert;
 }) => {
-  const getWinnerText = () => {
-    if (prediction.winner_prediction === "home") return "Home Win";
-    if (prediction.winner_prediction === "away") return "Away Win";
-    if (prediction.winner_prediction === "draw") return "Draw";
-    return null;
-  };
-
   const getScoreText = () => {
     if (
       prediction.home_prediction !== null &&
@@ -245,6 +239,27 @@ export default function PredictionDetail({
   const league = match.leagues?.[0] || match.competitions?.[0];
   const matchDate = new Date(match.match_date);
 
+  const getWinnerText = () => {
+    const prediction = predictions[0];
+    if (!prediction) return null;
+
+    if (prediction.winner_prediction === "home")
+      return `${match.home_team.name} Win`;
+    if (prediction.winner_prediction === "away")
+      return `${match.away_team.name} Win`;
+    if (prediction.winner_prediction === "draw") return "Draw";
+    if (prediction.winner_prediction === "over")
+      return `Over ${prediction.odds}`;
+    if (prediction.winner_prediction === "under")
+      return `Under ${prediction.odds}`;
+    if (prediction.winner_prediction === "home_draw")
+      return `${match.home_team.name} win or Draw`;
+    if (prediction.winner_prediction === "away_draw")
+      return `${match.away_team.name} win or Draw`;
+
+    return null;
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -265,7 +280,7 @@ export default function PredictionDetail({
             <MatchHeader match={match} predictions={predictions} />
 
             {/* Betting CTA */}
-            <BettingCTA matchTitle={`${match.home_team.name} or Draw`} />
+            <BettingCTA matchTitle={getWinnerText() as string} />
 
             {/* Expert Predictions */}
             <div className="space-y-4">
