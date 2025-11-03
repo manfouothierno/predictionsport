@@ -9,7 +9,7 @@ const TopPromoBanner = () => {
   const { formattedBonus, loading, flag } = useUserCurrency();
 
   return (
-    <div className="w-full fixed top-16 z-40 font-sans">
+    <div className="w-full fixed top-16 mb-4 z-40 font-sans">
       {/* DESKTOP */}
       <div className="hidden md:block">
         {/* White section */}

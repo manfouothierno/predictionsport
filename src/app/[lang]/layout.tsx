@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import Navbar from "@/app/[lang]/langing/Navbar";
 import Footer from "@/app/[lang]/langing/Footer";
 import { Roboto } from "next/font/google";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 export type LayoutProps = {
   children: React.ReactNode;
@@ -121,6 +122,7 @@ export default async function RootLayout({ children, params }: LayoutProps) {
           ${roboto.className}
         antialiased font-sans`}
       >
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ""} />
         <LanguageProvider initialLocale={lang} initialDictionary={dictionary}>
           {children}
           <Footer />

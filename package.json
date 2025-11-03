@@ -28,6 +28,7 @@
     "recharts": "^2.15.0"
   },
   "devDependencies": {
+    "@types/gtag.js": "^0.0.20",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
