@@ -648,6 +648,8 @@ export async function getAllUpcomingMatches(
       return [];
     }
 
+    console.log("Fetched matches:", matches);
+
     if (!matches || matches.length === 0) {
       return [];
     }

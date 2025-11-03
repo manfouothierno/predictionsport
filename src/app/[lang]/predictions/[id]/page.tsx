@@ -144,10 +144,6 @@ const ExpertPredictionCard = ({
           </p>
         </div>
       )}
-
-      <div className="mt-4 pt-3 border-t text-xs text-gray-400">
-        Prediction type: {prediction.prediction_type.toUpperCase()}
-      </div>
     </div>
   );
 };
@@ -341,15 +337,6 @@ export default function PredictionDetail({
                     <div className="text-xs text-gray-500">Competition</div>
                     <div className="font-medium text-gray-900 text-sm">
                       {league?.name || "N/A"}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <Users className="w-4 h-4 text-gray-400 flex-shrink-0 mt-1" />
-                  <div>
-                    <div className="text-xs text-gray-500">Status</div>
-                    <div className="font-medium text-gray-900 text-sm capitalize">
-                      {match.status}
                     </div>
                   </div>
                 </div>
