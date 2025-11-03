@@ -11,12 +11,10 @@ interface BettingCTAProps {
 }
 
 const BettingCTA = ({ matchTitle, className = "" }: BettingCTAProps) => {
-  const { formattedBonus, loading } = useUserCurrency()"";
+  const { formattedBonus, loading } = useUserCurrency();
 
   return (
-    <div
-      className={` rounded-xl shadow-sm p-6 ${className}`}
-    >
+    <div className={` rounded-xl shadow-sm p-6 ${className}`}>
       {/* Match Title */}
       {matchTitle && (
         <h3 className="text-white bg-yellow-600 rounded-xl text-lg font-bold text-center mb-4">
