@@ -118,7 +118,7 @@ export default async function RootLayout({ children, params }: LayoutProps) {
     <html lang={lang}>
       <body
         className={`
-        ${roboto.className}
+          ${roboto.className}
         antialiased font-sans`}
       >
         <LanguageProvider initialLocale={lang} initialDictionary={dictionary}>

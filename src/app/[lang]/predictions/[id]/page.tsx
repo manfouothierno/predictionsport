@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import Navbar from "@/app/[lang]/langing/Navbar";
 import TopPromoBanner from "@/components/TopPromoBanner";
+import BettingCTA from "@/components/BettingCTA";
 import { getMatchWithPredictions } from "@/lib/matches";
 import { MatchWithDetails } from "@/types/database";
 import { Prediction, User } from "@/types/database";
@@ -138,68 +139,6 @@ const ExpertPredictionCard = ({
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 border-l-4 border-red-600">
-      {/* Expert Info */}
-      <div className="flex items-center gap-3 mb-4 pb-4 border-b">
-        {expertPhoto ? (
-          <img
-            src={expertPhoto}
-            alt={expertName}
-            className="w-12 h-12 rounded-full object-cover"
-          />
-        ) : (
-          <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
-            <span className="text-red-600 font-bold text-lg">
-              {expertName[0].toUpperCase()}
-            </span>
-          </div>
-        )}
-        <div className="flex-1">
-          <h4 className="font-semibold text-gray-900">{expertName}</h4>
-          <p className="text-xs text-gray-500">
-            {isExpert ? "Expert Analyst" : "Analyst"}
-          </p>
-        </div>
-        <div className="text-right">
-          <div className="flex items-center gap-1 text-sm">
-            <Target className="w-4 h-4 text-red-600" />
-            <span className="font-semibold text-gray-900">
-              {Math.round(prediction.confidence_score * 100)}%
-            </span>
-          </div>
-          <p className="text-xs text-gray-500">Confidence</p>
-        </div>
-      </div>
-
-      {/* Prediction Details */}
-      <div className="space-y-3">
-        {getWinnerText() && (
-          <div className="bg-red-50 rounded-lg p-3">
-            <div className="text-xs text-gray-600 mb-1">Result Prediction</div>
-            <div className="text-lg font-bold text-red-600">
-              {getWinnerText()}
-            </div>
-          </div>
-        )}
-
-        {getScoreText() && (
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="text-xs text-gray-600 mb-1">Score Prediction</div>
-            <div className="text-2xl font-bold text-gray-900">
-              {getScoreText()}
-            </div>
-          </div>
-        )}
-
-        {prediction.odds && (
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-600">Suggested Odds:</span>
-            <span className="font-semibold text-gray-900">
-              {prediction.odds}
-            </span>
-          </div>
-        )}
-      </div>
-
       {/* Analysis */}
       {prediction.analysis && (
         <div className="mt-4 pt-4 border-t">
@@ -246,6 +185,8 @@ export default function PredictionDetail({
         const { match: matchData, predictions: predictionsData } =
           await getMatchWithPredictions(matchId);
 
+        console.log(predictionsData);
+
         if (!matchData) {
           setError("Match not found");
           return;
@@ -282,7 +223,7 @@ export default function PredictionDetail({
       <>
         <Navbar />
         <TopPromoBanner />
-        <div className="min-h-[calc(100vh-100px)] bg-gray-50 flex items-center justify-center px-4 pt-32 md:pt-36">
+        <div className="min-h-[calc(100vh-100px)] bg-gray-50 flex items-center justify-center px-4 pt-40 md:pt-36">
           <div className="text-center bg-white p-8 rounded-lg shadow-md max-w-md mx-auto">
             <h2 className="text-xl font-semibold text-red-600 mb-3">
               Could Not Load Match
@@ -308,7 +249,7 @@ export default function PredictionDetail({
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <TopPromoBanner />
-      <div className="container mx-auto px-4 py-8 max-w-7xl pt-32 md:pt-36">
+      <div className="container mx-auto px-4 py-8 max-w-7xl pt-56 md:pt-36">
         {/* Back Link */}
         <Link
           href="/predictions/today"
@@ -322,6 +263,9 @@ export default function PredictionDetail({
           {/* Main Content Area */}
           <div className="lg:col-span-2 space-y-6">
             <MatchHeader match={match} predictions={predictions} />
+
+            {/* Betting CTA */}
+            <BettingCTA matchTitle={`${match.home_team.name} or Draw`} />
 
             {/* Expert Predictions */}
             <div className="space-y-4">

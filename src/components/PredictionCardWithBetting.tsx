@@ -36,18 +36,15 @@ export default function PredictionCardWithBetting({
       : "League"
     : "International";
 
-  console.log("prediction ", prediction);
-
   // Generate prediction text
   const predictionText =
-    prediction?.prediction_text ||
-    (prediction?.winner_prediction === "home"
+    match.predictions[0]?.winner_prediction === "home"
       ? `${match.home_team.name} wins`
-      : prediction?.winner_prediction === "away"
+      : match.predictions[0]?.winner_prediction === "away"
         ? `${match.away_team.name} wins`
-        : prediction?.winner_prediction === "draw"
+        : match.predictions[0]?.winner_prediction === "draw"
           ? "Draw"
-          : `${match.home_team.name} wins`);
+          : `${match.home_team.name} wins`;
 
   // Bonus amount (use dynamic currency)
   const bonusAmount = currencyLoading ? "€390" : formattedBonus;
@@ -167,11 +164,12 @@ export default function PredictionCardWithBetting({
             className="flex items-center justify-center gap-2 md:gap-3 px-4 py-2.5 md:px-6 md:py-3 bg-primary hover:bg-primary-800 text-white font-bold text-sm md:text-base rounded-full transition-all shadow-md hover:shadow-lg"
           >
             <span>{dictionary?.betNow || "BET NOW!"}</span>
-            <div className="w-10 h-5 md:w-12 md:h-6 relative flex-shrink-0">
+            <div className="">
               <Image
-                src="/en/1xbet-logo-slim.png"
+                src="/en/1xbet-mini.jpeg"
                 alt="1xbet"
-                fill
+                width={60}
+                height={60}
                 className="object-contain"
               />
             </div>

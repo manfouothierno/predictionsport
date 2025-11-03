@@ -25,23 +25,36 @@ const bonusConfig: Record<string, CountryBonusConfig> = {
 
 export const useUserCurrency = () => {
   const [bonusData, setBonusData] = useState<CountryBonusConfig>(
-    bonusConfig.EUR,
+    bonusConfig.XAF, // Default to XAF for African markets
   );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserLocation = async () => {
       try {
-        const response = await fetch("https://ipapi.co/json/");
-        const data = await response.json();
-        const userCurrency = data.currency || "EUR";
+        // Try multiple geolocation APIs with timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-        // Get bonus config for user's currency, fallback to EUR
-        const config = bonusConfig[userCurrency] || bonusConfig.EUR;
+        const response = await fetch("https://ipapi.co/json/", {
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch location");
+        }
+
+        const data = await response.json();
+        const userCurrency = data.currency || "XAF";
+
+        // Get bonus config for user's currency, fallback to XAF
+        const config = bonusConfig[userCurrency] || bonusConfig.XAF;
         setBonusData(config);
       } catch (error) {
-        console.error("Error fetching user location:", error);
-        setBonusData(bonusConfig.EUR); // Fallback to EUR
+        // Silently fallback to XAF (Cameroon) for development/errors
+        console.warn("Using default location (Cameroon):", error);
+        setBonusData(bonusConfig.XAF);
       } finally {
         setLoading(false);
       }
