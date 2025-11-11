@@ -6,6 +6,7 @@ import Navbar from "@/app/[lang]/langing/Navbar";
 import Footer from "@/app/[lang]/langing/Footer";
 import { Roboto } from "next/font/google";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import NewsletterModal from "@/components/NewsletterModal";
 
 export type LayoutProps = {
   children: React.ReactNode;
@@ -124,6 +125,7 @@ export default async function RootLayout({ children, params }: LayoutProps) {
       >
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ""} />
         <LanguageProvider initialLocale={lang} initialDictionary={dictionary}>
+          <NewsletterModal dictionary={dictionary} locale={lang} />
           {children}
           <Footer />
         </LanguageProvider>

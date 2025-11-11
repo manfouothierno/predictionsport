@@ -109,3 +109,33 @@ export interface User {
   created_at: string;
   updated_at: string;
 }
+
+export interface NewsletterSubscription {
+  id: string;
+  name: string | null;
+  email: string;
+  country_code: string | null;
+  country_name: string | null;
+  city: string | null;
+  timezone: string | null;
+  browser_language: string | null;
+  page_locale: string | null;
+  subscribed_at: string;
+  is_active: boolean;
+  source: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface NewsletterFormData {
+  name: string;
+  email: string;
+}
+
+export interface GeolocationData {
+  country_code: string;
+  country_name: string;
+  city: string;
+  timezone: string;
+  ip: string;
+}

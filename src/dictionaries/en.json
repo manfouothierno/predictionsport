@@ -56,5 +56,16 @@
   "retry": "Retry",
   "noMatchesFound": "No matches found for the selected filters.",
   "noLeaguesAvailable": "No leagues available for selected date",
-  "showingResults": "Showing {count} predictions"
+  "showingResults": "Showing {count} predictions",
+  "newsletter": {
+    "modalTitle": "Stay Updated with Our Newsletter",
+    "modalDescription": "Get the latest predictions, match analyses, and exclusive betting tips delivered straight to your inbox.",
+    "namePlaceholder": "Your Name",
+    "emailPlaceholder": "Your Email",
+    "subscribeButton": "Subscribe",
+    "closeButton": "Maybe Later",
+    "successMessage": "Thank you for subscribing! Check your inbox soon.",
+    "errorMessage": "Something went wrong. Please try again later.",
+    "alreadySubscribed": "This email is already subscribed to our newsletter."
+  }
 }

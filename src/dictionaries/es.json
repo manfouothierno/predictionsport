@@ -56,5 +56,16 @@
   "retry": "Reintentar",
   "noMatchesFound": "No se encontraron partidos para los filtros seleccionados.",
   "noLeaguesAvailable": "No hay ligas disponibles para la fecha seleccionada",
-  "showingResults": "Mostrando {count} predicciones"
+  "showingResults": "Mostrando {count} predicciones",
+  "newsletter": {
+    "modalTitle": "Mantente actualizado con nuestro boletín",
+    "modalDescription": "Recibe las últimas predicciones, análisis de partidos y consejos de apuestas exclusivos directamente en tu bandeja de entrada.",
+    "namePlaceholder": "Tu nombre",
+    "emailPlaceholder": "Tu correo electrónico",
+    "subscribeButton": "Suscribirse",
+    "closeButton": "Quizás más tarde",
+    "successMessage": "¡Gracias por suscribirte! Revisa tu bandeja de entrada pronto.",
+    "errorMessage": "Algo salió mal. Por favor, inténtelo de nuevo más tarde.",
+    "alreadySubscribed": "Este correo electrónico ya está suscrito a nuestro boletín."
+  }
 }

@@ -56,5 +56,16 @@
   "retry": "Erneut versuchen",
   "noMatchesFound": "Keine Spiele für die ausgewählten Filter gefunden.",
   "noLeaguesAvailable": "Keine Ligen für das ausgewählte Datum verfügbar",
-  "showingResults": "{count} Vorhersagen anzeigen"
+  "showingResults": "{count} Vorhersagen anzeigen",
+  "newsletter": {
+    "modalTitle": "Bleiben Sie mit unserem Newsletter auf dem Laufenden",
+    "modalDescription": "Erhalten Sie die neuesten Vorhersagen, Spielanalysen und exklusive Wetttipps direkt in Ihr Postfach.",
+    "namePlaceholder": "Ihr Name",
+    "emailPlaceholder": "Ihre E-Mail",
+    "subscribeButton": "Abonnieren",
+    "closeButton": "Vielleicht später",
+    "successMessage": "Vielen Dank für Ihr Abonnement! Überprüfen Sie bald Ihr Postfach.",
+    "errorMessage": "Etwas ist schief gelaufen. Bitte versuchen Sie es später erneut.",
+    "alreadySubscribed": "Diese E-Mail ist bereits für unseren Newsletter angemeldet."
+  }
 }

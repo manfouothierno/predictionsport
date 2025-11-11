@@ -56,5 +56,16 @@
   "retry": "Réessayer",
   "noMatchesFound": "Aucun match trouvé pour les filtres sélectionnés.",
   "noLeaguesAvailable": "Aucune ligue disponible pour la date sélectionnée",
-  "showingResults": "Affichage de {count} pronostics"
+  "showingResults": "Affichage de {count} pronostics",
+  "newsletter": {
+    "modalTitle": "Restez informé avec notre newsletter",
+    "modalDescription": "Recevez les derniers pronostics, analyses de matchs et conseils de paris exclusifs directement dans votre boîte mail.",
+    "namePlaceholder": "Votre nom",
+    "emailPlaceholder": "Votre email",
+    "subscribeButton": "S'abonner",
+    "closeButton": "Peut-être plus tard",
+    "successMessage": "Merci de vous être abonné ! Consultez bientôt votre boîte mail.",
+    "errorMessage": "Une erreur s'est produite. Veuillez réessayer plus tard.",
+    "alreadySubscribed": "Cet email est déjà abonné à notre newsletter."
+  }
 }
